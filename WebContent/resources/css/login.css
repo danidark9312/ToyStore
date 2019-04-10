@@ -1,0 +1,21 @@
+@charset "ISO-8859-1";
+
+.login-container{
+	width: 350px;
+	margin: 0 auto;
+	box-shadow: black -2px 4px 21px;
+}
+
+
+
+#loginForm .labelText{
+	text-align: right;
+}
+
+#loginForm input[:text]{
+	width: 100%;
+}
+
+#loginForm input[type=submit]{
+	margin:  17px auto;
+}

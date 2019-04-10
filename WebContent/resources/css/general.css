@@ -1,0 +1,42 @@
+@charset "ISO-8859-1";
+
+/* main colors*/
+:root {
+  --main-bg-color: #fb609b;
+   
+}
+
+.checked {
+  color: orange;
+}
+
+.site-navbar-top{
+	background-color: var(--main-bg-color)
+}
+
+.p-3.p-lg-5.border{
+	background-color: var(--main-bg-color);
+	color : white;
+}
+
+.icon.icon-shopping_cart{
+	color:white;
+}
+
+form .fa.fa-star{
+	color:white;
+}
+form .fa.fa-star.checked{
+	color:orange;
+}
+
+.imgList{
+	width: 40px;
+}
+.imgInForm{
+	width: 200px
+}
+
+.bg-light.py-3 {
+    display: none;
+}
