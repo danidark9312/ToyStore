@@ -2,6 +2,9 @@ package co.toyslove.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,20 +18,17 @@ public class Util {
 	 * @return
 	 */
 	public static String guardarImagen(MultipartFile multiPart, HttpServletRequest request,String prefix) {
-		// Obtenemos el nombre original del archivo.
 		String nombreOriginal = multiPart.getOriginalFilename();
-		// Reemplazamos en el nombre de archivo los espacios por guiones.
 		nombreOriginal = nombreOriginal.replace(" ", "-");
-		// Agregamos al nombre del archivo 8 caracteres aleatorios para evitar duplicados.
 		String nombreFinal = randomAlphaNumeric(8)+nombreOriginal;
-		// Obtenemos la ruta ABSOLUTA del directorio images.
-		// apache-tomcat/webapps/cineapp/resources/images/
 		String rutaFinal = request.getServletContext().getRealPath("/resources/images/"+prefix+"/");
 		try {
-			// Formamos el nombre del archivo para guardarlo en el disco duro.
+			Path folder = Paths.get(rutaFinal);
 			File imageFile = new File(rutaFinal + nombreFinal);
+			if(!Files.exists(folder))
+				Files.createDirectory(folder);
+			
 			System.out.println(imageFile.getAbsolutePath());
-			// Aqui se guarda fisicamente el archivo en el disco duro.
 			multiPart.transferTo(imageFile);
 			return nombreFinal;
 		} catch (IOException e) {

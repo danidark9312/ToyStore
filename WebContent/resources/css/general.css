@@ -2,7 +2,9 @@
 
 /* main colors*/
 :root {
-  --main-bg-color: #fb609b;
+ /* --main-bg-color: #fb609b;*/
+  --main-bg-color: #60d7fb;
+ 
    
 }
 
@@ -39,4 +41,28 @@ form .fa.fa-star.checked{
 
 .bg-light.py-3 {
     display: none;
+}
+
+.shoppingIcon{
+	display: block;
+    position: absolute;
+    right: 35px;
+    font-size: x-large;
+    color: var(--main-bg-color);
+    -webkit-transition: font-size 0.5s;
+	transition-timing-function: linear;
+}
+
+.confirmCartIcon{
+	font-size: x-large;
+	cursor: pointer;
+}
+
+.shoppingIcon:hover{
+	display: block;
+    position: absolute;
+    right: 35px;
+    font-size: xx-large;
+    color: var(--main-bg-color);
+    cursor: pointer
 }

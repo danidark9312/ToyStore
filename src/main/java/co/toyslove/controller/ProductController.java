@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import co.toyslove.entity.Product;
+import co.toyslove.model.ShopFilter;
 import co.toyslove.repository.CategoryRepository;
 import co.toyslove.service.CategoryService;
 import co.toyslove.service.ProductServicesImpl;
@@ -56,9 +57,8 @@ public class ProductController {
 	}
 	
 	@GetMapping("/products/list")
-	public @ResponseBody List<Product> getProducts() {
-		productService.findAll();
-		return productService.findAll();
+	public @ResponseBody List<Product> getProducts(ShopFilter shopFilter) {
+		return productService.findByFilter(shopFilter);
 	}
 	
 	
