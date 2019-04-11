@@ -15,4 +15,6 @@ public interface CategoryService {
 
 	void deleteCategory(int idCategory);
 
+	List<Category> findFirstPage();
+
 }

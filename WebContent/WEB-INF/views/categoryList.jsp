@@ -62,6 +62,7 @@
 									<th scope="col">Id</th>
 									<th scope="col">Nombre</th>
 									<th scope="col">Descripción</th>
+									<th scope="col">Primera Pagina</th>
 									<th scope="col">Imagen</th>
 									<th scope="col">Editar</th>
 									<th scope="col">Eliminar</th>
@@ -73,6 +74,12 @@
 										<th scope="row">${category.id}</th>
 										<td>${category.name}</td>
 										<td>${category.description}</td>
+										<td><c:choose>
+												<c:when test="${category.firstPage}">Si</c:when>
+												<c:otherwise>No</c:otherwise>
+											</c:choose>
+										</td>
+
 										<td><img class="imgList" src="${urlResources}/images/categories/${category.image}"></td>
 										<td>
 										<a href="${url}admin/categories/${category.id}/#product">

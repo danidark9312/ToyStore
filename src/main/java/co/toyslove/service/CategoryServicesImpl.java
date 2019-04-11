@@ -16,6 +16,9 @@ public class CategoryServicesImpl implements CategoryService{
 	public List<Category> findAll(){
 		return CategoryRepository.findAll();
 	}
+	public List<Category> findFirstPage(){
+		return CategoryRepository.findByFirstPageTrueOrderByPriorityAsc();
+	}
 	
 	public void save(Category Category) {
 		CategoryRepository.save(Category);
