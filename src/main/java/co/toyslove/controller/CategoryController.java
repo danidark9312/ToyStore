@@ -30,6 +30,9 @@ public class CategoryController {
 	@Autowired
 	CategoryService categoryService;
 	
+	@Autowired
+	Util util;
+	
 	@GetMapping("/admin/categories")
 	public String showForm(@ModelAttribute Category category) {
 		return "categoryForm";
@@ -56,7 +59,7 @@ public class CategoryController {
 	
 	
 	@PostMapping("/admin/categories/save")
-	public String saveCliente(@ModelAttribute Category category, BindingResult result, Model model,
+	public String saveCategory(@ModelAttribute Category category, BindingResult result, Model model,
 			@RequestParam("archivoImagen") MultipartFile multiPart, HttpServletRequest request, RedirectAttributes attributes) {
 		String imageName = null;
 		if (result.hasErrors()){
@@ -65,7 +68,7 @@ public class CategoryController {
 		}	
 		
 		if (!multiPart.isEmpty()) {
-			imageName = Util.guardarImagen(multiPart,request,"categories");
+			imageName = util.saveImage(multiPart,request,"categories");
 		}
 			if (imageName!=null){ 
 				category.setImage(imageName);

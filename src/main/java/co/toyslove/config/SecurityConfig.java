@@ -15,19 +15,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 	String loginPage = "login";
 		 http.csrf().disable()
-		 .authorizeRequests()
-		 	.anyRequest().permitAll();
-		 
-             //.anyRequest()
-		 	//.antMatchers("/admin/**")
-             // .permitAll()
-             // .antMatchers("/admin/**")
-             //.authenticated()
-             /*.and()
+		   .authorizeRequests()
+		// 	.anyRequest().permitAll();
+            // .anyRequest()
+             .antMatchers("/admin/**")
+             .authenticated()
+             .and()
          .formLogin()
              .loginPage("/"+loginPage)
-             .failureUrl("/"+loginPage+"?error=\"Error de autenticación\"")
-             .permitAll();*/
+             .permitAll()
+             .failureUrl("/"+loginPage+"?error=\"Error de autenticación\"");
 		//super.configure(http);
 	}
 

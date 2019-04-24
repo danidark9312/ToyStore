@@ -8,20 +8,28 @@ import java.nio.file.Paths;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+@Component
 public class Util {
+	
+	@Value( "${uploadFile.folder}" )
+	private String filePath;
+	
 	/**
 	 * Metodo que guarda una imagen atraves de un formulario HTML al disco duro.
 	 * @param multiPart
 	 * @param request
 	 * @return
 	 */
-	public static String guardarImagen(MultipartFile multiPart, HttpServletRequest request,String prefix) {
+	public String saveImage(MultipartFile multiPart, HttpServletRequest request,String prefix) {
+		System.out.println("Param: "+filePath);
 		String nombreOriginal = multiPart.getOriginalFilename();
 		nombreOriginal = nombreOriginal.replace(" ", "-");
 		String nombreFinal = randomAlphaNumeric(8)+nombreOriginal;
-		String rutaFinal = request.getServletContext().getRealPath("/resources/images/"+prefix+"/");
+		String rutaFinal = filePath+prefix+"/";
 		try {
 			Path folder = Paths.get(rutaFinal);
 			File imageFile = new File(rutaFinal + nombreFinal);

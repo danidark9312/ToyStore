@@ -3,7 +3,8 @@ var defaultMaxPriceFilter = 500000;
 var app = angular.module('myApp', []);
 app.controller('shopController', function($scope,shopService) {
   $scope.shopTitle= "Listado de Productos";
-  $scope.products = "-";
+  $scope.products = "";
+  $scope.shoppingCart = new Array();
   $scope.shopFilter = {
 		  price : "priceMin="+defaultMinPriceFilter+"&priceMax"+defaultMaxPriceFilter,
   };
@@ -11,6 +12,7 @@ app.controller('shopController', function($scope,shopService) {
   angular.element(document).ready(function () {
 	  $scope.initComponents();
 	  $scope.loadProductos();
+	  $scope.setScreenToPhone();
   });
   
   
@@ -51,18 +53,40 @@ app.controller('shopController', function($scope,shopService) {
 	  shopService.loadProducts(filter).then(
 				 function(d) {
 					 $scope.products = d.data;
+					 $("[id=itemsCant]").text($scope.getItemsInCart($scope.products));
 	         		},
 	         function(errResponse){
 	             console.error('Error while fetching Users');
 	         }	  
 	  );
   }
-  $scope.addItemToCart = function(){
-	  var filter = buildFilters();
+  
+  $scope.getItemsInCart = function(products){
+	var total = 0;
+	angular.forEach(products, function(product, key){
+		if(product.inCart)
+			total++;
+	});
+	  return total;
+  };
+  
+  
+  $scope.addItemToCart = function(product, cant){
+	  var shoppingItem = {
+			  product : product,
+			  count : cant
+	  }
 	  
-	  shopService.addItemToCart(filter).then(
+	  shopService.addItemToCart(shoppingItem).then(
 			  function(d) {
-				  console.log(d);
+				  $scope.shoppingCart.push(shoppingItem);
+				  $("[id=itemsCant]").text(d.data.data);
+				  $("#animatedCart").addClass("animated-cart");
+				  setTimeout(function(){
+					  $("#animatedCart").removeClass("animated-cart")
+				  },1000);
+				  
+				  product.inCart = true;
 			  },
 			  function(errResponse){
 				  console.error('Error while fetching Users');
@@ -70,6 +94,46 @@ app.controller('shopController', function($scope,shopService) {
 	  );
 
   }
+  
+  $scope.removeItemFromCart = function(product){
+	  shopService.removeItemFromCart(product).then(
+			  function(d) {
+				  // $scope.shoppingCart.push(shoppingItem);
+				  $("#itemsCant").text(d.data.data);
+				  product.inCart = false;
+			  },
+			  function(errResponse){
+				  console.error('Error while fetching Users');
+			  }	  
+	  );
+	  
+  }
+  
+  $scope.setScreenToPhone = function(){
+	if(window.mobilecheck() || $(window).width()<768){
+		$("#collapsefilter").collapse("hide");
+	}  
+  };
+  $scope.searchProducts = function(text){
+	  if(text == ""){
+		  angular.forEach($scope.products, function(product, key){
+					product.invisible = false;
+			});
+	  }else{
+		  text = text.toLowerCase();
+		  angular.forEach($scope.products, function(product, key){
+			  if(        product.name.toLowerCase().includes(text) 
+					  || product.description.toLowerCase().includes(text)
+					  || product.category.name.toLowerCase().includes(text)
+					  || product.category.description.toLowerCase().includes(text)
+			  )
+				  product.invisible = false;
+			  else
+				  product.invisible = true;
+		  });
+	  }
+		  
+  };
   
   var buildFilters = function(){
 	var str = "";
@@ -81,4 +145,38 @@ app.controller('shopController', function($scope,shopService) {
   };
   
 });
-;
+
+
+$(document).ready(function(){
+ 	 changeFloatingVisibility(window.scrollY);
+ });
+ 
+  $('#modal-buy').on('hidden.bs.modal', function () {
+   		restoredFloating();
+   });
+   	
+   var sendBotFloating = function(){
+   	$(".floating-cart").addClass("activated");
+   }
+   
+   var restoredFloating = function(){
+   	$(".floating-cart").removeClass("activated");
+   }
+   
+   function changeFloatingVisibility (scroll) {
+   	  var element = $(".floating-cart")[0];
+   	  var visibility;
+   	  if(scroll)
+   	  	visibility = this.scrollY/240;
+   	  else
+   		 visibility = scroll/240;
+   	  
+   	  this.scrollY > 240 ? element.style.opacity = 1 : element.style.opacity = visibility;
+   	  
+   	  if(element.style.opacity < 0.1)
+   		  element.style.display = "none";
+   	  else
+   		  element.style.display = "block";
+   	}
+
+   	window.addEventListener("scroll", changeFloatingVisibility , false);

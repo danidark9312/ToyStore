@@ -1,6 +1,5 @@
 package co.toyslove.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import co.toyslove.entity.Product;
 import co.toyslove.model.ShopFilter;
-import co.toyslove.repository.CategoryRepository;
+import co.toyslove.model.ShoppingCart;
+import co.toyslove.model.ShoppingItem;
 import co.toyslove.service.CategoryService;
 import co.toyslove.service.ProductServicesImpl;
 import co.toyslove.util.Util;
@@ -36,6 +36,12 @@ public class ProductController {
 	
 	@Autowired
 	CategoryService categoryService;
+	
+	@Autowired
+	ShoppingCart shoppingCart;
+	
+	@Autowired
+	Util util;
 	
 	@GetMapping("/admin/products")
 	public String showForm(@ModelAttribute Product product,Model model) {
@@ -55,16 +61,18 @@ public class ProductController {
 		model.addAttribute("products",productService.findAll());
 		return "productList";
 	}
-	
+
 	@GetMapping("/products/list")
 	public @ResponseBody List<Product> getProducts(ShopFilter shopFilter) {
-		return productService.findByFilter(shopFilter);
+		List<Product> products = productService.findByFilter(shopFilter);
+		markItemsInCart(products);
+		return products;
 	}
 	
 	
 	
 	@PostMapping("/admin/products/save")
-	public String saveCliente(@ModelAttribute Product product, BindingResult result, Model model,
+	public String saveProduct(@ModelAttribute Product product, BindingResult result, Model model,
 			@RequestParam("archivoImagen") MultipartFile multiPart, HttpServletRequest request, RedirectAttributes attributes) {
 		String imageName = null;
 		if (result.hasErrors()){
@@ -73,7 +81,7 @@ public class ProductController {
 		}	
 		
 		if (!multiPart.isEmpty()) {
-			imageName = Util.guardarImagen(multiPart,request,"products");
+			imageName = util.saveImage(multiPart,request,"products");
 		}
 			if (imageName!=null){ 
 				product.setImage(imageName);
@@ -92,6 +100,21 @@ public class ProductController {
 		/*clienteService.deleteCliente(cliente);
 		return Response.ofMessage("Cliente eliminado con éxito");*/
 		return null;
+	}
+	
+	private void markItemsInCart(List<Product> products) {
+		if(shoppingCart.getShoppingItems() == null)
+			return;
+		
+		products.forEach(product->{
+			boolean isInCart = shoppingCart.getShoppingItems()
+				.stream()
+				.map(ShoppingItem::getProduct)
+				.anyMatch(p->p.equals(product))
+				;
+			product.setInCart(isInCart);
+		});
+		
 	}
 	
 	

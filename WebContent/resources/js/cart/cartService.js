@@ -1,14 +1,15 @@
-app.factory('shopService',function($http,$q){
+app.factory('cartService',function($http,$q){
 	var factory ={
-			loadProducts : loadProducts,
-			addItemToCart : addItemToCart,
-			removeItemFromCart : removeItemFromCart
+			loadShoppingCart : loadShoppingCart,
+			updateCart : updateCart,
+			saveClient : saveClient
 	};
 	return factory;
 	
-	function loadProducts(filters){
+	
+	function loadShoppingCart(){
 		 var deferred = $q.defer();
-	     $http.get(context+"products/list"+((filters!=undefined)?("?"+filters):''))
+	     $http.get(context+"cart/list")
             .then(
             function (response) {
             	deferred.resolve(response);        
@@ -20,13 +21,12 @@ app.factory('shopService',function($http,$q){
         );
         return deferred.promise;
 	}
-	function addItemToCart(shoppingItem){
+	function updateCart(shoppingItems){
 		var deferred = $q.defer();
 		var req = {
 				 method: 'POST',
-				 url: context+"cart/add",
-				 // headers: {'Content-Type': 'application/json'},
-				 data: JSON.stringify(shoppingItem)};
+				 url: context+"cart/update",
+				 data: JSON.stringify(shoppingItems)};
 		$http(req)
 		.then(
 				function (response) {
@@ -39,12 +39,13 @@ app.factory('shopService',function($http,$q){
 		);
 		return deferred.promise;
 	}
-	function removeItemFromCart(product){
+	
+	function saveClient(client){
 		var deferred = $q.defer();
 		var req = {
-				method: 'POST',
-				url: context+"cart/remove",
-				data: JSON.stringify(product)};
+				 method: 'POST',
+				 url: context+"checkout/saveClient",
+				 data: JSON.stringify(client)};
 		$http(req)
 		.then(
 				function (response) {
@@ -57,4 +58,5 @@ app.factory('shopService',function($http,$q){
 		);
 		return deferred.promise;
 	}
+	
 });

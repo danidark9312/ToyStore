@@ -17,10 +17,6 @@ public class Category {
 	private boolean firstPage;
 	private int priority;
 	private String image;
-	
-	
-	
-	
 
 	
 	public Category() {
