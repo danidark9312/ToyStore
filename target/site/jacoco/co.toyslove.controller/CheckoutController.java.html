@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CheckoutController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToysLove</a> &gt; <a href="index.source.html" class="el_package">co.toyslove.controller</a> &gt; <span class="el_source">CheckoutController.java</span></div><h1>CheckoutController.java</h1><pre class="source lang-java linenums">package co.toyslove.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import co.toyslove.entity.Client;
+import co.toyslove.model.ShoppingCart;
+import co.toyslove.service.ClientService;
+import co.toyslove.util.EmailSender;
+import co.toyslove.viewmodel.Response;
+
+@Controller
+@RequestMapping(&quot;checkout&quot;)
+<span class="nc" id="L20">public class CheckoutController {</span>
+	
+	@Autowired
+	ShoppingCart shoppingCart;
+	
+	@Autowired
+	ClientService clientService;
+	
+	@Autowired
+	EmailSender emailSender;
+	
+	@RequestMapping()
+	public String showForm(Model model, RedirectAttributes attributes) {
+<span class="nc bnc" id="L33" title="All 4 branches missed.">		if(shoppingCart.getShoppingItems()==null || shoppingCart.getShoppingItems().size()==0) {</span>
+<span class="nc" id="L34">			attributes.addFlashAttribute(&quot;error&quot;,&quot;No tiene productos en el carrito de compras&quot;);</span>
+<span class="nc" id="L35">			return &quot;redirect:home&quot;;</span>
+		}else {
+<span class="nc" id="L37">			model.addAttribute(&quot;shoppingList&quot;, shoppingCart.getShoppingItems());</span>
+<span class="nc" id="L38">			return &quot;checkout&quot;;	</span>
+		}
+	}
+	
+	@RequestMapping(&quot;thankyou&quot;)
+	public String showFormThankYou(Model model) {
+<span class="nc" id="L44">		emailSender.sendCheckoutOrder(shoppingCart);</span>
+<span class="nc" id="L45">		shoppingCart.clear();</span>
+<span class="nc" id="L46">		return &quot;thankyou&quot;;</span>
+	}
+	
+	@GetMapping(&quot;email&quot;)
+	public @ResponseBody Response&lt;String&gt; email() {
+<span class="nc" id="L51">		emailSender.sendTest();</span>
+<span class="nc" id="L52">		return Response.ofMessage(&quot;success&quot;);</span>
+	}
+		
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

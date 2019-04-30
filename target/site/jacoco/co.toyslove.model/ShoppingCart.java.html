@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShoppingCart.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToysLove</a> &gt; <a href="index.source.html" class="el_package">co.toyslove.model</a> &gt; <span class="el_source">ShoppingCart.java</span></div><h1>ShoppingCart.java</h1><pre class="source lang-java linenums">package co.toyslove.model;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
+
+import co.toyslove.entity.Client;
+import co.toyslove.entity.Product;
+
+@Component
+@Scope(value = &quot;session&quot;,proxyMode=ScopedProxyMode.TARGET_CLASS)
+<span class="nc" id="L15">public class ShoppingCart {</span>
+	private List&lt;ShoppingItem&gt; shoppingItems;
+	private Client client;
+	
+	
+
+	public Client getClient() {
+<span class="nc" id="L22">		return client;</span>
+	}
+
+	public void setClient(Client client) {
+<span class="nc" id="L26">		this.client = client;</span>
+<span class="nc" id="L27">	}</span>
+
+	public List&lt;ShoppingItem&gt; getShoppingItems() {
+<span class="nc" id="L30">		return shoppingItems;</span>
+	}
+
+	public void setShoppingItems(List&lt;ShoppingItem&gt; shoppingItems) {
+<span class="nc" id="L34">		this.shoppingItems = shoppingItems;</span>
+<span class="nc" id="L35">	}</span>
+
+	public int getItemsCount() {
+<span class="nc bnc" id="L38" title="All 2 branches missed.">		return shoppingItems==null?0:shoppingItems.size();</span>
+	}
+
+	public void addItem(ShoppingItem shoppingItem) {
+<span class="nc bnc" id="L42" title="All 2 branches missed.">		if(this.shoppingItems == null)</span>
+<span class="nc" id="L43">			this.shoppingItems = new LinkedList&lt;&gt;();</span>
+<span class="nc" id="L44">		this.shoppingItems.add(shoppingItem);</span>
+<span class="nc" id="L45">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L49">		return &quot;ShoppingCart [shoppingItems=&quot; + shoppingItems + &quot;]&quot;;</span>
+	}
+
+	public void removeProduct(Product product) {
+<span class="nc" id="L53">		this.shoppingItems.removeIf(si-&gt;si.getProduct().equals(product));</span>
+<span class="nc" id="L54">	}</span>
+
+	public void cleanProductsZeroCant() {
+<span class="nc bnc" id="L57" title="All 4 branches missed.">		if(this.shoppingItems==null || this.getShoppingItems().size() ==0)</span>
+<span class="nc" id="L58">			return;</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		for(int i=0;i&lt;shoppingItems.size();i++) {</span>
+<span class="nc" id="L60">			ShoppingItem shoppingItem = shoppingItems.get(i);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">			if(shoppingItem.getCount()&lt;1) {</span>
+<span class="nc" id="L62">				shoppingItems.remove(i);</span>
+<span class="nc" id="L63">				i--;</span>
+			}
+		}
+		
+<span class="nc" id="L67">	}</span>
+
+	public void clear() {
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		if(this.shoppingItems!=null)</span>
+<span class="nc" id="L71">			this.shoppingItems.clear();</span>
+<span class="nc" id="L72">	}</span>
+	
+	
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -9,14 +9,24 @@ import org.springframework.stereotype.Component;
 
 import co.toyslove.entity.Client;
 import co.toyslove.entity.Product;
+import co.toyslove.entity.PurchaseOrder;
 
 @Component
 @Scope(value = "session",proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class ShoppingCart {
 	private List<ShoppingItem> shoppingItems;
 	private Client client;
+	private PurchaseOrder purchaseOrder;
 	
 	
+
+	public PurchaseOrder getPurchaseOrder() {
+		return purchaseOrder;
+	}
+
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
 
 	public Client getClient() {
 		return client;
@@ -44,9 +54,12 @@ public class ShoppingCart {
 		this.shoppingItems.add(shoppingItem);
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "ShoppingCart [shoppingItems=" + shoppingItems + "]";
+		return "ShoppingCart [shoppingItems=" + shoppingItems + ", client=" + client + ", purchaseOrder="
+				+ purchaseOrder + "]";
 	}
 
 	public void removeProduct(Product product) {

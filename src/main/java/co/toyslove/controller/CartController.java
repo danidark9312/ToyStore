@@ -28,7 +28,7 @@ public class CartController {
 	@Autowired
 	ShoppingCart shoppingCart;
 	
-	@RequestMapping()
+	@GetMapping()
 	public String showForm(Model model, RedirectAttributes attributes) {
 		if(shoppingCart.getShoppingItems()==null || shoppingCart.getShoppingItems().size()==0) {
 			attributes.addFlashAttribute("error","No tiene productos en el carrito de compras");

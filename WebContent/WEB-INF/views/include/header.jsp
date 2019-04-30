@@ -8,8 +8,6 @@
         <div class="container">
           <div class="row align-items-center">
 
-            
-
             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
               <div class="site-logo">
                 <a href="${url}" class="${urlResources}/js-logo-clone">ToysLove</a>
@@ -65,6 +63,7 @@
 <!--               </ul> -->
 <!--             </li> -->
             <li class="active"><a href="${url}">Tienda</a></li>
+            <li class="active"><a href="${url}order/list/">Estado de compra</a></li>
 <!--             <li><a href="#">Catalogue</a></li> -->
 
             <li class="has-children">

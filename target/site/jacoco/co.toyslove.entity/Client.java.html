@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Client.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToysLove</a> &gt; <a href="index.source.html" class="el_package">co.toyslove.entity</a> &gt; <span class="el_source">Client.java</span></div><h1>Client.java</h1><pre class="source lang-java linenums">package co.toyslove.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+@Entity(name=&quot;clients&quot;)
+<span class="fc" id="L10">public class Client {</span>
+	
+	@Id
+	private String document;
+	@Column(name = &quot;dsname&quot;)
+	private String name;
+	@Column(name = &quot;dslast_name&quot;)
+	private String lastName;
+	@Column(name = &quot;dsaddress&quot;)
+	private String address;
+	@Column(name = &quot;dsaddress_append&quot;)
+	private String addressAppend;
+	@Column(name = &quot;dscity&quot;)
+	private String city;
+	@ManyToOne
+	@JoinColumn(name =&quot;idstate&quot;, referencedColumnName=&quot;idstate&quot;)
+	private State state;
+	@Column(name = &quot;dsemail&quot;)
+	private String email;
+	@Column(name = &quot;dsphone&quot;)
+	private String phone;
+	@Column(name = &quot;dsaddress_comment&quot;)
+	private String addressComment;
+	@Column(name=&quot;dspassword&quot;)
+	private String password;
+	
+	
+	public String getPassword() {
+<span class="nc" id="L38">		return password;</span>
+	}
+	public void setPassword(String password) {
+<span class="nc" id="L41">		this.password = password;</span>
+<span class="nc" id="L42">	}</span>
+	public String getDocument() {
+<span class="fc" id="L44">		return document;</span>
+	}
+	public void setDocument(String document) {
+<span class="fc" id="L47">		this.document = document;</span>
+<span class="fc" id="L48">	}</span>
+	public String getName() {
+<span class="nc" id="L50">		return name;</span>
+	}
+	public void setName(String name) {
+<span class="fc" id="L53">		this.name = name;</span>
+<span class="fc" id="L54">	}</span>
+	public String getLastName() {
+<span class="nc" id="L56">		return lastName;</span>
+	}
+	public void setLastName(String lastName) {
+<span class="fc" id="L59">		this.lastName = lastName;</span>
+<span class="fc" id="L60">	}</span>
+	public String getAddress() {
+<span class="nc" id="L62">		return address;</span>
+	}
+	public void setAddress(String address) {
+<span class="fc" id="L65">		this.address = address;</span>
+<span class="fc" id="L66">	}</span>
+	public String getAddressAppend() {
+<span class="nc" id="L68">		return addressAppend;</span>
+	}
+	public void setAddressAppend(String addressAppend) {
+<span class="fc" id="L71">		this.addressAppend = addressAppend;</span>
+<span class="fc" id="L72">	}</span>
+	public String getCity() {
+<span class="nc" id="L74">		return city;</span>
+	}
+	public void setCity(String city) {
+<span class="nc" id="L77">		this.city = city;</span>
+<span class="nc" id="L78">	}</span>
+	public State getState() {
+<span class="nc" id="L80">		return state;</span>
+	}
+	public void setState(State state) {
+<span class="nc" id="L83">		this.state = state;</span>
+<span class="nc" id="L84">	}</span>
+	public String getEmail() {
+<span class="nc" id="L86">		return email;</span>
+	}
+	public void setEmail(String email) {
+<span class="nc" id="L89">		this.email = email;</span>
+<span class="nc" id="L90">	}</span>
+	public String getPhone() {
+<span class="nc" id="L92">		return phone;</span>
+	}
+	public void setPhone(String phone) {
+<span class="fc" id="L95">		this.phone = phone;</span>
+<span class="fc" id="L96">	}</span>
+	public String getAddressComment() {
+<span class="nc" id="L98">		return addressComment;</span>
+	}
+	public void setAddressComment(String addressComment) {
+<span class="nc" id="L101">		this.addressComment = addressComment;</span>
+<span class="nc" id="L102">	}</span>
+	@Override
+	public int hashCode() {
+<span class="nc" id="L105">		final int prime = 31;</span>
+<span class="nc" id="L106">		int result = 1;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		result = prime * result + ((document == null) ? 0 : document.hashCode());</span>
+<span class="nc" id="L108">		return result;</span>
+	}
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L112" title="All 2 branches missed.">		if (this == obj)</span>
+<span class="nc" id="L113">			return true;</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (obj == null)</span>
+<span class="nc" id="L115">			return false;</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">		if (getClass() != obj.getClass())</span>
+<span class="nc" id="L117">			return false;</span>
+<span class="nc" id="L118">		Client other = (Client) obj;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">		if (document == null) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">			if (other.document != null)</span>
+<span class="nc" id="L121">				return false;</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		} else if (!document.equals(other.document))</span>
+<span class="nc" id="L123">			return false;</span>
+<span class="nc" id="L124">		return true;</span>
+	}
+	@Override
+	public String toString() {
+<span class="nc" id="L128">		return &quot;Client [document=&quot; + document + &quot;, name=&quot; + name + &quot;, lastName=&quot; + lastName + &quot;, address=&quot; + address</span>
+				+ &quot;, addressAppend=&quot; + addressAppend + &quot;, city=&quot; + city + &quot;, state=&quot; + state + &quot;, email=&quot; + email
+				+ &quot;, phone=&quot; + phone + &quot;, addressComment=&quot; + addressComment + &quot;]&quot;;
+	}
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

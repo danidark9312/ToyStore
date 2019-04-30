@@ -47,7 +47,7 @@ public class EmailSender {
 	}
 	
 	private String getHTMLBodyOrder(ShoppingCart shoppingCart) {
-		
+		int purchaseOrderId = shoppingCart.getPurchaseOrder().getId();
 		String base = templateReader.getTemplate("PurchaseOrder");
 		String table = "";
 		table+="<table border=0>";
@@ -62,7 +62,7 @@ public class EmailSender {
 		table+="<tr><td colspan=3>Total</td><td>"+currencyFormat.format(getTotal(shoppingCart.getShoppingItems()))+"</td></tr>";
 		table+="</table>";
 		table+=getClentInfo(shoppingCart.getClient());
-		String bodyEmail = String.format(base, table);
+		String bodyEmail = String.format(base, purchaseOrderId ,table);
 		System.out.println(bodyEmail);
 		return bodyEmail;
 	}
@@ -90,7 +90,7 @@ public class EmailSender {
 			details+=	"<td>"+item.getProduct().getName()+"</td>";
 			details+=	"<td>"+currencyFormat.format(item.getProduct().getValue())+"</td>";
 			details+=	"<td>"+item.getCount()+"</td>";
-			details+=	"<td>"+currencyFormat.format(item.getCount()*item.getProduct().getValue())+"</td>";
+			details+=	"<td>"+currencyFormat.format((long)item.getCount()*item.getProduct().getValue())+"</td>";
 			details+="</tr>";
 			return details;
 		}).reduce("", String::concat);

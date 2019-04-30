@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebMvcConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ToysLove</a> &gt; <a href="index.source.html" class="el_package">co.toyslove.config</a> &gt; <span class="el_source">WebMvcConfig.java</span></div><h1>WebMvcConfig.java</h1><pre class="source lang-java linenums">package co.toyslove.config;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Properties;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import co.toyslove.util.EmailSender;
+
+@Configuration
+@EnableWebMvc
+@ComponentScan(basePackages = &quot;co.toyslove&quot;)
+@PropertySource(&quot;classpath:parameter.properties&quot;)
+<span class="nc" id="L28">public class WebMvcConfig implements WebMvcConfigurer {</span>
+
+//	@Bean
+//	public ViewResolver getViewResolver() {
+//		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+//		resolver.setPrefix(&quot;/WEB-INF/views/&quot;);
+//		resolver.setSuffix(&quot;.jsp&quot;);
+//		return resolver;
+//	}
+
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+<span class="nc" id="L41">		registry.addResourceHandler(&quot;/resources/**&quot;).addResourceLocations(&quot;/resources/&quot;);</span>
+<span class="nc" id="L42">	}</span>
+
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+<span class="nc" id="L46">		registry.jsp().prefix(&quot;/WEB-INF/views/&quot;).suffix(&quot;.jsp&quot;);</span>
+<span class="nc" id="L47">	}</span>
+	// @Bean
+	// public MessageSource messageSource() {
+	// ResourceBundleMessageSource messageSource = new
+	// ResourceBundleMessageSource();
+	// messageSource.setBasename(&quot;messages&quot;);
+	// return messageSource;
+	// }
+
+	
+
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+<span class="nc" id="L60">		registry.addViewController(&quot;/&quot;).setViewName(&quot;shop&quot;);</span>
+<span class="nc" id="L61">	}</span>
+	
+
+
+	@Bean(name = &quot;multipartResolver&quot;)
+	public CommonsMultipartResolver multipartResolver() {
+<span class="nc" id="L67">	    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();</span>
+	    // multipartResolver.setMaxUploadSize(100000);
+<span class="nc" id="L69">	    return multipartResolver;</span>
+	}
+	
+	@Bean
+	public JavaMailSender getJavaMailSender() {
+<span class="nc" id="L74">		String username = &quot;maestramagaliceleste@gmail.com&quot;;</span>
+<span class="nc" id="L75">		String password = &quot;ayudaspoderosas&quot;;</span>
+		
+<span class="nc" id="L77">	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();</span>
+<span class="nc" id="L78">	    mailSender.setHost(&quot;smtp.gmail.com&quot;);</span>
+<span class="nc" id="L79">	    mailSender.setPort(587);</span>
+<span class="nc" id="L80">	    mailSender.setUsername(username);</span>
+<span class="nc" id="L81">	    mailSender.setPassword(password);</span>
+	     
+<span class="nc" id="L83">	    Properties props=new Properties(); </span>
+	    // props.put(&quot;mail.transport.protocol&quot;, &quot;smtp&quot;);
+<span class="nc" id="L85">	    props.put(&quot;mail.smtp.auth&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L86">	    props.put(&quot;mail.smtp.starttls.enable&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L87">	    props.put(&quot;mail.debug&quot;, &quot;true&quot;);</span>
+	    
+<span class="nc" id="L89">	    mailSender.setJavaMailProperties(props);</span>
+	     
+<span class="nc" id="L91">	    return mailSender;</span>
+	}
+	
+	@Bean(name = &quot;currencyFormat&quot;)
+	public NumberFormat getCurrencyFormat() {
+<span class="nc" id="L96">		NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(new Locale(&quot;es&quot;, &quot;CO&quot;));</span>
+<span class="nc" id="L97">		currencyInstance.setMaximumFractionDigits(0);</span>
+<span class="nc" id="L98">		return currencyInstance;</span>
+	}
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -163,15 +163,17 @@ $(document).ready(function(){
    	$(".floating-cart").removeClass("activated");
    }
    
+   
    function changeFloatingVisibility (scroll) {
    	  var element = $(".floating-cart")[0];
+   	  var scrollToDisappear = 500;
    	  var visibility;
    	  if(scroll)
-   	  	visibility = this.scrollY/240;
+   	  	visibility = this.scrollY/scrollToDisappear;
    	  else
-   		 visibility = scroll/240;
+   		 visibility = scroll/scrollToDisappear;
    	  
-   	  this.scrollY > 240 ? element.style.opacity = 1 : element.style.opacity = visibility;
+   	  this.scrollY > scrollToDisappear ? element.style.opacity = 1 : element.style.opacity = visibility;
    	  
    	  if(element.style.opacity < 0.1)
    		  element.style.display = "none";
@@ -179,4 +181,25 @@ $(document).ready(function(){
    		  element.style.display = "block";
    	}
 
-   	window.addEventListener("scroll", changeFloatingVisibility , false);
+   	 window.addEventListener("scroll", changeFloatingVisibility , false);
+   	
+   var lastScroll = 0;
+   	$(window).scroll(function() {
+   		var scrollY = $(window).scrollTop();
+   		var element = $(".floating-cart")[0];
+   		var scrollQnty = 10;
+   		var isDown = lastScroll<scrollY;
+   		lastScroll = scrollY; 
+   		
+   		if(isDown){
+    		element.style.marginTop = "-"+scrollQnty+"px";  
+    	}else{
+    		element.style.marginTop = scrollQnty+"px";
+    	}
+   		
+   	    clearTimeout($.data(this, 'scrollTimer'));
+   	    $.data(this, 'scrollTimer', setTimeout(function() {
+   	    	element.style.marginTop = "0"+"px";
+   	    }, 80));
+   	});
+   	

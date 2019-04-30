@@ -28,6 +28,7 @@
 
     <link rel="stylesheet" href="${urlResources}/css/style.css">
     <link rel="stylesheet" href="${urlResources}/css/general.css">
+    <link rel="stylesheet" href="${urlResources}/css/animation.css">
     <script>
     var context = '${url}';
     
@@ -43,7 +44,7 @@
     </script>
   </head>
   <body>
-	<div class="floating-cart" style="opacity: 0">
+	<div class="floating-cart bouncing-anim" style="opacity: 0">
 	<div id="animatedCart">
 		<a href="javascript:void()" onclick="sendBotFloating()" data-toggle="modal" data-target="#modal-buy" class="site-cart"> <span
 				class="icon icon-shopping_cart"></span>
@@ -142,7 +143,7 @@
 	            <div ng-repeat="product in products" ng-show="!product.invisible" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=1;showCant=false">
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
-	                    <a href="shop-single.html">
+	                    <a href="javascript:void(0)">
 	                    	<img src="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid">
 	                    </a>
 	                  </figure>
