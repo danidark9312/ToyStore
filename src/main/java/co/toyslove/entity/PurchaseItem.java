@@ -3,6 +3,9 @@ package co.toyslove.entity;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +24,31 @@ public class PurchaseItem {
 	
 	
 	
+	
+	private String image;
+	
+	@Column(name= "idproduct")
+	private Integer idProduct;
+	
+	
+	
+
+	public Integer getIdProduct() {
+		return idProduct;
+	}
+
+	public void setIdProduct(Integer idProduct) {
+		this.idProduct = idProduct;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	public double getPrice() {
 		return price;
 	}

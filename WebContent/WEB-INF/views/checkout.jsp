@@ -278,11 +278,12 @@
 	                  </table>
 	
 	                  <div class="blueBorder p-3 mb-3">
-	                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Transferencia Bancaria</a></h3>
+	                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">
+	                    Pago</a></h3>
 	                    <div class="collapse" id="collapsebank">
 	                      <div class="py-2">
 	                        <p class="mb-0">
-	                        Realice el pago por medio de una transferencia bancaria a Bancolombia
+	                        Realice el pago por medio de una transferencia bancaria a Bancolombia o pague contra entrega
 	                        </p>
 	                      </div>
 	                    </div>

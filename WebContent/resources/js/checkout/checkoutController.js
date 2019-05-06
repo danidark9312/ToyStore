@@ -71,6 +71,7 @@ app.controller('checkoutController', function($scope,cartService) {
 				phone : "3016637232",
 				addressComment : "Cerca al polideportivo de primavera"
 		}
-	  return new Object();//dni;
+	  return new Object();
+	  //return dni;
   }
 });

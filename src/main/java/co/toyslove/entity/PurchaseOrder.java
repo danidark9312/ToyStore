@@ -38,10 +38,10 @@ public class PurchaseOrder implements Serializable{
 	private String phone;
 	
 	@Transient
-	private OrderState orderState;
+	private OrderStatus orderStatus;
 	
-	@Column(name="dsstate")
-	private String stateDescription; 
+	@Column(name="dsstatus")
+	private String statusDescription; 
 	
 	@OneToMany(mappedBy="purchaseItemPK.purchaseOrder",fetch=FetchType.EAGER)
 	private List<PurchaseItem> items;
@@ -70,21 +70,21 @@ public class PurchaseOrder implements Serializable{
 		this.shippingCarrier = shippingCarrier;
 	}
 
-	public OrderState getOrderState() {
-		return orderState;
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
 	}
 
-	public void setOrderState(OrderState orderState) {
-		this.orderState = orderState;
-		this.stateDescription = orderState.getName();
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
+		this.statusDescription = orderStatus.getName();
 	}
 
-	public String getStateDescription() {
-		return stateDescription;
+	public String getStatusDescription() {
+		return statusDescription;
 	}
 
-	public void setStateDescription(String stateDescription) {
-		this.stateDescription = stateDescription;
+	public void setStatusDescription(String statusDescription) {
+		this.statusDescription = statusDescription;
 	}
 
 	public String getTrackGuide() {
@@ -162,10 +162,13 @@ public class PurchaseOrder implements Serializable{
 	
 		
 
+	
+
 	@Override
 	public String toString() {
 		return "PurchaseOrder [id=" + id + ", client=" + client + ", address=" + address + ", email=" + email
-				+ ", phone=" + phone + ", orderState=" + orderState + ", items=" + items + ", trackGuide=" + trackGuide
+				+ ", phone=" + phone + ", orderStatus=" + orderStatus + ", stateDescription=" + statusDescription
+				+ ", items=" + items + ", trackGuide=" + trackGuide + ", shippingCarrier=" + shippingCarrier
 				+ ", dateOrder=" + dateOrder + ", dateUpdated=" + dateUpdated + "]";
 	}
 

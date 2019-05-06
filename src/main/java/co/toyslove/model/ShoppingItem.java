@@ -27,4 +27,13 @@ public class ShoppingItem {
 		return "ShoppingItem [product=" + product + ", count=" + count + "]";
 	}
 
+	public void addCant(int cant) {
+		this.count+=cant;
+	}
+	
+	
+	
+	
+	
+
 }

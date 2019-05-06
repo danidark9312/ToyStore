@@ -7,18 +7,20 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Embeddable
 public class PurchaseItemPK implements Serializable{
-	@Column(name="idProduct")
+	@Column(name="product_consecutive")
 	private int productConsecutive;
 	
-	@ManyToOne
-	@JoinColumn(name="idpurchase_order",referencedColumnName="id")
-	private PurchaseOrder purchaseOrder;
 
-	public PurchaseItemPK(int consecutive ,PurchaseOrder purchaseOrder) {
-		this.purchaseOrder = purchaseOrder;
+	@Column(name="idpurchase_order")
+	private Integer purchaseOrder;
+
+	public PurchaseItemPK(int consecutive ,Integer purchaseOrder) {
 		this.productConsecutive = consecutive;
+		this.purchaseOrder = purchaseOrder;
 	}
 	public PurchaseItemPK() {
 		super();
@@ -32,11 +34,11 @@ public class PurchaseItemPK implements Serializable{
 		this.productConsecutive = productConsecutive;
 	}
 
-	public PurchaseOrder getPurchaseOrder() {
+	public Integer getPurchaseOrder() {
 		return purchaseOrder;
 	}
 
-	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+	public void setPurchaseOrder(Integer purchaseOrder) {
 		this.purchaseOrder = purchaseOrder;
 	}
 
@@ -69,7 +71,7 @@ public class PurchaseItemPK implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "PurchaseItemPK [productConsecutive=" + productConsecutive + ", purchaseOrder=" + purchaseOrder.getId() + "]";
+		return "PurchaseItemPK [productConsecutive=" + productConsecutive + ", purchaseOrder=" + purchaseOrder + "]";
 	}
 	
 	

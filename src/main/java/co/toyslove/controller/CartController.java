@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import co.toyslove.entity.Product;
 import co.toyslove.model.ShoppingCart;
 import co.toyslove.model.ShoppingItem;
-import co.toyslove.service.ProductServicesImpl;
+import co.toyslove.service.ProductServices;
 import co.toyslove.viewmodel.Response;
 
 @Controller
@@ -23,10 +23,11 @@ import co.toyslove.viewmodel.Response;
 public class CartController {
 	
 	@Autowired
-	ProductServicesImpl productService;
+	ProductServices productService;
 	
 	@Autowired
 	ShoppingCart shoppingCart;
+	
 	
 	@GetMapping()
 	public String showForm(Model model, RedirectAttributes attributes) {
@@ -46,11 +47,13 @@ public class CartController {
 	}
 	@PostMapping("add" )
 	public @ResponseBody Response<Integer> addItem(Model model,@RequestBody ShoppingItem shoppingItem) {
+		loadProductCompleteInfo(shoppingItem);
 		shoppingCart.addItem(shoppingItem);
 		Response<Integer> response = Response.of(shoppingCart.getItemsCount());
 		response.setMessage("Operación Exitosa");
 		return response;
 	}
+
 	@PostMapping("remove" )
 	public @ResponseBody Response<Integer> removeItemFromCart(Model model,@RequestBody Product product) {
 		shoppingCart.removeProduct(product);
@@ -69,6 +72,11 @@ public class CartController {
 	}
 	
 	
-	
+	private void loadProductCompleteInfo(ShoppingItem shoppingItem) {
+		Product product = shoppingItem.getProduct();
+		if((product.getName()==null || product.getValue() ==0) && product.getId()!=0) {
+			shoppingItem.setProduct(productService.findById(product.getId()));
+		}
+	}
 	
 }

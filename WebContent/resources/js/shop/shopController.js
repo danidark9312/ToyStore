@@ -71,7 +71,14 @@ app.controller('shopController', function($scope,shopService) {
   };
   
   
+  $scope.addItemToCartFromDetail = function(productId, cant){
+	  $scope.addItemToCart(
+			  {id : productId } 
+			  ,cant);
+  }
+  
   $scope.addItemToCart = function(product, cant){
+	  console.log(product);
 	  var shoppingItem = {
 			  product : product,
 			  count : cant
@@ -146,10 +153,6 @@ app.controller('shopController', function($scope,shopService) {
   
 });
 
-
-$(document).ready(function(){
- 	 changeFloatingVisibility(window.scrollY);
- });
  
   $('#modal-buy').on('hidden.bs.modal', function () {
    		restoredFloating();
@@ -164,9 +167,9 @@ $(document).ready(function(){
    }
    
    
+   var scrollToDisappear = 500;
    function changeFloatingVisibility (scroll) {
    	  var element = $(".floating-cart")[0];
-   	  var scrollToDisappear = 500;
    	  var visibility;
    	  if(scroll)
    	  	visibility = this.scrollY/scrollToDisappear;
@@ -181,25 +184,30 @@ $(document).ready(function(){
    		  element.style.display = "block";
    	}
 
-   	 window.addEventListener("scroll", changeFloatingVisibility , false);
-   	
-   var lastScroll = 0;
-   	$(window).scroll(function() {
-   		var scrollY = $(window).scrollTop();
-   		var element = $(".floating-cart")[0];
-   		var scrollQnty = 10;
-   		var isDown = lastScroll<scrollY;
-   		lastScroll = scrollY; 
-   		
-   		if(isDown){
-    		element.style.marginTop = "-"+scrollQnty+"px";  
-    	}else{
-    		element.style.marginTop = scrollQnty+"px";
-    	}
-   		
-   	    clearTimeout($.data(this, 'scrollTimer'));
-   	    $.data(this, 'scrollTimer', setTimeout(function() {
-   	    	element.style.marginTop = "0"+"px";
-   	    }, 80));
-   	});
+   
+   function setFloatingProperties(scrollDisappearParam){
+	   scrollToDisappear = scrollDisappearParam;
+	   window.addEventListener("scroll", changeFloatingVisibility , false);
+	   var lastScroll = 0;
+	   	$(window).scroll(function() {
+	   		var scrollY = $(window).scrollTop();
+	   		var element = $(".floating-cart")[0];
+	   		var scrollQnty = 10;
+	   		var isDown = lastScroll<scrollY;
+	   		lastScroll = scrollY; 
+	   		
+	   		if(isDown){
+	    		element.style.marginTop = "-"+scrollQnty+"px";  
+	    	}else{
+	    		element.style.marginTop = scrollQnty+"px";
+	    	}
+	   		
+	   	    clearTimeout($.data(this, 'scrollTimer'));
+	   	    $.data(this, 'scrollTimer', setTimeout(function() {
+	   	    	element.style.marginTop = "0"+"px";
+	   	    }, 80));
+	   	});
+	   
+   }
+   	 
    	

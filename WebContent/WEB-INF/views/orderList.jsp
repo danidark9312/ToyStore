@@ -96,7 +96,7 @@
 										<tr>
 											<th scope="row">${order.id}</th>
 											<td>${order.dateOrder}</td>
-											<td><span class="badge badge-primary">${order.stateDescription}</span></td>
+											<td><span class="badge badge-primary">${order.statusDescription}</span></td>
 											<td>
 											<c:choose>
 												<c:when test="${order.trackGuide ne null}">
@@ -123,7 +123,7 @@
 													<c:set var="total" value="${total + (item.price*item.quantity)}" />
 												</c:forEach>
 												<fmt:formatNumber 
-											value = "${total}" 
+											value = "${total+7000}" 
 											currencySymbol = "$"
 											maxFractionDigits="0" 
 											type = "currency"/>
@@ -138,6 +138,7 @@
 							<table class="table table-striped">
 								<thead>
 									<tr>
+										<th scope="col"></th>
 										<th scope="col">Producto</th>
 										<th scope="col">Valor Unitario</th>
 										<th scope="col">Cantidad</th>
@@ -147,6 +148,11 @@
 								<tbody>
 								<c:forEach var="item" items="${order.items}" >
 										<tr>
+											<td>
+												<a ng-href="${url}item/${item.idProduct}">
+													<img class="imgList" src="${urlResources}/images/products/${item.image}">
+												</a>
+											</td>
 											<td>${item.productName}</td>
 											<td><fmt:formatNumber 
 											value = "${item.price}" 
@@ -161,6 +167,14 @@
 											type = "currency"/></td>
 										</tr>
 								</c:forEach>
+								<tr>
+											<td style="text-align: right" colspan="4">Envío</td>
+											<td><fmt:formatNumber 
+											value = "${7000}" 
+											currencySymbol = "$"
+											maxFractionDigits="0" 
+											type = "currency"/></td>
+										</tr>
 								</tbody>
 							</table>
 	

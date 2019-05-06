@@ -69,6 +69,7 @@
             <li class="has-children">
               <a>Admin</a>
               <ul class="dropdown">
+                <li><a href="${url}admin/order">Ordenes</a></li>
                 <li><a href="${url}admin/products/list">Productos</a></li>
 	             <li><a href="${url}admin/categories/list">Categorias</a></li>
 	             <li><a href="${url}admin/client/list">Clientes</a></li>

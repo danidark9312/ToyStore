@@ -61,7 +61,9 @@
                 <tbody>
                 <tr ng-repeat="item in shoppingList" ng-show="item.count!=0">
                     <td class="product-thumbnail">
+                    <a ng-href="${url}item/{{item.product.id}}">
                       <img src="${urlResources}/images/products/{{item.product.image}}" alt="Image" class="img-fluid">
+					</a>
                     </td>
                     <td class="product-name">
                       <h2 class="h5 text-black">{{item.product.name}}</h2>

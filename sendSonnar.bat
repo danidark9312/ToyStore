@@ -1,0 +1,1 @@
+mvn sonar:sonar -Dsonar.projectKey=toyslove -Dsonar.host.url=http://localhost:9000 -Dsonar.login=3d816da937fd329e4f79cb2e90af28595fd9626b

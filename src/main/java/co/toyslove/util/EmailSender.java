@@ -30,14 +30,14 @@ public class EmailSender {
 	@Qualifier("currencyFormat")
 	NumberFormat currencyFormat;
 	
-	public void sendCheckoutOrder(ShoppingCart shoppingCart){
+	public void sendCheckoutOrder(ShoppingCart shoppingCart, double shippingCost){
 		//SimpleMailMessage message = new SimpleMailMessage();
 		MimeMessage createMimeMessage = sender.createMimeMessage();
 		try {
-			MimeMessageHelper helper = new MimeMessageHelper(createMimeMessage, true);
+			MimeMessageHelper helper = new MimeMessageHelper(createMimeMessage, true,"UTF-8");
 			helper.setTo(new String[] {"danielgm9312@hotmail.com",shoppingCart.getClient().getEmail()});
 			helper.setSubject("Orden de compra");
-			helper.setText(getHTMLBodyOrder(shoppingCart),true);
+			helper.setText(getHTMLBodyOrder(shoppingCart, shippingCost),true);
 			sender.send(createMimeMessage);
 		} catch (MessagingException e) {
 			e.printStackTrace();
@@ -46,7 +46,7 @@ public class EmailSender {
 		
 	}
 	
-	private String getHTMLBodyOrder(ShoppingCart shoppingCart) {
+	private String getHTMLBodyOrder(ShoppingCart shoppingCart, double shippingCost) {
 		int purchaseOrderId = shoppingCart.getPurchaseOrder().getId();
 		String base = templateReader.getTemplate("PurchaseOrder");
 		String table = "";
@@ -57,9 +57,9 @@ public class EmailSender {
 		table+=	 "<th>Cantidad</th>";
 		table+=	 "<th>Total</th>";
 		table+=	"</tr>";
-		table+=getItemsDetails(shoppingCart.getShoppingItems());
+		table+=getItemsDetails(shoppingCart.getShoppingItems(), shippingCost);
 		
-		table+="<tr><td colspan=3>Total</td><td>"+currencyFormat.format(getTotal(shoppingCart.getShoppingItems()))+"</td></tr>";
+		table+="<tr><td colspan=3>Total</td><td>"+currencyFormat.format(getTotal(shoppingCart.getShoppingItems())+shippingCost)+"</td></tr>";
 		table+="</table>";
 		table+=getClentInfo(shoppingCart.getClient());
 		String bodyEmail = String.format(base, purchaseOrderId ,table);
@@ -84,7 +84,7 @@ public class EmailSender {
 		return shoppingItems.stream().mapToInt(item->item.getProduct().getValue()*item.getCount()).sum();
 	}
 
-	private String getItemsDetails(List<ShoppingItem> shoppingItems) {
+	private String getItemsDetails(List<ShoppingItem> shoppingItems, double shippingCost) {
 		String body = shoppingItems.stream().map(item->{
 			String details = "<tr>";
 			details+=	"<td>"+item.getProduct().getName()+"</td>";
@@ -94,7 +94,13 @@ public class EmailSender {
 			details+="</tr>";
 			return details;
 		}).reduce("", String::concat);
-				
+			if(shippingCost != 0) {
+				String details = "<tr>";
+				details+=	"<td style=\"text-align='right'\" colspan='3'>Envío</td>";
+				details+=	"<td>"+currencyFormat.format(shippingCost)+"</td>";
+				details+="</tr>";
+				body+=details;
+			}
 		return body;
 	}
 

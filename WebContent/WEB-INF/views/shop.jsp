@@ -143,7 +143,7 @@
 	            <div ng-repeat="product in products" ng-show="!product.invisible" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=1;showCant=false">
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
-	                    <a href="javascript:void(0)">
+	                    <a ng-href="${url}item/{{product.id}}">
 	                    	<img src="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid">
 	                    </a>
 	                  </figure>
@@ -171,7 +171,7 @@
 			                <span ng-click="showCant=true" class="fa fa-cart-plus shoppingIcon" ng-show="!product.inCart"></span>
 			                <span ng-click="removeItemFromCart(product)" class="fa fa-trash-o shoppingIcon" ng-show="product.inCart"></span>
 			                
-			                <h3><a href="shop-single.html">{{product.name}}</a></h3>
+			                <h3><a ng-href="${url}item/{{product.id}}">{{product.name}}</a></h3>
 			                <p class="mb-0">{{product.description}}</p>
 		                    <p class="text-primary font-weight-bold">{{product.value | currency:"$":0}}</p>
 		                </div>
@@ -211,7 +211,7 @@
 	              		<li class="mb-1">
 	              			<a href="" ng-click="addCategoryFilter('categoryId=${category.id }')" class="d-flex">
 	              				<span>${category.name}</span> 
-	              				<span class="text-black ml-auto">(2,220)</span></a>
+<!-- 	              				<span class="text-black ml-auto">(2,220)</span></a> -->
 	              		</li>
 	              	</c:forEach>
 	              </ul>
@@ -312,7 +312,10 @@
   <script src="${urlResources}/js/shop/shopService.js"></script>
   <script>
   
- 
+  $(document).ready(function(){
+	  	setFloatingProperties(200);
+	 	 changeFloatingVisibility(window.scrollY);
+	 });
     
     </script>
     

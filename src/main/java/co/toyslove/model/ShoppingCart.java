@@ -2,6 +2,7 @@ package co.toyslove.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -51,7 +52,16 @@ public class ShoppingCart {
 	public void addItem(ShoppingItem shoppingItem) {
 		if(this.shoppingItems == null)
 			this.shoppingItems = new LinkedList<>();
-		this.shoppingItems.add(shoppingItem);
+		
+		Optional<ShoppingItem> findAny = this.shoppingItems
+		.stream()
+		.filter(item->item.getProduct().equals(shoppingItem.getProduct()))
+		.findAny();
+		
+		if(findAny.isPresent()) 
+			findAny.get().addCant(shoppingItem.getCount());
+		else 
+			this.shoppingItems.add(shoppingItem);	
 	}
 
 	
