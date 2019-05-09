@@ -44,6 +44,12 @@
     </script>
   </head>
   <body>
+  
+	<div class="row">
+		<div class="col-12 col-md-8">.col-12 .col-md-8</div>
+		<div class="col-6 col-md-4">.col-6 .col-md-4</div>
+	</div>
+
 	<div class="floating-cart bouncing-anim" style="opacity: 0">
 	<div id="animatedCart">
 		<a href="javascript:void()" onclick="sendBotFloating()" data-toggle="modal" data-target="#modal-buy" class="site-cart"> <span
@@ -61,8 +67,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-footer">
-        <a href="cart"><button type="button" class="btn btn-default" id="modal-btn-si">Ir al carro de compras</button></a>
-        <a href="checkout" style="color:white"><button type="button" class="btn btn-primary" id="modal-btn-no">Pagar</button></a>
+        <a href="cart"><button type="button" class="btn btn-default" style="letter-spacing:0" id="modal-btn-si">Editar carro</button></a>
+        <a href="checkout" style="color:white"><button type="button" style="letter-spacing:0" class="btn btn-primary" id="modal-btn-no">Finalizar compra</button></a>
       </div>
     </div>
   </div>
@@ -140,14 +146,14 @@
             <div class="row mb-5">
             <div>
 	        </div>
-	            <div ng-repeat="product in products" ng-show="!product.invisible" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=1;showCant=false">
+	            <div ng-repeat="product in products" ng-show="!product.invisible" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=initializeCant(product);showCant=false">
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
 	                    <a ng-href="${url}item/{{product.id}}">
 	                    	<img src="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid">
 	                    </a>
 	                  </figure>
-	                  <div class="block-4-text p-4">
+	                  <div class="block-4-text p-4 limitedSize200">
 	                  	
 	                  	<div class="row" ng-show="showCant">
 							<div class="col-8 mb-1">
@@ -169,11 +175,14 @@
 						</div>
 		                <div ng-show="!showCant">  
 			                <span ng-click="showCant=true" class="fa fa-cart-plus shoppingIcon" ng-show="!product.inCart"></span>
+			                <span ng-show="product.inCart" class="shoppingCant">{{cant}}</span>
 			                <span ng-click="removeItemFromCart(product)" class="fa fa-trash-o shoppingIcon" ng-show="product.inCart"></span>
 			                
 			                <h3><a ng-href="${url}item/{{product.id}}">{{product.name}}</a></h3>
-			                <p class="mb-0">{{product.description}}</p>
-		                    <p class="text-primary font-weight-bold">{{product.value | currency:"$":0}}</p>
+			                
+			                <p class="mb-0" style="margin-bottom: 0">{{product.description | limitTo:80}}</p>
+			                
+		                    <p class="text-primary font-weight-bold" style="margin-bottom: 0">{{product.value | currency:"$":0}}</p>
 		                </div>
 	                    <span class="fa fa-star" ng-class="{checked: product.stars>0} "></span>
 						<span class="fa fa-star" ng-class="{checked: product.stars>1} "></span>

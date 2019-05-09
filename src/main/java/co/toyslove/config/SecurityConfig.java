@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          .formLogin()
              .loginPage("/"+loginPage)
              .permitAll()
-             .failureUrl("/"+loginPage+"?error=\"Error de autenticación\"");
+             .failureUrl("/"+loginPage+"?error=\"Usuario o clave incorrecto\"");
 		//super.configure(http);
 	}
 

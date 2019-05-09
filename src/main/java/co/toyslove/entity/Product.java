@@ -27,6 +27,9 @@ public class Product {
 	private boolean inCart;
 	
 	@Transient
+	private int qntyInCart;
+	
+	@Transient
 	private boolean invisible; //Used to define wether or not is shown in store(filters, pagination, etc)
 
 	@ManyToOne()
@@ -35,6 +38,14 @@ public class Product {
 
 	
 	
+
+	public int getQntyInCart() {
+		return qntyInCart;
+	}
+
+	public void setQntyInCart(int qntyInCart) {
+		this.qntyInCart = qntyInCart;
+	}
 
 	public boolean isInvisible() {
 		return invisible;

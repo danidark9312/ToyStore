@@ -62,8 +62,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-footer">
-        <a href="${url}cart"><button type="button" class="btn btn-default" id="modal-btn-si">Ir al carro de compras</button></a>
-        <a href="${url}checkout" style="color:white"><button type="button" class="btn btn-primary" id="modal-btn-no">Pagar</button></a>
+        <a href="${url}cart"><button type="button" class="btn btn-default" style="letter-spacing:0" id="modal-btn-si">Editar carro</button></a>
+        <a href="${url}checkout" style="color:white"><button type="button" style="letter-spacing:0" class="btn btn-primary" id="modal-btn-no">Finalizar compra</button></a>
       </div>
     </div>
   </div>

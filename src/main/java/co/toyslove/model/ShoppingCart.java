@@ -90,6 +90,8 @@ public class ShoppingCart {
 	}
 
 	public void clear() {
+		this.client = null;
+		this.purchaseOrder = null;
 		if(this.shoppingItems!=null)
 			this.shoppingItems.clear();
 	}

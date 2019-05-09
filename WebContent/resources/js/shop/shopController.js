@@ -69,6 +69,13 @@ app.controller('shopController', function($scope,shopService) {
 	});
 	  return total;
   };
+  $scope.initializeCant = function(product){
+	  if(product.qntyInCart==0)
+		  return 1;
+	  else
+		  return product.qntyInCart;
+	  
+  };
   
   
   $scope.addItemToCartFromDetail = function(productId, cant){

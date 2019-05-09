@@ -12,5 +12,7 @@ public interface ProductServices {
 
 	List<Product> findByFilter(ShopFilter shopFilter);
 
+	void remove(Product product);
+
 
 }

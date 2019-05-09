@@ -2,7 +2,8 @@ app.factory('cartService',function($http,$q){
 	var factory ={
 			loadShoppingCart : loadShoppingCart,
 			updateCart : updateCart,
-			saveClient : saveClient
+			saveClient : saveClient,
+			loadClient : loadClient,
 	};
 	return factory;
 	
@@ -44,8 +45,26 @@ app.factory('cartService',function($http,$q){
 		var deferred = $q.defer();
 		var req = {
 				 method: 'POST',
-				 url: context+"checkout/saveClient",
+				 url: context+"client/save",
 				 data: JSON.stringify(client)};
+		$http(req)
+		.then(
+				function (response) {
+					deferred.resolve(response);        
+				},
+				function(errResponse){
+					console.error(errResponse);
+					deferred.reject(errResponse);
+				}
+		);
+		return deferred.promise;
+	}
+	function loadClient(client){
+		var deferred = $q.defer();
+		var req = {
+				method: 'POST',
+				url: context+"client/load",
+				data: JSON.stringify(client)};
 		$http(req)
 		.then(
 				function (response) {

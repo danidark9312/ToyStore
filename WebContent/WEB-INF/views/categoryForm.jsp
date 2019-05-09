@@ -29,7 +29,9 @@
     <link rel="stylesheet" href="${urlResources}/css/style.css">
     <link rel="stylesheet" href="${urlResources}/css/general.css" />
     
-    
+    <script>
+    	var imageUrl = '${category.image}';
+    </script>
     
   </head>
   <body>
@@ -50,6 +52,10 @@
         <div class="row">
           <div class="col-md-12">
             <h2 class="h3 mb-3 text-black">Categorias</h2>
+          </div>
+          <div class="col-md-12 text-center p-2 text-md-left">
+            <a href="${url}admin/categories" class="btn btn-sm btn-primary">Nueva Categoria<i class="fa fa-plus" aria-hidden="true"></i>
+							</a>
           </div>
           <div class="col-md-7 offset-md-2">
 
@@ -120,6 +126,12 @@
   <script src="${urlResources}/js/angular/angular.min.js"></script>
   
   <script>
+  
+  $(document).ready(function(){
+		if(!imageUrl)
+			$("#imagePreview").hide();
+	  });
+  
   function readURL(input) {
 	  if (input.files && input.files[0]) {
 	    var reader = new FileReader();
@@ -132,6 +144,7 @@
 
 	$("#archivoImagen").change(function() {
 	  readURL(this);
+	  $("#imagePreview").show();
 	});
   </script>
     

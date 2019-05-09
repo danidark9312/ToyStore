@@ -70,7 +70,8 @@ a {
   .btn.btn-primary {
     font-size: 17px;
     font-weight: 300;
-    letter-spacing: .2em; }
+    /*letter-spacing: .2em;*/ 
+    }
   .btn:hover {
     -webkit-box-shadow: 0 5px 20px -7px rgba(0, 0, 0, 0.9) !important;
     box-shadow: 0 5px 20px -7px rgba(0, 0, 0, 0.9) !important;

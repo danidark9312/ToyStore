@@ -30,14 +30,14 @@ public class EmailSender {
 	@Qualifier("currencyFormat")
 	NumberFormat currencyFormat;
 	
-	public void sendCheckoutOrder(ShoppingCart shoppingCart, double shippingCost){
+	public void sendCheckoutOrder(ShoppingCart shoppingCart, double shippingCost, String orderLink){
 		//SimpleMailMessage message = new SimpleMailMessage();
 		MimeMessage createMimeMessage = sender.createMimeMessage();
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(createMimeMessage, true,"UTF-8");
 			helper.setTo(new String[] {"danielgm9312@hotmail.com",shoppingCart.getClient().getEmail()});
 			helper.setSubject("Orden de compra");
-			helper.setText(getHTMLBodyOrder(shoppingCart, shippingCost),true);
+			helper.setText(getHTMLBodyOrder(shoppingCart, shippingCost, orderLink),true);
 			sender.send(createMimeMessage);
 		} catch (MessagingException e) {
 			e.printStackTrace();
@@ -46,7 +46,7 @@ public class EmailSender {
 		
 	}
 	
-	private String getHTMLBodyOrder(ShoppingCart shoppingCart, double shippingCost) {
+	private String getHTMLBodyOrder(ShoppingCart shoppingCart, double shippingCost, String orderLink) {
 		int purchaseOrderId = shoppingCart.getPurchaseOrder().getId();
 		String base = templateReader.getTemplate("PurchaseOrder");
 		String table = "";
@@ -62,7 +62,7 @@ public class EmailSender {
 		table+="<tr><td colspan=3>Total</td><td>"+currencyFormat.format(getTotal(shoppingCart.getShoppingItems())+shippingCost)+"</td></tr>";
 		table+="</table>";
 		table+=getClentInfo(shoppingCart.getClient());
-		String bodyEmail = String.format(base, purchaseOrderId ,table);
+		String bodyEmail = String.format(base, purchaseOrderId ,orderLink,table);
 		System.out.println(bodyEmail);
 		return bodyEmail;
 	}

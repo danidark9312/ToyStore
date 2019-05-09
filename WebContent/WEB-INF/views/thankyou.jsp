@@ -52,8 +52,19 @@
             <span class="icon-check_circle display-3 text-success"></span>
             <h2 class="display-3 text-black">Gracias</h2>
             <h3 class="display-3 text-black">Tu orden fue generada con éxito</h3>
+            <h3 class="display-3 text-black"># de Orden <c:out value="${po}"></c:out></h3>
+            
             <p class="lead mb-5">Pronto recibiras un correo con el número de guía</p>
-            <p><a href="javascript:void(0)" onclick="backToShop()" class="btn btn-sm btn-primary">Volver a la tienda</a></p>
+            <div class="row">
+	            <div class="col-6 col-md-3 offset-md-3">
+	            	<a href="${orderLink}" class="btn btn-sm btn-primary">Consultar pedido</a>
+	            </div>
+	            <div class="col-6 col-md-3">
+	            	<a href="javascript:void(0)" onclick="backToShop()" class="btn btn-sm btn-primary">Volver a la tienda</a>
+	            </div>
+            </div>
+            
+            <p></p>
           </div>
         </div>
       </div>

@@ -54,10 +54,10 @@
               <div class="p-3 border col-md-6 offset-md-3">
                 <div class="form-group row">
                   <div class="col-md-6">
-                    <input id="trackId" type="number" class="form-control" placeholder="Número Orden"/>
+                    <input id="trackId" type="number" class="form-control" placeholder="Número Orden" value="${trackId}"/>
                   </div>
                   <div class="col-md-6">
-                    <input id="document" type="text" class="form-control" placeholder="Documento identidad"/>
+                    <input id="document" type="text" class="form-control" placeholder="Documento identidad" value="${document}"/>
                   </div>
                 </div>
                 <div class="form-group row">

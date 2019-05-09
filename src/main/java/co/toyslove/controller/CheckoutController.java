@@ -2,6 +2,8 @@ package co.toyslove.controller;
 
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,14 +53,26 @@ public class CheckoutController {
 	}
 	
 	@RequestMapping("thankyou")
-	public String showFormThankYou(Model model) {
+	public String showFormThankYou(Model model,HttpServletRequest request) {
+		if(shoppingCart.getItemsCount()==0)
+			return "thankyou";
+		
 		PurchaseOrder po = purchaseOrderService.savePurchaseOrder(getPurchaseFromCart(shoppingCart));
 		shoppingCart.setPurchaseOrder(po);
-		emailSender.sendCheckoutOrder(shoppingCart, SHIPPING_COST);
+		String orderLink = getOrderLink(po,request);
+		try {
+			emailSender.sendCheckoutOrder(shoppingCart, SHIPPING_COST, orderLink);	
+		}catch (Exception e) {
+			System.out.println("Email could not be sent");
+			e.printStackTrace();
+		}
+		model.addAttribute("po",po.getId());
+		model.addAttribute("orderLink",orderLink);
 		shoppingCart.clear();
 		return "thankyou";
 	}
 	
+
 
 	@GetMapping("email")
 	public @ResponseBody Response<String> email() {
@@ -92,5 +106,14 @@ public class CheckoutController {
 		purchaseItem.setIdProduct(item.getProduct().getId());
 		return purchaseItem;
 	}
-		
+	
+	private String getOrderLink(PurchaseOrder po, HttpServletRequest request) {
+		return String.format("%s://%s:%d%s/order/list/%s/%s"
+				,request.getScheme()
+				,request.getServerName()
+				,request.getServerPort()
+				,request.getContextPath()
+				,po.getId()
+				,po.getClient().getDocument());
+	}
 }

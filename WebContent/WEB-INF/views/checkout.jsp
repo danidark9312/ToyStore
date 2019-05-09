@@ -53,12 +53,12 @@
       <div class="container">
         <div class="row mb-5">
           <div class="col-md-12">
-            <div class="border p-4 rounded" role="alert">
-              Returning customer? <a href="#">Click here</a> to login
-            </div>
+<!--             <div class="border p-4 rounded" role="alert"> -->
+<!--               Returning customer? <a href="#">Click here</a> to login -->
+<!--             </div> -->
           </div>
         </div>
-        <form ng-init="user=getDummy()" name="billingForm">
+        <form ng-init="" name="billingForm">
 	        <div class="row checkoutSeccion">
 		      <div class="col-md-6 mb-5 mb-md-0">
 		            <h2 class="h3 mb-3 text-black">Detalles de compra</h2>
@@ -66,9 +66,28 @@
 		              <div class="form-group row">
 		                <div class="col-md-12">
 		                  <label for="c_fname" class="text-black">Documento<span class="text-danger">*</span></label>
-		                  <input type="text" class="form-control" ng-model="user.document" name="document" required >
+		                  <input type="text" class="form-control" ng-model="user.document" name="document" id="document" required >
 		                  <span ng-show="!isNotEmptyField(billingForm.document)">Documento</span>
 		                </div>
+		                
+		                <div class="form-group" id="passwordPanel">
+		                <label for="password" class="text-black">
+		                	<input type="checkbox" id="checkShowPassword" value="1" data-toggle="collapse" href="#inputPassword" role="button" aria-expanded="false" aria-controls="inputPassword"> Ya tengo cuenta</label>
+		                <div class="collapse" id="inputPassword">
+		                  <div class="py-2">
+		                    <p class="mb-3">Ingrese su contraseña</p>
+		                    <div class="input-group">
+		                      	<input type="password" class="form-control" ng-model="user.password" id="password" name="password" placeholder="Contraseña">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button" ng-click="loadUser(user.document,user.password)">Cargar</button>
+								</div>
+							</div>
+							<div id="messageLoadClient" class="alert alert-danger" style="display: none">
+							</div>
+		                  </div>
+		                </div>
+		              </div>
+		                
 		              </div>
 		              <div class="form-group row">
 		                <div class="col-md-6">
@@ -124,18 +143,18 @@
 <!-- 		Boton Crear cuenta -->
 
 
-<!-- 		              <div class="form-group"> -->
-<!-- 		                <label for="c_create_account" class="text-black" data-toggle="collapse" href="#create_an_account" role="button" aria-expanded="false" aria-controls="create_an_account"><input type="checkbox" value="1" id="c_create_account"> Crear cuenta ?</label> -->
-<!-- 		                <div class="collapse" id="create_an_account"> -->
-<!-- 		                  <div class="py-2"> -->
-<!-- 		                    <p class="mb-3">Crear cuenta</p> -->
-<!-- 		                    <div class="form-group"> -->
-<!-- 		                      <label for="c_account_password" class="text-black">Contraseña</label> -->
-<!-- 		                      <input type="email" class="form-control" id="c_account_password" name="c_account_password" placeholder=""> -->
-<!-- 		                    </div> -->
-<!-- 		                  </div> -->
-<!-- 		                </div> -->
-<!-- 		              </div> -->
+		              <div class="form-group" id="newPasswordPanel">
+		                <label for="c_create_account" class="text-black" data-toggle="collapse" href="#create_an_account" role="button" aria-expanded="false" aria-controls="create_an_account"><input type="checkbox" value="1" id="c_create_account"> Crear contraseña ?</label>
+		                <div class="collapse" id="create_an_account">
+		                  <div class="py-2">
+		                    <p class="mb-3">Ingrese contraseña</p>
+		                    <div class="form-group">
+		                      <label for="c_account_password" class="text-black">Contraseña</label>
+		                      <input type="password" ng-model="user.password" class="form-control" id="c_account_password" name="c_account_password" placeholder="">
+		                    </div>
+		                  </div>
+		                </div>
+		              </div>
 		
 		
 		              <div class="form-group" style="display: none">
@@ -226,22 +245,7 @@
 		      
 	          <div class="col-md-6">
 	
-	            <div class="row mb-5">
-	              <div class="col-md-12">
-	                <h2 class="h3 mb-3 text-black">Cupon</h2>
-	                <div class="p-3 p-lg-5 border">
-	                  
-	                  <label for="c_code" class="text-black mb-3">Ingrese el cupon si tiene</label>
-	                  <div class="input-group w-75">
-	                    <input type="text" class="form-control" id="c_code" placeholder="Código de cupon" aria-label="Coupon Code" aria-describedby="button-addon2">
-	                    <div class="input-group-append">
-	                      <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Aplicar</button>
-	                    </div>
-	                  </div>
-	
-	                </div>
-	              </div>
-	            </div>
+	            
 	            
 	            <div class="row mb-5">
 	              <div class="col-md-12">
@@ -283,8 +287,12 @@
 	                    <div class="collapse" id="collapsebank">
 	                      <div class="py-2">
 	                        <p class="mb-0">
-	                        Realice el pago por medio de una transferencia bancaria a Bancolombia o pague contra entrega
-	                        </p>
+	                        Realice el pago por medio de las siguientes opciones</p>
+	                        <ul>
+	                        <li>Transferencia bancaria a Bancolombia</li>
+	                        <li>PayPal</li>
+	                        <li>Contra-entrega</li>
+	                        </ul>
 	                      </div>
 	                    </div>
 	                  </div>
@@ -306,6 +314,23 @@
 	                  </div>
 	                  
 	                  
+	
+	                </div>
+	              </div>
+	            </div>
+	            
+	            <div class="row mb-5" style="display: none;">
+	              <div class="col-md-12">
+	                <h2 class="h3 mb-3 text-black">Cupon</h2>
+	                <div class="p-3 p-lg-5 border">
+	                  
+	                  <label for="c_code" class="text-black mb-3">Ingrese el cupon si tiene</label>
+	                  <div class="input-group w-75">
+	                    <input type="text" class="form-control" id="c_code" placeholder="Código de cupon" aria-label="Coupon Code" aria-describedby="button-addon2">
+	                    <div class="input-group-append">
+	                      <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Aplicar</button>
+	                    </div>
+	                  </div>
 	
 	                </div>
 	              </div>

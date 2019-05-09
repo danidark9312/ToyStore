@@ -35,16 +35,36 @@ public class ClientController {
 		return clientService.findAll();
 	}
 	
-	@RequestMapping("/checkout/saveClient")
+	@RequestMapping("/client/load")
+	public @ResponseBody Response<Client> loadClient(@RequestBody Client client) {
+		Client clientDB = clientService.findByDocumentAndPassword(client);
+		Response<Client> of;
+		if(clientDB != null) {
+			of = Response.of(clientDB);
+		}else {
+			of = Response.ofMessage("Documento o clave incorrecto");
+		}
+		return of;
+		
+	}
+	
+	@RequestMapping("/client/save")
 	public @ResponseBody Response saveClient(@RequestBody Client client) {
 		if(shoppingCart.getShoppingItems()!=null && shoppingCart.getShoppingItems().size()>0)
 			shoppingCart.setClient(client);
-		if(clientService.findById(client.getDocument())!=null) {
-			return Response.ofMessage("Usuario ya existe");
-		}else {
-			clientService.saveClient(client);
-			return Response.ofMessage("success");	
+//		}else {
+//			clientService.saveClient(client);
+//			return Response.ofMessage("success");	
+//		}
+		
+		Client clientDB = clientService.findById(client.getDocument());
+		if(clientDB!=null && clientDB.getPassword()!=null && !clientDB.getPassword().isEmpty()) {
+			client.setPassword(clientDB.getPassword());  //Do not allow to change the password, another module will be made for that purpose.
 		}
+			
+		
+		clientService.saveClient(client);
+		return Response.ofMessage("success");
 	}
 	
 }

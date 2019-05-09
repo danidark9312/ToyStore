@@ -53,12 +53,12 @@
       <div class="container">
         <div class="row">
 					<div class="col-md-12">
-						<h2 class="h3 mb-3 text-black">Administrador Productos</h2>
-						<p>
-							<a href="${url}admin/products" class="btn btn-sm btn-primary">Agregar Cliente
-							<i class="fa fa-plus" aria-hidden="true"></i>
-							</a>
-						</p>
+						<h2 class="h3 mb-3 text-black">Administrador Clientes</h2>
+<!-- 						<p> -->
+<%-- 							<a href="${url}admin/products" class="btn btn-sm btn-primary">Agregar Cliente --%>
+<!-- 							<i class="fa fa-plus" aria-hidden="true"></i> -->
+<!-- 							</a> -->
+<!-- 						</p> -->
 					</div>
 					<div class="col-md-10 offset-md-1">
 						<table class="table table-striped">

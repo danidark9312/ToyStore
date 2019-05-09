@@ -25,5 +25,9 @@ public class ClientServicesImpl implements ClientService {
 	public List<Client> findAll() {
 		return clientRepository.findAll();
 	}
+	
+	public Client findByDocumentAndPassword(Client client) {
+		return clientRepository.findByDocumentAndPassword(client.getDocument(),client.getPassword()).orElse(null);
+	}
 
 }

@@ -12,4 +12,6 @@ public interface ClientService {
 
 	List<Client> findAll();
 
+	Client findByDocumentAndPassword(Client client);
+
 }

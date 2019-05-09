@@ -97,7 +97,9 @@
 											<i class="fa fa-pencil" aria-hidden="true"></i>
 										</a>
 										</td>
-										<td><i class="fa fa-times" aria-hidden="true"></i></td>
+										<td><a href="${url}admin/products/${product.id}/remove">
+											<i class="fa fa-times" aria-hidden="true"></i>
+										</a></td>
 									</tr> 
 								</c:forEach>
 								

@@ -1,5 +1,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page import="co.toyslove.util.Variables" %>
 <spring:url value="/resources" var="urlResources" />
 	<spring:url value="/" var="url" />
 
@@ -10,14 +12,20 @@
 
             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
               <div class="site-logo">
-                <a href="${url}" class="${urlResources}/js-logo-clone">ToysLove</a>
+                <a id="logoTitle" href="${url}" class="${urlResources}/js-logo-clone"><%=Variables.pageName%></a>
               </div>
             </div>
 
             <div class="col-12 col-md-4 order-3 order-md-3 text-right">
               <div class="site-top-icons">
                 <ul>
-<!--                   <li><a href="#"><span class="icon icon-person"></span></a></li> -->
+                <sec:authorize access="isAuthenticated()">
+  					<li><a class="fa fa-sign-out" style="color:white;font-size: 27px" title="Cerrar sesión" href="${url}security/logout"></a></li>
+				</sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
+  					<li><a class="fa fa-sign-in" style="color:white;font-size: 27px" title="Iniciar sesión" href="${url}login"></a></li>
+				</sec:authorize>
+                  
 <!--                   <li><a href="#"><span class="icon icon-heart-o"></span></a></li> -->
                   <li>
 <!--                     <a href="cart.html" class="site-cart"> -->
@@ -66,6 +74,7 @@
             <li class="active"><a href="${url}order/list/">Estado de compra</a></li>
 <!--             <li><a href="#">Catalogue</a></li> -->
 
+		  <sec:authorize access="isAuthenticated()">
             <li class="has-children">
               <a>Admin</a>
               <ul class="dropdown">
@@ -75,6 +84,14 @@
 	             <li><a href="${url}admin/client/list">Clientes</a></li>
               </ul>
             </li>
+           </sec:authorize>
+		  <sec:authorize access="!isAuthenticated()">
+           	<li class="active"><a href="${url}login">Login</a></li> 
+          </sec:authorize>
+		  <sec:authorize access="isAuthenticated()">
+           	<li class="active"><a href="${url}security/logout">Cerrar Sesión</a></li> 
+          </sec:authorize>
+           
 
              
           </ul>

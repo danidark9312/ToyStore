@@ -42,6 +42,9 @@ public class ProductServicesImpl implements ProductServices{
 	public void save(Product product) {
 		productRepository.save(product);
 	}
+	public void remove(Product product) {
+		productRepository.delete(product);
+	}
 	
 	public Product findById(int id) {
 		return productRepository.findById(id).orElse(null);

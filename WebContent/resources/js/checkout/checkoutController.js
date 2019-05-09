@@ -6,6 +6,9 @@ app.controller('checkoutController', function($scope,cartService) {
   $scope.totalOrden = 0;
   $scope.shoppingList = new Array();
   $scope.departamentos = new Array();
+  $scope.user;
+  //$scope.user = $scope.getDummy();
+  
   
   angular.element(document).ready(function () {
 	  $scope.loadShoppingCart();
@@ -48,6 +51,48 @@ app.controller('checkoutController', function($scope,cartService) {
 		  );
 		  
 	  }
+  }
+  
+  $scope.loadUser = function(document,password){
+	  if(!document){
+		  $scope.setErrorField($("#document"));
+	  }else if(!password){
+		  $scope.setErrorField($("#password"));
+	  }else{
+		  $scope.clearErrorField($("#document,#password"));
+		  
+		  var user = {document : document,
+				  	  password : password}
+		  
+		  cartService.loadClient(user).then(
+				  function(d) {
+					  if(d.data.message){
+						  $("#messageLoadClient").text(d.data.message).css("display","block");
+					  }else{
+						  $("#messageLoadClient").text("").css("display","none");
+						  $scope.user=d.data.data;
+						  $("#inputPassword").collapse('hide');
+						  $("#checkShowPassword").prop("checked",false);
+						  $("#newPasswordPanel,#passwordPanel").hide();
+					  }
+					  
+					  console.log(d);
+				  },
+				  function(errResponse){
+					  console.error('Error while fetching Users');
+				  }	  
+		  );
+		  
+	  } 
+	
+  }
+  
+  $scope.setErrorField = function(field){
+	  field.css("border-color","red");
+  }
+  
+  $scope.clearErrorField = function(field){
+	  field.css("border-color","white");
   }
   
   

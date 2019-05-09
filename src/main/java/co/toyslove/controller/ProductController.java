@@ -1,6 +1,7 @@
 package co.toyslove.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -95,11 +96,11 @@ public class ProductController {
 		
 	}
 	
-	@DeleteMapping("/remove")
-	public @ResponseBody Response<List<Product>> remove(@RequestBody Product cliente) {
-		/*clienteService.deleteCliente(cliente);
-		return Response.ofMessage("Cliente eliminado con éxito");*/
-		return null;
+	@GetMapping("admin/products/{idProduct}/remove")
+	public String remove(@PathVariable("idProduct") Integer idProduct) {
+		Product productDB = productService.findById(idProduct);
+		productService.remove(productDB);
+		return "redirect:/admin/products/list";
 	}
 	
 	private void markItemsInCart(List<Product> products) {
@@ -107,12 +108,16 @@ public class ProductController {
 			return;
 		
 		products.forEach(product->{
-			boolean isInCart = shoppingCart.getShoppingItems()
+			Optional<ShoppingItem> cartItem = shoppingCart.getShoppingItems()
 				.stream()
-				.map(ShoppingItem::getProduct)
-				.anyMatch(p->p.equals(product))
+				//.map(ShoppingItem::getProduct)
+				.filter(p->p.getProduct().equals(product))
+				.findAny()
 				;
-			product.setInCart(isInCart);
+			product.setInCart(cartItem.isPresent());
+			if(cartItem.isPresent()) {
+				product.setQntyInCart(cartItem.get().getCount());
+			}
 		});
 		
 	}

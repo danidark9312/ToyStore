@@ -27,10 +27,13 @@ public class OrderController {
 	public String showForm(Model model,@PathVariable(value="trackId",required=false)Integer trackId,@PathVariable(value="document",required=false) String document) {
 		if(trackId != null && document != null){
 			PurchaseOrder purchaseOrder = PurchaseOrderService.findByIdAndClient(trackId, document);
-			if(purchaseOrder==null) 
+			if(purchaseOrder==null) {
 				model.addAttribute("message","No existe orden con esa información");
-			else
+			}else {
 				model.addAttribute(purchaseOrder);
+			}
+			model.addAttribute("document", document);
+			model.addAttribute("trackId", trackId);
 		}
 		return "orderList";
 	}
