@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,12 +74,12 @@ public class ProductController {
 	
 	
 	@PostMapping("/admin/products/save")
-	public String saveProduct(@ModelAttribute Product product, BindingResult result, Model model,
+	public @ResponseBody Response saveProduct(@ModelAttribute Product product, BindingResult result, Model model,
 			@RequestParam("archivoImagen") MultipartFile multiPart, HttpServletRequest request, RedirectAttributes attributes) {
 		String imageName = null;
 		if (result.hasErrors()){
 			System.out.println("Existieron errores");
-			return "peliculas/formPelicula";
+			Response.ofMessage("Error");
 		}	
 		
 		if (!multiPart.isEmpty()) {
@@ -92,7 +93,7 @@ public class ProductController {
 			productService.save(product);
 					
 		//return "redirect:/peliculas/index";
-		return "redirect:/admin/products/list";
+		return Response.ofMessage("Success");
 		
 	}
 	

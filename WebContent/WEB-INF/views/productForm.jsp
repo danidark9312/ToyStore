@@ -28,9 +28,12 @@
 
     <link rel="stylesheet" href="${urlResources}/css/style.css">
     <link rel="stylesheet" href="${urlResources}/css/general.css" />
+    <link rel="stylesheet" href="${urlResources}/css/cropper.css" />
     
     <script>
     var imageUrl = '${product.image}';
+    var formUrl = '${urlForm}';
+    var url = '${url}';
     </script>
     
   </head>
@@ -61,8 +64,12 @@
           
           
           <div class="col-md-7 offset-md-2">
-
-            <form:form action="${urlForm}" method="POST" enctype="multipart/form-data" modelAttribute="product" >
+<%-- 
+action="${urlForm}" 
+--%>
+            <form:form method="POST" enctype="multipart/form-data" modelAttribute="product" >
+            <div class="alert alert-danger" role="alert" id="errorMessage" style="display:none;">
+  			</div>
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
               
               <div class="p-3 p-lg-5 border">
@@ -87,11 +94,16 @@
                     <form:select path="category.id" items="${categories}" itemValue="id" itemLabel="name" class="form-control" />
                   </div>
                 </div>
+                
+                
                 <div class="form-group row">
                   <div class="col-md-12" style="text-align: center;color:white">
-                    <label for="archivoImagen">Imagen de producto<span class="text-danger">*</span></label>
-                    <input type="file" id="archivoImagen" name="archivoImagen" />
-	                  <img id="imagePreview" class="imgInForm" src="${urlResources}/images/products/${product.image}">
+                    <label for="archivoImagenPreload">Imagen de producto<span class="text-danger">*</span></label>
+                    <input type="file" id="archivoImagenPreload" name="archivoImagenPreload" />
+                    <div>
+                		<img id="imageCrop" class="imgInForm" src="${urlResources}/images/products/${product.image}"/>
+                	</div>
+	                  
               		<form:hidden path="image" />
                   </div>
                 </div>
@@ -103,11 +115,11 @@
                 </div>
                 <div class="form-group row">
                   <label for="stars">Estrellas</label>
-                    <form:input type="number" path="stars" class="form-control" id="estrellas" name="estrellas"  />
+                    <form:input type="number" path="stars" class="form-control" id="estrellas" name="estrellas" value="5" />
                 </div>
                 <div class="form-group row">
                   <div class="col-lg-12">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" value="Guardar">Guardar</button>
+                    <button type="button" onclick="saveFormProduct()" class="btn btn-primary btn-lg btn-block" value="Guardar">Guardar</button>
                   </div>
                 </div>
               </div>
@@ -131,28 +143,12 @@
   <script src="${urlResources}/js/main.js"></script>
   
   <script src="${urlResources}/js/angular/angular.min.js"></script>
+  <script src="${urlResources}/js/cropper.js"></script>
+  <script src="${urlResources}/js/product.js"></script>
   
   <script>
   
-  $(document).ready(function(){
-	if(!imageUrl)
-		$("#imagePreview").hide();
-  });
   
-  function readURL(input) {
-	  if (input.files && input.files[0]) {
-	    var reader = new FileReader();
-	    reader.onload = function(e) {
-	      $('#imagePreview').attr('src', e.target.result);
-	    }
-	    reader.readAsDataURL(input.files[0]);
-	  }
-	}
-
-	$("#archivoImagen").change(function() {
-	  readURL(this);
-	  $("#imagePreview").show();
-	});
   </script>
     
   </body>

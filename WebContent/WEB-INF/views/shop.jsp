@@ -44,12 +44,6 @@
     </script>
   </head>
   <body>
-  
-	<div class="row">
-		<div class="col-12 col-md-8">.col-12 .col-md-8</div>
-		<div class="col-6 col-md-4">.col-6 .col-md-4</div>
-	</div>
-
 	<div class="floating-cart bouncing-anim" style="opacity: 0">
 	<div id="animatedCart">
 		<a href="javascript:void()" onclick="sendBotFloating()" data-toggle="modal" data-target="#modal-buy" class="site-cart"> <span
@@ -149,8 +143,8 @@
 	            <div ng-repeat="product in products" ng-show="!product.invisible" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=initializeCant(product);showCant=false">
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
-	                    <a ng-href="${url}item/{{product.id}}">
-	                    	<img src="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid">
+	                    <a ng-href="${url}item/{{product.id}}" style="width: 100%;display: block">
+	                    	<img src="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid" style="width: 100%">
 	                    </a>
 	                  </figure>
 	                  <div class="block-4-text p-4 limitedSize200">
