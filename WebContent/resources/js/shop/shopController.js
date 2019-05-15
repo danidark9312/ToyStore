@@ -1,5 +1,5 @@
-var defaultMinPriceFilter = 1000;
-var defaultMaxPriceFilter = 500000;
+var defaultMinPriceFilter = 2000;
+var defaultMaxPriceFilter = 200000;
 var app = angular.module('myApp', []);
 app.controller('shopController', function($scope,shopService) {
   $scope.shopTitle= "Listado de Productos";
@@ -20,9 +20,9 @@ app.controller('shopController', function($scope,shopService) {
   $scope.initComponents = function(){
 	  $( "#slider-range" ).slider({
 	      range: true,
-	      min: 0,
-	      max: 1000000,
-	      step : 1000,
+	      min: 10000,
+	      max: 500000,
+	      step : 5000,
 	      animate: 'slow',
 	      values: [ defaultMinPriceFilter, defaultMaxPriceFilter],
 	      slide: function( event, ui ) {

@@ -22,7 +22,7 @@ public class ProductServicesImpl implements ProductServices{
 	ProductRepository productRepository;
 	
 	public List<Product> findAll(){
-		return productRepository.findAll();
+		return productRepository.findAllByOrderByIdDesc();
 	}
 	public List<Product> findByFilter(ShopFilter shopFilter){
 		return productRepository.findAll(new Specification<Product>() {

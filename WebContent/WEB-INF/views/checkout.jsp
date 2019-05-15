@@ -237,7 +237,7 @@
 		
 		              <div class="form-group">
 		                <label for="c_order_notes" class="text-black">Observaciones de entrega</label>
-		                <textarea ng-model="user.addressComment" cols="30" rows="5" class="form-control" placeholder="Mencione puntos de referencia, indicaciones y sugerencias para una entrega efectiva"></textarea>
+		                <textarea ng-model="user.addressComment" cols="30" rows="5" class="form-control" placeholder="Especifique talla o tamaño del producto, Mencione puntos de referencia del domicilio, indicaciones y sugerencias para una entrega efectiva"></textarea>
 		              </div>
 		
 		            </div>

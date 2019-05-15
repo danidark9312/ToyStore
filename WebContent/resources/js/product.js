@@ -1,4 +1,4 @@
-var globalAspectRatio = 1.4;
+var globalAspectRatio = 1;
 $(document).ready(function(){
 	if(!imageUrl)
 		$("#imageCrop").hide();
@@ -45,13 +45,6 @@ function saveFormProduct(){
 		croppedCanvas.toBlob(function(blob){
 			formData.delete("archivoImagenPreload");
 			formData.append('archivoImagen', blob, "product.jpg");
-			
-			
-			for(var pair of formData.entries()) {
-				   console.log(pair[0]);
-				   console.log(pair[1]);
-				   
-				}
 			$.ajax(formUrl, {
 			    method: "POST",
 			    data: formData,

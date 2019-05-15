@@ -1,5 +1,8 @@
 package co.toyslove.entity;
 
+import java.util.Arrays;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +25,20 @@ public class Product {
 	private String image;
 	private int stars;
 	private int stock;
+	
+	
+	@Column(name="ds_sizes")
+	private String joinedSizes;
+	
+	@Transient
+	private String[] sizeArray;
+	
+	
+	@Column(name="yn_enable")
+	private String enable;
+	
+	@Transient
+	private String[] sizes;
 
 	@Transient
 	private boolean inCart;
@@ -38,6 +55,43 @@ public class Product {
 
 	
 	
+
+	public String getJoinedSizes() {
+		return joinedSizes;
+	}
+
+	public void setJoinedSizes(String joinedSizes) {
+		this.joinedSizes = joinedSizes;
+		if(joinedSizes!=null && joinedSizes.length()>0)
+			this.sizeArray = joinedSizes.split(";");
+	}
+
+	public String[] getSizeArray() {
+		if(sizeArray==null && joinedSizes!=null && joinedSizes.length()>0 )
+			this.sizeArray = joinedSizes.split(";");
+		return sizeArray;
+	}
+
+	public void setSizeArray(String[] sizeArray) {
+		this.sizeArray = sizeArray;
+		this.joinedSizes = String.join(";", sizeArray);
+	}
+
+	public String[] getSizes() {
+		return sizes;
+	}
+
+	public void setSizes(String[] sizes) {
+		this.sizes = sizes;
+	}
+
+	public String getEnable() {
+		return enable;
+	}
+
+	public void setEnable(String enable) {
+		this.enable = enable;
+	}
 
 	public int getQntyInCart() {
 		return qntyInCart;

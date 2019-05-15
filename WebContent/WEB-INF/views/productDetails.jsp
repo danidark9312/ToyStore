@@ -114,6 +114,43 @@
           </div>
         </div>
       </div>
+      
+      <form method="POST" enctype="multipart/form-data" id="formQuestion" >
+            <div class="alert alert-danger" role="alert" id="errorMessage" style="display:none;">
+  			</div>
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+              
+              <div class="col-md-4 offset-md-1 p-3 mt-lg-4 p-lg-4 border">
+              <div class="alert alert-danger" id="errorAlert"  role="alert" style="display: none"></div>
+              <div class="alert alert-success" id="successAlert"  role="alert" style="display: none"></div>
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="name">Realizar pregunta<span class="text-danger">*</span></label>
+							<input id="question" type="text" class="form-control" />
+
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" placeholder="Email"
+									id="email"
+									aria-label="Recipient's username"
+									aria-describedby="basic-addon2">
+								<div class="input-group-append">
+									<button type="button" onclick="sendQuestion(${product.id})" class="btn btn-outline-primary" value="Guardar">Envíar</button>
+								</div>
+							</div>
+							
+                  </div>
+                </div>
+                
+                <p>Las preguntas y comentarios son respondidos a la mayor brevedad posible, puede confirmar talla, 
+                estilo o color antes de realizar la comprar
+                </p>
+                <p>La respuesta sera enviada directamente por correo electrónico</p>
+                
+                
+              </div>
+           </form>
+      
+      
     </div>
     
     
@@ -142,6 +179,50 @@
 	 	 setFloatingProperties(100);
 	 	changeFloatingVisibility(window.scrollY);
 	 });
+  
+  function sendQuestion(productId){
+	  if(isValidForm()){
+		  var questionProduct = {
+				  product : {id : productId},
+				  question:  $("#question").val(),
+				  userEmail:  $("#email").val(),
+		  };
+		  $.ajax({
+			  method: "POST",
+			  url: context+"products/sendQuestion",
+			  contentType : "application/json",
+			  data: JSON.stringify(questionProduct),
+			  success: function(data){
+				  if(data.message == "failed")
+					  showErrorAlert("La pregunta no se pudo envíar, intente mas tarde");
+				  else{
+					  showSuccessAlert("Pregunta enviada con éxito, sera contestada en breve");
+					  $("#formQuestion")[0].reset();  
+				  }
+					  
+			  }
+			})  
+	  }else{
+		  showErrorAlert("formulario incompleto");
+	  }
+  }
+  
+  function showSuccessAlert(message){
+	  $("#errorAlert").hide();
+	  $("#successAlert").show().text(message);
+  }
+  
+  function showErrorAlert(message){
+	  $("#successAlert").hide();
+	  $("#errorAlert").show().text(message);
+  }
+  
+  function isValidForm(){
+	  if($("#question").val() == "" || $("#email").val()=="")
+		  return false;
+	  else
+		  return true;
+  }
     
     </script>
     

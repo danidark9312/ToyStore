@@ -93,6 +93,12 @@ action="${urlForm}"
                     <label for="valor">Categoria</label>
                     <form:select path="category.id" items="${categories}" itemValue="id" itemLabel="name" class="form-control" />
                   </div>
+                  <div class="col-md-6">
+                    <label for="valor">Tallas</label>
+                    <form:select path="sizeArray"  class="form-control" multiple="true">
+                    	<form:options items="${sizes}" />
+                    </form:select>
+                  </div>
                 </div>
                 
                 
@@ -115,7 +121,7 @@ action="${urlForm}"
                 </div>
                 <div class="form-group row">
                   <label for="stars">Estrellas</label>
-                    <form:input type="number" path="stars" class="form-control" id="estrellas" name="estrellas" value="5" />
+                    <form:input type="number" path="stars" class="form-control" id="estrellas" name="estrellas" />
                 </div>
                 <div class="form-group row">
                   <div class="col-lg-12">

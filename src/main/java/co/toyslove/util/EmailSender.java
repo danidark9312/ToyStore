@@ -2,6 +2,8 @@ package co.toyslove.util;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -15,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 import co.toyslove.entity.Client;
+import co.toyslove.model.ProductQuestion;
 import co.toyslove.model.ShoppingCart;
 import co.toyslove.model.ShoppingItem;
 
@@ -35,7 +38,9 @@ public class EmailSender {
 		MimeMessage createMimeMessage = sender.createMimeMessage();
 		try {
 			MimeMessageHelper helper = new MimeMessageHelper(createMimeMessage, true,"UTF-8");
-			helper.setTo(new String[] {"danielgm9312@hotmail.com",shoppingCart.getClient().getEmail()});
+			List<String> toAddresses = getNotificationEmails();
+			toAddresses.add(shoppingCart.getClient().getEmail());
+			helper.setTo(toAddresses.toArray(new String[0]));
 			helper.setSubject("Orden de compra");
 			helper.setText(getHTMLBodyOrder(shoppingCart, shippingCost, orderLink),true);
 			sender.send(createMimeMessage);
@@ -46,6 +51,28 @@ public class EmailSender {
 		
 	}
 	
+	public void sendQuestionReceived(ProductQuestion productQuestion, String productLink){
+		//SimpleMailMessage message = new SimpleMailMessage();
+		MimeMessage createMimeMessage = sender.createMimeMessage();
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(createMimeMessage, true,"UTF-8");
+			List<String> toAddresses = getNotificationEmails();
+			helper.setTo(toAddresses.toArray(new String[0]));
+			helper.setSubject("Pregunta producto "+productQuestion.getProduct().getName());
+			helper.setText(getHTMLQuestion(productQuestion, productLink),true);
+			sender.send(createMimeMessage);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	private List<String> getNotificationEmails() {
+		 List<String> emailsTo = Stream.of("danielgm9312@hotmail.com").collect(Collectors.toList());
+		return emailsTo;
+	}
+
 	private String getHTMLBodyOrder(ShoppingCart shoppingCart, double shippingCost, String orderLink) {
 		int purchaseOrderId = shoppingCart.getPurchaseOrder().getId();
 		String base = templateReader.getTemplate("PurchaseOrder");
@@ -65,6 +92,18 @@ public class EmailSender {
 		String bodyEmail = String.format(base, purchaseOrderId ,orderLink,table);
 		System.out.println(bodyEmail);
 		return bodyEmail;
+	}
+	private String getHTMLQuestion(ProductQuestion productQuestion, String orderLink) {
+		String base = templateReader.getTemplate("QuestionReceived");
+		String formatBody = String.format(
+				base
+				, productQuestion.getProduct().getName()
+				,orderLink
+				,productQuestion.getQuestion()
+				,productQuestion.getUserEmail()
+				);
+		
+		return formatBody;
 	}
 
 	private String getClentInfo(Client client) {

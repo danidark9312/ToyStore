@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="co.toyslove.util.Variables" %>
 <spring:url value="/resources" var="urlResources" />
 	<spring:url value="/" var="url" />
 	
@@ -45,14 +46,14 @@
 <!--             </a> -->
 <!--           </div> -->
           <div class="col-md-6 col-lg-3">
-<!--             <div class="block-5 mb-5"> -->
-<!--               <h3 class="footer-heading mb-4">Contact Info</h3> -->
-<!--               <ul class="list-unstyled"> -->
-<!--                 <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li> -->
-<!--                 <li class="phone"><a href="tel://23923929210">+2 392 3929 210</a></li> -->
-<!--                 <li class="email">emailaddress@domain.com</li> -->
-<!--               </ul> -->
-<!--             </div> -->
+            <div class="block-5 mb-5">
+              <h3 class="footer-heading mb-4">Inquietudes</h3>
+              <ul class="list-unstyled">
+                <li class="address">Medellín - Colombia</li>
+                <li class="phone"><a href="tel://301 663 7232">3016637232</a></li>
+                <li class="email">danielgm9312@hotmail.com</li>
+              </ul>
+            </div>
 
 <!--             <div class="block-7"> -->
 <!--               <form action="#" method="post"> -->
@@ -68,7 +69,7 @@
         <div class="row pt-5 mt-5 text-center">
           <div class="col-md-12">
             <p>
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos los derechos reservados | <i class="icon-heart" aria-hidden="true"></i>  <a href="https://colorlib.com" target="_blank" class="text-primary">ToysLove</a>
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos los derechos reservados | <i class="icon-heart" aria-hidden="true"></i>  <a href="https://colorlib.com" target="_blank" class="text-primary"><%=Variables.pageName%></a>
             </p>
           </div>
           

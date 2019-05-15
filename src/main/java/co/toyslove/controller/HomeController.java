@@ -30,12 +30,7 @@ public class HomeController {
 		return "shop";
 	}
 	
-	@GetMapping("item/{id}")
-	public String showDetailItem(Model model,@PathVariable int id) {
-		Product product = productServices.findById(id);
-		model.addAttribute(product);
-		return "itemDetails";
-	}
+	
 	
 	
 

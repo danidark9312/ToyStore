@@ -140,7 +140,7 @@
             <div class="row mb-5">
             <div>
 	        </div>
-	            <div ng-repeat="product in products" ng-show="!product.invisible" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=initializeCant(product);showCant=false">
+	            <div ng-repeat="product in products" ng-show="!product.invisible && product.enable=='Y'" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=initializeCant(product);showCant=false">
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
 	                    <a ng-href="${url}item/{{product.id}}" style="width: 100%;display: block">
@@ -183,6 +183,16 @@
 						<span class="fa fa-star" ng-class="{checked: product.stars>2} "></span>
 						<span class="fa fa-star" ng-class="{checked: product.stars>3} "></span>
 						<span class="fa fa-star" ng-class="{checked: product.stars>4} "></span>
+						<br/>
+						
+						
+						<div ng-init="sizes = product.sizeArray" ng-if="product.sizeArray.length > 0">
+							<span class="badge badge-primary m-1" ng-repeat="size in sizes">{{size}}</span>
+						</div>
+						
+						
+						
+
 						
 	                  </div>
 	                </div>

@@ -2,8 +2,10 @@
 
 /* main colors*/
 :root {
- --main-bg-color: #fb609b;  /*Pink*/
+ /*--main-bg-color: #fb609b;  *//*Pink*/
 /*   --main-bg-color: #60d7fb; */ /*Blue*/
+   --main-bg-color: #536aff;  /*Dark blue*/
+
    
 }
 
@@ -176,6 +178,10 @@ form .fa.fa-star.checked{
  
 #imageCrop{
   max-width: 100%; /* This rule is very important, please do not ignore this! */
+}
+
+.background-white{
+	background-color: white;
 }
  
  
