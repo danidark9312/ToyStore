@@ -22,9 +22,10 @@
                 <sec:authorize access="isAuthenticated()">
   					<li><a class="fa fa-sign-out" style="color:white;font-size: 27px" title="Cerrar sesión" href="${url}security/logout"></a></li>
 				</sec:authorize>
-                <sec:authorize access="!isAuthenticated()">
-  					<li><a class="fa fa-sign-in" style="color:white;font-size: 27px" title="Iniciar sesión" href="${url}login"></a></li>
-				</sec:authorize>
+<!-- 				Login Link goes here -->
+<%--                 <sec:authorize access="!isAuthenticated()"> --%>
+<%--   					<li><a class="fa fa-sign-in" style="color:white;font-size: 27px" title="Iniciar sesión" href="${url}login"></a></li> --%>
+<%-- 				</sec:authorize> --%>
                   
 <!--                   <li><a href="#"><span class="icon icon-heart-o"></span></a></li> -->
                   <li>
@@ -85,9 +86,10 @@
               </ul>
             </li>
            </sec:authorize>
-		  <sec:authorize access="!isAuthenticated()">
-           	<li class="active"><a href="${url}login">Login</a></li> 
-          </sec:authorize>
+<!--            login goes here -->
+<%-- 		  <sec:authorize access="!isAuthenticated()"> --%>
+<%--            	<li class="active"><a href="${url}login">Login</a></li>  --%>
+<%--           </sec:authorize> --%>
 		  <sec:authorize access="isAuthenticated()">
            	<li class="active"><a href="${url}security/logout">Cerrar Sesión</a></li> 
           </sec:authorize>

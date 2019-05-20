@@ -29,12 +29,17 @@
 
     <link rel="stylesheet" href="${urlResources}/css/style.css">
     <link rel="stylesheet" href="${urlResources}/css/general.css">
+    <script>
+    	var context = '${url}';
+    </script>
+    
     
   </head>
   <body>
   
-  <div class="site-wrap" ng-app="">
+  <div class="site-wrap" ng-app="myApp" ng-controller="productController">
   	<c:import url="include/header.jsp"></c:import>
+  	
     
 
     <div class="bg-light py-3">
@@ -50,13 +55,33 @@
         <div class="row">
 					<div class="col-md-12">
 						<h2 class="h3 mb-3 text-black">Administrador Productos</h2>
+						
+						
+						<div class="row">
+							<div class="input-group mb-3 col-12">
+								<input type="text" class="form-control"
+									ng-model="search.name" placeholder="Producto" aria-label="producto" aria-describedby="basic-addon2">
+									
+								<select class="form-control" ng-model="search.enable" placeholder="Estado producto">
+								<option value="Y">Activo</option>
+								<option value="N">Suspendido</option>
+									
+								</select>
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="button" 
+									ng-click="search.name='';search.enable=''"
+									><i class="fa fa-eraser"></i></button>
+		 						</div>
+							</div>
+						</div>
+						
 						<p>
 							<a href="${url}admin/products" class="btn btn-sm btn-primary">Agregar
 								Producto<i class="fa fa-plus" aria-hidden="true"></i>
 							</a>
 						</p>
 					</div>
-					<div class="col-md-10 offset-md-1">
+					<div class="col-m2-12 site-blocks-table">
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -70,55 +95,90 @@
 									<th scope="col">Activar/Suspender</th>
 									<th scope="col">Editar</th>
 									<th scope="col">Eliminar</th>
+									<th scope="col">Duplicar</th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${products}" var="product">
-									<tr>
-										<th scope="row">${product.id}</th>
-										<td>${product.name}</td>
+<%-- 								<c:forEach items="${products}" var="product"> --%>
+<!-- 									<tr> -->
+<%-- 										<th scope="row">${product.id}</th> --%>
+<%-- 										<td>${product.name}</td> --%>
+<!-- 										<td> -->
+<%-- 											<fmt:formatNumber  --%>
+<%-- 											value = "${product.value}"  --%>
+<%-- 											currencySymbol = "$" --%>
+<%-- 											maxFractionDigits="0"  --%>
+<%-- 											type = "currency"/> --%>
+<!-- 										</td> -->
+<%-- 										<td>${product.stock}</td> --%>
+<%-- 										<td>${product.category.name}</td> --%>
+<!-- 										<td> -->
+<%-- 											<c:forEach begin="1" end="${product.stars}" var="index"> --%>
+<%-- 												<c:if test="${index<=5}"> --%>
+<!-- 													<span class="fa fa-star checked"></span> -->
+<%-- 												</c:if> --%>
+<%-- 											</c:forEach> --%>
+										
+<!-- 										</td> -->
+<%-- 										<td><img class="imgList" src="${urlResources}/images/products/${product.image}"></td> --%>
+<!-- 										<td> -->
+<%-- 										<a href="${url}admin/products/${product.id}/toggleStatus"> --%>
+<%-- 											<c:choose> --%>
+<%-- 												<c:when test="${product.enable=='Y'}"> --%>
+<!-- 													<span class="badge badge-secondary">Suspender</span> -->
+<%-- 												</c:when> --%>
+<%-- 												<c:otherwise> --%>
+<!-- 													<span class="badge badge-secondary">Activar</span> -->
+<%-- 												</c:otherwise> --%>
+<%-- 											</c:choose> --%>
+												
+<!-- 										</a> -->
+<!-- 										</td> -->
+<!-- 										<td> -->
+<%-- 										<a href="${url}admin/products/${product.id}/#product"> --%>
+<!-- 											<i class="fa fa-pencil" aria-hidden="true"></i> -->
+<!-- 										</a> -->
+<!-- 										</td> -->
+<%-- 										<td><a href="${url}admin/products/${product.id}/remove"> --%>
+<!-- 											<i class="fa fa-times" aria-hidden="true"></i> -->
+<!-- 										</a></td> -->
+<!-- 									</tr>  -->
+<%-- 								</c:forEach> --%>
+								
+									<tr ng-repeat="product in products | orderBy : '-id' | filter:search |limitTo:20">
+										<th scope="row">{{product.id}}</th>
+										<td>{{product.name}}</td>
+										<td>{{product.value | currency:"$":0}}</td>
+										<td>{{product.stock}}</td>
+										<td>{{product.category.name}}</td>
 										<td>
-											<fmt:formatNumber 
-											value = "${product.value}" 
-											currencySymbol = "$"
-											maxFractionDigits="0" 
-											type = "currency"/>
-										</td>
-										<td>${product.stock}</td>
-										<td>${product.category.name}</td>
-										<td>
-											<c:forEach begin="1" end="${product.stars}" var="index">
-											
-											<c:if test="${index<=5}">
-												<span class="fa fa-star checked"></span>
-											</c:if>
-											</c:forEach>
+											<span class="fa fa-star" ng-class="{checked: product.stars>0} "></span>
+											<span class="fa fa-star" ng-class="{checked: product.stars>1} "></span>
+											<span class="fa fa-star" ng-class="{checked: product.stars>2} "></span>
+											<span class="fa fa-star" ng-class="{checked: product.stars>3} "></span>
+											<span class="fa fa-star" ng-class="{checked: product.stars>4} "></span>
 										
 										</td>
-										<td><img class="imgList" src="${urlResources}/images/products/${product.image}"></td>
+										<td><img class="imgList" src="${urlResources}/images/products/{{product.image}}"></td>
 										<td>
-										<a href="${url}admin/products/${product.id}/toggleStatus">
-											<c:choose>
-												<c:when test="${product.enable=='Y'}">
-													<span class="badge badge-secondary">Suspender</span>
-												</c:when>
-												<c:otherwise>
-													<span class="badge badge-secondary">Activar</span>
-												</c:otherwise>
-											</c:choose>
-												
-										</a>
+											<a href="${url}admin/products/{{product.id}}/toggleStatus">
+												<span ng-if="product.enable == 'Y'" class="badge badge-secondary">Suspender</span>
+												<span ng-if="product.enable == 'N'" class="badge badge-secondary">Activar</span>
+											</a>
 										</td>
 										<td>
-										<a href="${url}admin/products/${product.id}/#product">
+										<a href="${url}admin/products/{{product.id}}/#product">
 											<i class="fa fa-pencil" aria-hidden="true"></i>
 										</a>
 										</td>
-										<td><a href="${url}admin/products/${product.id}/remove">
+										<td><a href="${url}admin/products/{{product.id}}/remove">
 											<i class="fa fa-times" aria-hidden="true"></i>
 										</a></td>
+										<td><a href="${url}admin/products/{{product.id}}/duplicate">
+											<i class="fa fa-pencil" aria-hidden="true"></i>
+										</a></td>
 									</tr> 
-								</c:forEach>
+								
 								
 							</tbody>
 						</table>
@@ -143,6 +203,8 @@
   <script src="${urlResources}/js/main.js"></script>
   
   <script src="${urlResources}/js/angular/angular.min.js"></script>
+  <script src="${urlResources}/js/product/productController.js"></script>
+  <script src="${urlResources}/js/shop/shopService.js"></script>
     
   </body>
 </html>

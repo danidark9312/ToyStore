@@ -27,7 +27,7 @@
     <script>
     	var context = '${url}';
     </script>
-    
+    <link rel="icon" href="resources/images/favicon.ico" type="image/x-icon">
   </head>
   <body>
   

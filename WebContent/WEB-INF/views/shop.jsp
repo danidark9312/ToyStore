@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+ <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
  <%@ page import="co.toyslove.util.Variables" %>
+ 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,6 +44,7 @@
     	
     
     </script>
+    <link rel="icon" href="resources/images/favicon.ico" type="image/x-icon">
   </head>
   <body>
 	<div class="floating-cart bouncing-anim" style="opacity: 0">
@@ -140,7 +143,7 @@
             <div class="row mb-5">
             <div>
 	        </div>
-	            <div ng-repeat="product in products" ng-show="!product.invisible && product.enable=='Y'" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=initializeCant(product);showCant=false">
+	            <div ng-repeat="product in products | orderBy : '-stars'" ng-show="!product.invisible && product.enable=='Y'" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=initializeCant(product);showCant=false">
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
 	                    <a ng-href="${url}item/{{product.id}}" style="width: 100%;display: block">
@@ -169,6 +172,13 @@
 						</div>
 		                <div ng-show="!showCant">  
 			                <span ng-click="showCant=true" class="fa fa-cart-plus shoppingIcon" ng-show="!product.inCart"></span>
+			                <sec:authorize access="isAuthenticated()">
+			  					<a href="${url}admin/products/{{product.id}}">
+			             		   	<span class="fa fa-pencil editProductAtStore"></span>
+				                </a>
+							</sec:authorize>
+			                
+			                
 			                <span ng-show="product.inCart" class="shoppingCant">{{cant}}</span>
 			                <span ng-click="removeItemFromCart(product)" class="fa fa-trash-o shoppingIcon" ng-show="product.inCart"></span>
 			                
@@ -281,7 +291,7 @@
                 </div>
                 <div class="row">
                 <c:forEach items="${categories}" var="category" varStatus="index">
-	                <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="${(index.count-1)*100}">
+	                <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0 p-md-2" data-aos="fade" data-aos-delay="${(index.count-1)*100}">
 	                    <a class="block-2-item" href="#mainSection" ng-click="addCategoryFilter('categoryId=${category.id }')">
 	                      <figure class="image">
 	                        <img src="${urlResources}/images/categories/${category.image}" alt="" class="img-fluid">
@@ -302,6 +312,8 @@
         
       </div>
     </div>
+    
+    
     
     
    <jsp:include page="include/footer.jsp" />

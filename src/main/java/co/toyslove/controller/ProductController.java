@@ -89,7 +89,11 @@ public class ProductController {
 
 	@GetMapping("/products/list")
 	public @ResponseBody List<Product> getProducts(ShopFilter shopFilter) {
-		List<Product> products = productService.findByFilter(shopFilter);
+		List<Product> products = null ;
+		if(shopFilter==null) 
+			products = productService.findAll();
+		else
+			products = productService.findByFilter(shopFilter);
 		markItemsInCart(products);
 		return products;
 	}
@@ -140,6 +144,14 @@ public class ProductController {
 		Product productDB = productService.findById(idProduct);
 		productService.remove(productDB);
 		return "redirect:/admin/products/list";
+	}
+	
+	@GetMapping("admin/products/{idProduct}/duplicate")
+	public String duplicate(@PathVariable("idProduct") Integer idProduct) {
+		Product productDB = productService.findById(idProduct);
+		productDB.setId(0);
+		productService.save(productDB);
+		return "redirect:/admin/products/"+productDB.getId();
 	}
 	
 	@GetMapping("admin/products/{idProduct}/toggleStatus")
