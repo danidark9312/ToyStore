@@ -3,6 +3,7 @@ package co.toyslove.config;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.http.CacheControl;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -38,7 +40,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+		registry
+		.addResourceHandler("/resources/**")
+		.addResourceLocations("/resources/")
+		.setCacheControl(CacheControl.maxAge(360, TimeUnit.DAYS))
+		;
 	}
 
 	@Override

@@ -460,7 +460,7 @@ a {
     @media (min-width: 768px) {
       .site-blocks-cover h1 {
         font-size: 50px; } }
-  .site-blocks-cover p {
+  .site-blocks-cover p, .site-blocks-cover ul {
     color: #333333;
     font-size: 20px;
     line-height: 35px; }

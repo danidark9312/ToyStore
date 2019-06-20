@@ -1,5 +1,7 @@
 package co.toyslove.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,9 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import co.toyslove.entity.OrderStatus;
+import co.toyslove.entity.PurchaseItem;
 import co.toyslove.entity.PurchaseOrder;
 import co.toyslove.service.PurchaseOrderService;
 
@@ -23,17 +27,22 @@ public class OrderController {
 	@Autowired
 	PurchaseOrderService PurchaseOrderService;
 		
-	@GetMapping({"/order/list/{trackId}/{document}","/order/list/"})
-	public String showForm(Model model,@PathVariable(value="trackId",required=false)Integer trackId,@PathVariable(value="document",required=false) String document) {
-		if(trackId != null && document != null){
-			PurchaseOrder purchaseOrder = PurchaseOrderService.findByIdAndClient(trackId, document);
+	@GetMapping({"/order/list/{trackId}/{user}","/order/list/"})
+	public String showForm(Model model,@RequestParam(value="trackId",required=false)Integer trackId,@RequestParam(value="user",required=false) String user) {
+		if(trackId != null && user != null){
+			PurchaseOrder purchaseOrder = PurchaseOrderService.findByIdAndClient(trackId, user);
 			if(purchaseOrder==null) {
 				model.addAttribute("message","No existe orden con esa información");
 			}else {
 				model.addAttribute(purchaseOrder);
 			}
-			model.addAttribute("document", document);
-			model.addAttribute("trackId", trackId);
+			try {
+				model.addAttribute("user", URLEncoder.encode(user, "UTF-8"));
+				model.addAttribute("trackId", trackId);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return "orderList";
 	}
@@ -48,6 +57,10 @@ public class OrderController {
 	@GetMapping(value = "admin/order/list", produces="application/json")
 	public @ResponseBody List<PurchaseOrder> getOrderList(Model model) {
 			List<PurchaseOrder> orderList = PurchaseOrderService.findAll();
+			orderList.forEach(order->{
+				double total = order.getItems().stream().mapToDouble(PurchaseItem::getPrice).sum();
+				order.setIncludeShipping(total<65000);
+			});
 		return orderList;
 	}
 	

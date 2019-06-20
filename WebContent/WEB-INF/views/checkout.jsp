@@ -60,15 +60,92 @@
         </div>
         <form ng-init="" name="billingForm">
 	        <div class="row checkoutSeccion">
-		      <div class="col-md-6 mb-5 mb-md-0">
+		      
+		      
+	          <div class="col-md-6">
+	
+	            
+	            
+	            <div class="row mb-5">
+	              <div class="col-md-12">
+	                <h2 class="h3 mb-3 text-black">Tu orden</h2>
+	                <div class="p-3 p-lg-5 border">
+	                  <table class="table site-block-order-table mb-5">
+	                    <thead>
+	                      <th>Producto</th>
+	                      <th>Total</th>
+	                    </thead>
+	                    <tbody>
+	                      <tr ng-repeat="item in shoppingList">
+	                        <td>{{item.product.name}}<strong class="mx-2">x</strong>{{item.count}}</td>
+	                        <td>{{item.product.value * item.count | currency:"$":0}}</td>
+	                      </tr>
+	                      <tr>
+	                        <td class="text-black font-weight-bold"><strong>Subtotal</strong></td>
+	                        <td class="text-black">{{totalProducts | currency:"$":0}}</td>
+	                      </tr>
+	                      <tr>
+	                        <td>Envio</td>
+	                        <td>{{valorEnvio | currency:"$":0}}</td>
+	                      </tr>
+	                      <tr>
+	                        <td class="text-black font-weight-bold"><strong>Total Orden</strong></td>
+	                        <td class="text-black font-weight-bold"><strong>{{totalOrden | currency:"$":0}}</strong></td>
+	                      </tr>
+	                      <tr>
+	                      	<td colspan="2">
+	                      	
+	                      	</td>
+	                      </tr>
+	                    </tbody>
+	                  </table>
+	
+	                  <div class="blueBorder p-3 mb-3">
+	                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">
+	                    Pago</a></h3>
+	                    <div class="collapse" id="collapsebank">
+	                      <div class="py-2">
+	                        <p class="mb-0">
+	                        Luego de finalizar la orden, podrá realizar el pago a través de los siguientes medios</p>
+	                        <ul>
+		                        <li>Transferencia bancaria a Bancolombia</li>
+		                        <li>Transferencia bancaria a Citibank</li>
+		                        <li>PayPal</li>
+		                        <li>Contra-entrega (Medellín)</li>
+	                        </ul>
+	                      </div>
+	                    </div>
+	                  </div>
+	                  
+	                  
+	
+	                </div>
+	              </div>
+	            </div>
+	            
+	            <div class="row mb-5" style="display: none;">
+	              <div class="col-md-12">
+	                <h2 class="h3 mb-3 text-black">Cupon</h2>
+	                <div class="p-3 p-lg-5 border">
+	                  
+	                  <label for="c_code" class="text-black mb-3">Ingrese el cupon si tiene</label>
+	                  <div class="input-group w-75">
+	                    <input type="text" class="form-control" id="c_code" placeholder="Código de cupon" aria-label="Coupon Code" aria-describedby="button-addon2">
+	                    <div class="input-group-append">
+	                      <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Aplicar</button>
+	                    </div>
+	                  </div>
+	
+	                </div>
+	              </div>
+	            </div>
+	
+	          </div>
+	          <div class="col-md-6 mb-5 mb-md-0">
 		            <h2 class="h3 mb-3 text-black">Detalles de compra</h2>
 		            <div class="p-3 p-lg-5 border">
 		              <div class="form-group row">
-		                <div class="col-md-12">
-		                  <label for="c_fname" class="text-black">Documento<span class="text-danger">*</span></label>
-		                  <input type="text" class="form-control" ng-model="user.document" name="document" id="document" required >
-		                  <span ng-show="!isNotEmptyField(billingForm.document)">Documento</span>
-		                </div>
+		                
 		                
 		                <div class="form-group" id="passwordPanel">
 		                <label for="password" class="text-black">
@@ -77,10 +154,12 @@
 		                  <div class="py-2">
 		                    <p class="mb-3">Ingrese su contraseña</p>
 		                    <div class="input-group">
+		                      	<input type="text" class="form-control" ng-model="user.document" name="document" id="document" placeholder="usuario/documento" >
 		                      	<input type="password" class="form-control" ng-model="user.password" id="password" name="password" placeholder="Contraseña">
 								<div class="input-group-append">
 									<button class="btn btn-outline-secondary" type="button" ng-click="loadUser(user.document,user.password)">Cargar</button>
 								</div>
+								
 							</div>
 							<div id="messageLoadClient" class="alert alert-danger" style="display: none">
 							</div>
@@ -115,14 +194,14 @@
 		                <input type="text" class="form-control" placeholder="Apartamento, piso, oficia,etc" ng-model="user.addressAppend" name="addressAppend">
 		              </div>
 		              <div class="form-group row">
-		                <div class="col-md-6">
+		                <div class="col-md-6" style="display: none">
 		                  <label for="c_state_country" class="text-black">Departamento<span class="text-danger">*</span></label> 
 		                  <select class="custom-select" ng-options="dep as dep.name for dep in departamentos track by dep.id" ng-init="user.state.id='1'" ng-model="user.state"></select>
 		                  
 						</div>
 		                <div class="col-md-6">
 		                  <label for="c_postal_zip" class="text-black">Ciudad<span class="text-danger">*</span></label>
-		                  <input type="text" class="form-control" name="city" ng-model="user.city" required>
+		                  <input type="text" class="form-control" name="city" ng-model="user.city" ng-init="user.city='Medellin'" required>
 		                  <span ng-show="!isNotEmptyField(billingForm.city)">Ciudad es requerida</span>
 		                </div>
 		              </div>
@@ -144,15 +223,17 @@
 
 
 		              <div class="form-group" id="newPasswordPanel">
-		                <label for="c_create_account" class="text-black" data-toggle="collapse" href="#create_an_account" role="button" aria-expanded="false" aria-controls="create_an_account"><input type="checkbox" value="1" id="c_create_account"> Crear contraseña ?</label>
+		                <label for="c_create_account" class="text-black" data-toggle="collapse"
+		                 href="#create_an_account" role="button" aria-expanded="false" 
+		                 aria-controls="create_an_account"><input type="checkbox" value="1" 
+		                 id="c_create_account"> Registrarse</label>
 		                <div class="collapse" id="create_an_account">
-		                  <div class="py-2">
-		                    <p class="mb-3">Ingrese contraseña</p>
-		                    <div class="form-group">
-		                      <label for="c_account_password" class="text-black">Contraseña</label>
-		                      <input type="password" ng-model="user.password" class="form-control" id="c_account_password" name="c_account_password" placeholder="">
-		                    </div>
-		                  </div>
+						<div class="input-group">
+							<input type="text" class="form-control" ng-model="user.document" name="document" id="document" placeholder="usuario/documento" >
+							<input type="password" ng-model="user.password" class="form-control" id="c_account_password" name="c_account_password" placeholder="contraseña">
+						</div>
+										
+		                  
 		                </div>
 		              </div>
 		
@@ -240,67 +321,11 @@
 		                <textarea ng-model="user.addressComment" cols="30" rows="5" class="form-control" placeholder="Especifique talla o tamaño del producto, Mencione puntos de referencia del domicilio, indicaciones y sugerencias para una entrega efectiva"></textarea>
 		              </div>
 		
-		            </div>
-		          </div>
-		      
-	          <div class="col-md-6">
-	
-	            
-	            
-	            <div class="row mb-5">
-	              <div class="col-md-12">
-	                <h2 class="h3 mb-3 text-black">Tu orden</h2>
-	                <div class="p-3 p-lg-5 border">
-	                  <table class="table site-block-order-table mb-5">
-	                    <thead>
-	                      <th>Producto</th>
-	                      <th>Total</th>
-	                    </thead>
-	                    <tbody>
-	                      <tr ng-repeat="item in shoppingList">
-	                        <td>{{item.product.name}}<strong class="mx-2">x</strong>{{item.count}}</td>
-	                        <td>{{item.product.value * item.count | currency:"$":0}}</td>
-	                      </tr>
-	                      <tr>
-	                        <td class="text-black font-weight-bold"><strong>Subtotal</strong></td>
-	                        <td class="text-black">{{totalProducts | currency:"$":0}}</td>
-	                      </tr>
-	                      <tr>
-	                        <td>Envio</td>
-	                        <td>{{valorEnvio | currency:"$":0}}</td>
-	                      </tr>
-	                      <tr>
-	                        <td class="text-black font-weight-bold"><strong>Total Orden</strong></td>
-	                        <td class="text-black font-weight-bold"><strong>{{totalOrden | currency:"$":0}}</strong></td>
-	                      </tr>
-	                      <tr>
-	                      	<td colspan="2">
-	                      	
-	                      	</td>
-	                      </tr>
-	                    </tbody>
-	                  </table>
-	
-	                  <div class="blueBorder p-3 mb-3">
-	                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">
-	                    Pago</a></h3>
-	                    <div class="collapse" id="collapsebank">
-	                      <div class="py-2">
-	                        <p class="mb-0">
-	                        Realice el pago por medio de las siguientes opciones</p>
-	                        <ul>
-	                        <li>Transferencia bancaria a Bancolombia</li>
-	                        <li>PayPal</li>
-	                        <li>Contra-entrega</li>
-	                        </ul>
-	                      </div>
-	                    </div>
-	                  </div>
-	                  
-	                  <div class="row">
+					  <div class="row">
 		                  <div class="col-3">
 			                  <div class="form-group">
 										<button class="btn btn-success btn-lg btn-block" style="font-size: 36px ;padding: 1px"
+										title="Regresar a la tienda"
 											onclick="promptBackStore()"><i class="fa fa-cart-plus"
 												aria-hidden="true"></i>
 										</button>
@@ -312,31 +337,9 @@
 			                  </div>
 		                  </div>
 	                  </div>
-	                  
-	                  
-	
-	                </div>
-	              </div>
-	            </div>
-	            
-	            <div class="row mb-5" style="display: none;">
-	              <div class="col-md-12">
-	                <h2 class="h3 mb-3 text-black">Cupon</h2>
-	                <div class="p-3 p-lg-5 border">
-	                  
-	                  <label for="c_code" class="text-black mb-3">Ingrese el cupon si tiene</label>
-	                  <div class="input-group w-75">
-	                    <input type="text" class="form-control" id="c_code" placeholder="Código de cupon" aria-label="Coupon Code" aria-describedby="button-addon2">
-	                    <div class="input-group-append">
-	                      <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Aplicar</button>
-	                    </div>
-	                  </div>
-	
-	                </div>
-	              </div>
-	            </div>
-	
-	          </div>
+		
+		            </div>
+		          </div>
 	        </div>
         </form>
         <!-- </form> -->
@@ -358,6 +361,7 @@
   
   <script src="${urlResources}/js/checkout/checkoutController.js"></script>
   <script src="${urlResources}/js/cart/cartService.js"></script>
+
 
   
     

@@ -12,11 +12,11 @@
 
             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
               <div class="site-logo">
-                <a id="logoTitle" href="${url}" class="${urlResources}/js-logo-clone"><%=Variables.pageName%></a>
+                <a id="logoTitle" href="${url}home" class="${urlResources}/js-logo-clone"><%=Variables.pageName%></a>
               </div>
             </div>
 
-            <div class="col-12 col-md-4 order-3 order-md-3 text-right">
+            <div class="col-12 col-md-8 order-3 order-md-3 text-right">
               <div class="site-top-icons">
                 <ul>
                 <sec:authorize access="isAuthenticated()">
@@ -28,14 +28,18 @@
 <%-- 				</sec:authorize> --%>
                   
 <!--                   <li><a href="#"><span class="icon icon-heart-o"></span></a></li> -->
-                  <li>
-<!--                     <a href="cart.html" class="site-cart"> -->
-
-<!--                     <a href="cart" class="site-cart"> -->
-<!--                       <span class="icon icon-shopping_cart"></span> -->
-<!--                       <span class="count" id="itemsCant">0</span> -->
-<!--                     </a> -->
-                  </li> 
+                  <li id="cartMenuItem">
+                  <a href="javascript:showTutorial();validateNotification();" class="site-cart">
+                  	<span class="fa fa-question-circle help-icon" title="Como comprar"></span>
+                  	<span class="count" id="notifications" style="display:none;">0</span>
+                  </a>
+				</li> 
+                  <li id="cartMenuItem">
+                  <a href="${url}checkout" class="site-cart">
+                      <span class="icon icon-shopping_cart"></span>
+                      <span class="count" id="itemsCant">0</span>
+                    </a>
+				</li> 
                   <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu" style="color: white;"></span></a></li>
                 </ul>
               </div> 
@@ -73,6 +77,7 @@
 <!--             </li> -->
             <li class="active"><a href="${url}">Tienda</a></li>
             <li class="active"><a href="${url}order/list/">Estado de compra</a></li>
+            <li class="active"><a href="${url}terminos">Terminos y condiciones</a></li>
 <!--             <li><a href="#">Catalogue</a></li> -->
 
 		  <sec:authorize access="isAuthenticated()">
@@ -100,4 +105,6 @@
         </div>
       </nav> 
     </header>
+    <jsp:include page="modalTuto.jsp" />
+    
 

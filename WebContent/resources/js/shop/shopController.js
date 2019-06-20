@@ -1,6 +1,7 @@
 var defaultMinPriceFilter = 2000;
 var defaultMaxPriceFilter = 200000;
 var app = angular.module('myApp', []);
+var observerAttach = false;
 app.controller('shopController', function($scope,shopService) {
   $scope.shopTitle= "Listado de Productos";
   $scope.products = "";
@@ -10,14 +11,21 @@ app.controller('shopController', function($scope,shopService) {
   };
 
   angular.element(document).ready(function () {
+	  //validateShowTuto();
 	  $scope.initComponents();
-	  $scope.loadProductos();
 	  $scope.setScreenToPhone();
+	  if(category!=''){
+		  $scope.addCategoryFilter("categoryId="+category);
+	  }
+	  $scope.loadProductos();
+	  //setTimeout("startLazyLoad()",1000);
   });
   
   
   
   $scope.initComponents = function(){
+	  $("#cartMenuItem").show();
+	  $scope.getItemsInCart();
 	  $( "#slider-range" ).slider({
 	      range: true,
 	      min: 10000,
@@ -34,10 +42,39 @@ app.controller('shopController', function($scope,shopService) {
 	
   }
   
-  $scope.addCategoryFilter = function(filter){
-	  $scope.shopFilter.category = filter;
+  $scope.resetRibbonFilters = function(){
+	  $scope.shopFilter.ribbon = undefined;
 	  $scope.loadProductos();
   };
+  
+  $scope.resetCategoryFilters = function(){
+	  $scope.shopFilter.category = undefined;
+	  $scope.loadProductos();
+  };
+  
+  $scope.resetFilters = function(){
+	  $scope.shopFilter = {
+			  price : "priceMin="+defaultMinPriceFilter+"&priceMax"+defaultMaxPriceFilter,
+	  }; 
+	  $( "#slider-range" ).slider( "values", 0 , defaultMinPriceFilter );
+	  $( "#slider-range" ).slider( "values", 1 , defaultMaxPriceFilter );
+	  
+	  $scope.loadProductos();
+  };
+  
+  $scope.addCategoryFilter = function(filter){
+	  $scope.shopFilter.category = filter;
+  };
+  
+  $scope.addRibbonFilter = function(filter){
+	  $scope.shopFilter.ribbon = filter;
+  };
+  
+  $scope.moveToProductSection = function(){
+	  window.location="#productSection";
+  };
+  
+  
   
   $scope.addPriceFilter = function(){
 	  var min = $( "#slider-range" ).slider( "values", 0 );
@@ -49,11 +86,12 @@ app.controller('shopController', function($scope,shopService) {
   };
   
   $scope.loadProductos = function(){
+	  observerAttach = false;
 	  var filter = buildFilters();
 	  shopService.loadProducts(filter).then(
 				 function(d) {
 					 $scope.products = d.data;
-					 $("[id=itemsCant]").text($scope.getItemsInCart($scope.products));
+					 
 	         		},
 	         function(errResponse){
 	             console.error('Error while fetching Users');
@@ -62,12 +100,14 @@ app.controller('shopController', function($scope,shopService) {
   }
   
   $scope.getItemsInCart = function(products){
-	var total = 0;
-	angular.forEach(products, function(product, key){
-		if(product.inCart)
-			total++;
-	});
-	  return total;
+	  shopService.getProductsInCart().then(
+				 function(d) {
+					  $("[id=itemsCant]").text(d.data.length);
+	         		},
+	         function(errResponse){
+	             console.error('Error while fetching Users');
+	         }	  
+	  );
   };
   $scope.initializeCant = function(product){
 	  if(product.qntyInCart==0)
@@ -82,10 +122,17 @@ app.controller('shopController', function($scope,shopService) {
 	  $scope.addItemToCart(
 			  {id : productId } 
 			  ,cant);
+	  
+
+	  setTimeout(function(){
+		  $('#successAlertItemAdded').show('slow');
+		  $("#addProductBtn").hide();
+	  },800);
+	 
   }
   
   $scope.addItemToCart = function(product, cant){
-	  console.log(product);
+	  addProductAddedToCart();
 	  var shoppingItem = {
 			  product : product,
 			  count : cant
@@ -153,6 +200,8 @@ app.controller('shopController', function($scope,shopService) {
 	var str = "";
 	if($scope.shopFilter.category)
 		str+=$scope.shopFilter.category+"&";
+	if($scope.shopFilter.ribbon)
+		str+=$scope.shopFilter.ribbon+"&";
 	
 	str+=$scope.shopFilter.price;
 	return str;
@@ -160,6 +209,17 @@ app.controller('shopController', function($scope,shopService) {
   
 });
 
+
+app.directive("callbackOnEnd", function() {
+    return {
+        restrict: "A",
+        link: function(scope, element, attrs) {
+            if (scope.$last) {
+                eval(attrs.callbackOnEnd);
+            }
+        }
+    };
+});
  
   $('#modal-buy').on('hidden.bs.modal', function () {
    		restoredFloating();
@@ -216,5 +276,19 @@ app.controller('shopController', function($scope,shopService) {
 	   	});
 	   
    }
-   	 
-   	
+   
+function validateShowTuto(){
+	if(isFirstTimeUser()){
+		showTutorial();
+	}
+}
+
+attachImageObserver = function(){
+	  if(observerAttach){
+		  return;
+	  }
+	  else{
+		  startLazyLoad();
+		  observerAttach = true;
+	  }
+};   	

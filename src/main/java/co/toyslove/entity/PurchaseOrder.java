@@ -40,6 +40,9 @@ public class PurchaseOrder implements Serializable{
 	@Transient
 	private OrderStatus orderStatus;
 	
+	@Transient
+	private boolean includeShipping;
+	
 	@Column(name="dsstatus")
 	private String statusDescription; 
 	
@@ -192,6 +195,14 @@ public class PurchaseOrder implements Serializable{
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public boolean isIncludeShipping() {
+		return includeShipping;
+	}
+
+	public void setIncludeShipping(boolean includeShipping) {
+		this.includeShipping = includeShipping;
 	}
 	
 	

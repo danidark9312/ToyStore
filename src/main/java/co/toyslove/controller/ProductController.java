@@ -1,6 +1,7 @@
 package co.toyslove.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,25 +60,40 @@ public class ProductController {
 	Util util;
 	
 	@GetMapping("item/{id}")
-	public String showDetailItem(Model model,@PathVariable int id) {
+	public String showDetailItem(Model model,@PathVariable int id,RedirectAttributes attributes) {
 		Product product = productService.findById(id);
-		model.addAttribute(product);
-		return "productDetails";
+		if(product == null) {
+			attributes.addFlashAttribute("error","El producto seleccionado no existe");
+			return "redirect:/store";
+		}else {
+			model.addAttribute(product);
+			System.out.println("Consulting product details: ");
+			System.out.println(product.getName());
+			return "productDetails";	
+		}
 	}
 	
 	@GetMapping("/admin/products")
 	public String showForm(@ModelAttribute Product product,Model model) {
-		model.addAttribute("categories", categoryService.findAll());
-		model.addAttribute("sizes", getSizesAsList());
+		loadScreenAttributes(model);
 		return "productForm";
 	}
 	
 
+	private void loadScreenAttributes(Model model) {
+		model.addAttribute("categories", categoryService.findAll());
+		model.addAttribute("sizes", getSizesAsList());
+		model.addAttribute("ribbons", getRibbonsAsList());
+	}
+
+	private List<String> getRibbonsAsList() {
+		return Arrays.asList("N_A","NUEVO","OFERTA","LIMITADO");
+	}
+
 	@GetMapping("/admin/products/{id}")
 	public String showForm(Model model,@PathVariable int id) {
-		model.addAttribute("categories", categoryService.findAll());
 		model.addAttribute("product", productService.findById(id));
-		model.addAttribute("sizes", getSizesAsList());
+		loadScreenAttributes(model);
 		return "productForm";
 	}
 	
@@ -116,14 +132,15 @@ public class ProductController {
 	
 	@PostMapping(value="/admin/products/save", consumes = "multipart/form-data;charset=UTF-8")
 	public @ResponseBody Response saveProduct(@ModelAttribute Product product, BindingResult result, Model model,
-			@RequestParam("archivoImagen") MultipartFile multiPart, HttpServletRequest request, RedirectAttributes attributes) {
+			@RequestParam(value="archivoImagen",required=false) MultipartFile multiPart, HttpServletRequest request, RedirectAttributes attributes) {
 		String imageName = null;
+		System.out.println(product);
 		if (result.hasErrors()){
 			System.out.println("Existieron errores");
 			Response.ofMessage("Error");
 		}	
 		
-		if (!multiPart.isEmpty()) {
+		if (multiPart!=null && !multiPart.isEmpty()) {
 			imageName = util.saveImage(multiPart,request,"products");
 		}
 			if (imageName!=null){ 

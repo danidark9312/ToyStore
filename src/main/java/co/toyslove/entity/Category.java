@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "categories")
@@ -17,8 +18,21 @@ public class Category {
 	private boolean firstPage;
 	private int priority;
 	private String image;
+	
+	@Transient
+	private int items;
+	
+	
 
 	
+	public int getItems() {
+		return items;
+	}
+
+	public void setItems(int items) {
+		this.items = items;
+	}
+
 	public Category() {
 		super();
 	}

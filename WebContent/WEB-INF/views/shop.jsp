@@ -31,8 +31,10 @@
     <link rel="stylesheet" href="${urlResources}/css/style.css">
     <link rel="stylesheet" href="${urlResources}/css/general.css">
     <link rel="stylesheet" href="${urlResources}/css/animation.css">
+    <link rel="stylesheet" href="${urlResources}/css/ribbon.css">
     <script>
     var context = '${url}';
+    var category = '${param.category}';
     
     window.mobilecheck = function() {
     	  var check = false;
@@ -132,7 +134,7 @@
 	                        <input type="text" class="form-control" placeholder="Buscar" ng-model="filter"/>
 	                    </div>
 	                    <div class="col-sm-6 xs-center">
-	                    	<input type="button" ng-click="searchProducts(filter)" class="btn btn-sm btn-primary" value="Buscar">
+	                    	<input type="button" ng-click="searchProducts(filter);moveToProductSection();" class="btn btn-sm btn-primary" value="Buscar">
 	                    </div>
 	                </div>
 	             </form>
@@ -140,14 +142,35 @@
                 
               </div>
             </div>
-            <div class="row mb-5">
-            <div>
+            <div class="row mb-5" id="productSection">
+
+<!-- 			<div class="box"> -->
+<!-- 				<div class="ribbon"> -->
+<!-- 					<span>POPULAR</span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+
+			<div>
 	        </div>
-	            <div ng-repeat="product in products | orderBy : '-stars'" ng-show="!product.invisible && product.enable=='Y'" class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up" ng-init="cant=initializeCant(product);showCant=false">
+	            <div ng-repeat="product in products | orderBy : '-stars'"
+	             ng-show="!product.invisible && product.enable=='Y'" 
+	             class="col-sm-6 col-lg-4 mb-4 box" 
+	             ng-init="cant=initializeCant(product);showCant=false"
+	             callback-on-end="attachImageObserver()"
+	             >
+	            
+		            <div ng-if="product.ribbon"class="ribbon">
+						<span 
+						ng-class="{
+						ribbon_New : product.ribbon=='NUEVO'
+						,ribbon_Limited : product.ribbon=='LIMITADO'
+						,ribbon_Hidden : product.ribbon=='N_A'
+						}">{{product.ribbon}}</span>
+					</div>
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
 	                    <a ng-href="${url}item/{{product.id}}" style="width: 100%;display: block">
-	                    	<img src="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid" style="width: 100%">
+	                    	<img data-lazy="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid" style="width: 100%">
 	                    </a>
 	                  </figure>
 	                  <div class="block-4-text p-4 limitedSize200">
@@ -171,8 +194,13 @@
 							<p ng-show="cant<1" class="text-primary font-weight-bold text-danger">Cantidad debe ser superior a 0</p>
 						</div>
 		                <div ng-show="!showCant">  
-			                <span ng-click="showCant=true" class="fa fa-cart-plus shoppingIcon" ng-show="!product.inCart"></span>
+			                <a href="javascript:void(0)" ng-click="showCant=true" ng-show="!product.inCart">
+			                	<span class="fa fa-cart-plus shoppingIcon" ></span>
+			                </a>
 			                <sec:authorize access="isAuthenticated()">
+			  					<a href="${url}admin/products/{{product.id}}/duplicate">
+			             		   	<span class="fa fa-pause duplicateProductAtStore"></span>
+				                </a>
 			  					<a href="${url}admin/products/{{product.id}}">
 			             		   	<span class="fa fa-pencil editProductAtStore"></span>
 				                </a>
@@ -185,8 +213,17 @@
 			                <h3><a ng-href="${url}item/{{product.id}}">{{product.name}}</a></h3>
 			                
 			                <p class="mb-0" style="margin-bottom: 0">{{product.description | limitTo:80}}</p>
+			                <div ng-if="product.value_prev">
+		                    	<p class="font-weight-bold previous_value" style="margin-bottom: 0">{{product.value_prev | currency:"$":0}}</p>
+			                	<p class="text-primary font-weight-bold" style="margin-bottom: 0">{{product.value | currency:"$":0}}</p>
+			                </div>
+			                <div ng-if="!product.value_prev">
+			                	<p class="text-primary font-weight-bold" style="margin-bottom: 0">{{product.value | currency:"$":0}}</p>
+			                </div>
 			                
-		                    <p class="text-primary font-weight-bold" style="margin-bottom: 0">{{product.value | currency:"$":0}}</p>
+		                    
+		                    
+		                    
 		                </div>
 	                    <span class="fa fa-star" ng-class="{checked: product.stars>0} "></span>
 						<span class="fa fa-star" ng-class="{checked: product.stars>1} "></span>
@@ -196,7 +233,7 @@
 						<br/>
 						
 						
-						<div ng-init="sizes = product.sizeArray" ng-if="product.sizeArray.length > 0">
+						<div ng-show="!showCant" ng-init="sizes = product.sizeArray" ng-if="product.sizeArray.length > 0">
 							<span class="badge badge-primary m-1" ng-repeat="size in sizes">{{size}}</span>
 						</div>
 						
@@ -225,16 +262,52 @@
           <div class="col-md-3 order-1 mb-5 mb-md-0">
 
 			<div class="border rounded p-4">
-				<h3 class="mb-3 h6 text-uppercase text-black d-block"><a data-toggle="collapse" href="#collapsefilter" role="button" aria-expanded="false" aria-controls="collapsefilter" >Filtros</a></h3>
+			
+			<div class="row" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapsefilter" onclick="$('#collapsefilter').collapse('toggle')"
+				style="background-color: #d7d9e2;opacity: 0.8;border-radius: 7px;">
+				<div class="col-4 p-2">
+						<h3 class="mb-3 h6 text-uppercase text-black d-block m-3">Filtros </h3>
+				</div>
+				<div class="col-2 offset-5 p-2" style="text-align: center;color : var(--main-bg-color);font-size: xx-large;">
+					<i class="fa fa-arrow-circle-o-down"></i>
+				</div>
+			</div>
+			
+				
 	            <div class="mb-4 collapse show" id="collapsefilter">
 		            <div class="border p-4 rounded mb-4">
 	              <h3 class="mb-3 h6 text-uppercase text-black d-block">Categorías</h3>
 	              <ul class="list-unstyled mb-0">
+	              <li class="mb-1">
+	              			<a href="#productSection" ng-click="resetCategoryFilters()" class="d-flex">
+	              				<span>Catálogo completo</span>
+	              			</a> 
+	              		</li>
 	              	<c:forEach var ="category" items="${categories}">
 	              		<li class="mb-1">
-	              			<a href="" ng-click="addCategoryFilter('categoryId=${category.id }')" class="d-flex">
-	              				<span>${category.name}</span> 
+	              			<a href="${url}?category=${category.id}#productSection" class="d-flex">
+	              				<span>${category.name} (${category.items})</span>
+	              			</a> 
 <!-- 	              				<span class="text-black ml-auto">(2,220)</span></a> -->
+	              		</li>
+	              	</c:forEach>
+	              </ul>
+	            </div>
+		            <div class="border p-4 rounded mb-4">
+	              <h3 class="mb-3 h6 text-uppercase text-black d-block">OTROS</h3>
+	              <ul class="list-unstyled mb-0">
+	              <li class="mb-1">
+	              			<a href="#productSection" ng-click="resetRibbonFilters()" class="d-flex">
+	              				<span>TODOS</span>
+	              			</a> 
+	              		</li>
+	              	<c:forEach var ="ribbon" items="${ribbons}">
+	              		<li class="mb-1">
+	              			<a 	href="#productSection" 
+	              				ng-click="addRibbonFilter('ribbon=${ribbon}');loadProductos()" 
+	              				class="d-flex">
+	              				<span>${ribbon}</span>
+	              			</a> 
 	              		</li>
 	              	</c:forEach>
 	              </ul>
@@ -242,9 +315,26 @@
 	             <div class="mb-4" style="text-align: center;">
 	                <h3 class="mb-3 h6 text-uppercase text-black d-block">Filtro por precio</h3>
 	                <div id="slider-range" class="border-primary"></div>
-	                <input type="text" name="text" id="amount" class="form-control border-0 pl-0 bg-white" disabled="" />
-	                <br/>
-	                <input type="button" ng-click="addPriceFilter()" class="btn btn-sm btn-primary" value="Filtrar">
+					<input type="text" name="text" id="amount" class="form-control border-0 pl-0 bg-white" disabled="" />
+					
+					<div class="input-group">
+						<input type="button" ng-click="addPriceFilter();moveToProductSection()" class="form-control btn btn-sm btn-primary" value="Filtrar">
+						<div class="input-group-append">
+							<a href="javascript:void(0)" ng-click="resetFilters()" class="input-group-text fa fa-eraser" id="basic-addon1"></a>
+						</div>
+					</div>
+
+					<br/>
+<!-- 	                <div class="row"> -->
+<!-- 	                	<div class="col-8"> -->
+<!-- 		                	<input type="button" ng-click="addPriceFilter()" class="btn btn-sm btn-primary" value="Filtrar"> -->
+<!-- 		                </div> -->
+<!-- 		                <div class="col-4"> -->
+<!-- 		                	<a href="javascript:void(0)" ng-click="" ><i class="fa fa-eraser"></i></a> -->
+<!-- 		                </div> -->
+<!-- 	                </div> -->
+	                
+	                
 	              </div>
 	
 	              <!--  <div class="mb-4">
@@ -292,9 +382,9 @@
                 <div class="row">
                 <c:forEach items="${categories}" var="category" varStatus="index">
 	                <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0 p-md-2" data-aos="fade" data-aos-delay="${(index.count-1)*100}">
-	                    <a class="block-2-item" href="#mainSection" ng-click="addCategoryFilter('categoryId=${category.id }')">
+	                    <a class="block-2-item" href="#productSection" ng-click="addCategoryFilter('categoryId=${category.id }');loadProductos()">
 	                      <figure class="image">
-	                        <img src="${urlResources}/images/categories/${category.image}" alt="" class="img-fluid">
+	                        <img data-lazy="${urlResources}/images/categories/${category.image}" alt="" class="img-fluid">
 	                      </figure>
 	                      <div class="text">
 	                        <span class="text-uppercase">${category.description}</span>
@@ -316,6 +406,7 @@
     
     
     
+    
    <jsp:include page="include/footer.jsp" />
 
     
@@ -323,6 +414,7 @@
 
   <script src="${urlResources}/js/jquery-3.3.1.min.js"></script>
   <script src="${urlResources}/js/jquery-ui.js"></script>
+  <script src="${urlResources}/js/jquery-ui-touch-punch.js"></script>
   <script src="${urlResources}/js/popper.min.js"></script>
   <script src="${urlResources}/js/bootstrap.min.js"></script>
   <script src="${urlResources}/js/owl.carousel.min.js"></script>
@@ -335,13 +427,15 @@
   
   <script src="${urlResources}/js/shop/shopController.js"></script>
   <script src="${urlResources}/js/shop/shopService.js"></script>
+  <script src="${urlResources}/js/lazy-load-image.js"></script>
   <script>
   
   $(document).ready(function(){
 	  	setFloatingProperties(200);
 	 	 changeFloatingVisibility(window.scrollY);
 	 });
-    
+  
+  
     </script>
     
   </body>

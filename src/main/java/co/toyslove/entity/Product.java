@@ -22,39 +22,68 @@ public class Product {
 	private String name;
 	private String description;
 	private int value;
+	private int value_prev;
 	private String image;
 	private int stars;
 	private int stock;
-	
-	
-	@Column(name="ds_sizes")
+
+	@Column(name = "ds_sizes")
 	private String joinedSizes;
-	
+
 	@Transient
 	private String[] sizeArray;
-	
-	
-	@Column(name="yn_enable")
+
+	@Column(name = "yn_enable")
 	private String enable;
-	
+
+	@Column(name = "ds_ribbon")
+	private String ribbon;
+
 	@Transient
 	private String[] sizes;
 
 	@Transient
 	private boolean inCart;
-	
+
 	@Transient
 	private int qntyInCart;
 	
 	@Transient
-	private boolean invisible; //Used to define wether or not is shown in store(filters, pagination, etc)
+	private boolean imageModified;
+
+	@Transient
+	private boolean invisible; // Used to define wether or not is shown in store(filters, pagination, etc)
 
 	@ManyToOne()
 	@JoinColumn(name = "category", referencedColumnName = "id")
+	
+	
+	
 	private Category category;
+	
+	public boolean isImageModified() {
+		return imageModified;
+	}
 
-	
-	
+	public void setImageModified(boolean imageModified) {
+		this.imageModified = imageModified;
+	}
+
+	public int getValue_prev() {
+		return value_prev;
+	}
+
+	public void setValue_prev(int value_prev) {
+		this.value_prev = value_prev;
+	}
+
+	public String getRibbon() {
+		return ribbon;
+	}
+
+	public void setRibbon(String ribbon) {
+		this.ribbon = ribbon;
+	}
 
 	public String getJoinedSizes() {
 		return joinedSizes;
@@ -62,12 +91,12 @@ public class Product {
 
 	public void setJoinedSizes(String joinedSizes) {
 		this.joinedSizes = joinedSizes;
-		if(joinedSizes!=null && joinedSizes.length()>0)
+		if (joinedSizes != null && joinedSizes.length() > 0)
 			this.sizeArray = joinedSizes.split(";");
 	}
 
 	public String[] getSizeArray() {
-		if(sizeArray==null && joinedSizes!=null && joinedSizes.length()>0 )
+		if (sizeArray == null && joinedSizes != null && joinedSizes.length() > 0)
 			this.sizeArray = joinedSizes.split(";");
 		return sizeArray;
 	}
@@ -195,10 +224,16 @@ public class Product {
 		this.stars = stars;
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", value=" + value + ", image="
-				+ image + ", stars=" + stars + "]";
+		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", value=" + value
+				+ ", value_prev=" + value_prev + ", image=" + image + ", stars=" + stars + ", stock=" + stock
+				+ ", joinedSizes=" + joinedSizes + ", sizeArray=" + Arrays.toString(sizeArray) + ", enable=" + enable
+				+ ", ribbon=" + ribbon + ", sizes=" + Arrays.toString(sizes) + ", inCart=" + inCart + ", qntyInCart="
+				+ qntyInCart + ", imageModified=" + imageModified + ", invisible=" + invisible + ", category="
+				+ category + "]";
 	}
 
 	@Override
@@ -222,7 +257,5 @@ public class Product {
 			return false;
 		return true;
 	}
-	
-	
 
 }

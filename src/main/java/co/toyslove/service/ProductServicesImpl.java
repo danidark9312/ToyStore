@@ -31,8 +31,12 @@ public class ProductServicesImpl implements ProductServices{
 				List<Predicate> predicates = new ArrayList<>();
 				if(shopFilter.getCategoryId()!=0) {
 					predicates.add(cb.and(cb.equal(root.get("category").get("id"),shopFilter.getCategoryId())));
-				}if(shopFilter.getPriceMin()!=0 && shopFilter.getPriceMax()!=0) {
+				}
+				if(shopFilter.getPriceMin()!=0 && shopFilter.getPriceMax()!=0) {
 					predicates.add(cb.between(root.get("value"),shopFilter.getPriceMin(),shopFilter.getPriceMax()));
+				}
+				if(shopFilter.getRibbon()!=null && !shopFilter.getRibbon().equals("")) {
+					predicates.add(cb.and(cb.equal(root.get("ribbon"),shopFilter.getRibbon())));
 				}
 				return cb.and(predicates.toArray(new Predicate[predicates.size()]));
 			}

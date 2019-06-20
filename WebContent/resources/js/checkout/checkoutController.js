@@ -1,6 +1,7 @@
 var app = angular.module('myApp', []);
 app.controller('checkoutController', function($scope,cartService) {
   $scope.title= "Carro de compras";
+  $scope.valorEnvioBase = 7000;
   $scope.valorEnvio = 7000;
   $scope.totalProducts = 0;
   $scope.totalOrden = 0;
@@ -13,6 +14,7 @@ app.controller('checkoutController', function($scope,cartService) {
   angular.element(document).ready(function () {
 	  $scope.loadShoppingCart();
 	  $scope.departamentos = $scope.loadDepartamentos();
+	  addCartConversion();
   });
   
   $scope.getTotalProducts = function(){
@@ -20,6 +22,11 @@ app.controller('checkoutController', function($scope,cartService) {
 	  angular.forEach($scope.shoppingList, function(item, key) {
 		  total=total+(item.product.value*item.count);
 		});
+	  if(total>65000)
+		  $scope.valorEnvio = 0;
+	  else
+		  $scope.valorEnvio = $scope.valorEnvioBase;  
+	  
 	  return total;
   }
   $scope.getTotalOrden = function(shoppingList){
@@ -43,7 +50,7 @@ app.controller('checkoutController', function($scope,cartService) {
 		  cartService.saveClient(user).then(
 				  function(d) {
 					  console.log(d);
-					  window.location = context + "checkout/thankyou"
+					  addCheckoutConversion(context + "checkout/thankyou");
 				  },
 				  function(errResponse){
 					  console.error('Error while fetching Users');

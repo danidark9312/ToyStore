@@ -2,8 +2,17 @@ package co.toyslove.model;
 
 public class ShopFilter {
 	private int categoryId;
+	private String ribbon;
 	private int priceMin;
 	private int priceMax;
+	
+	
+	public String getRibbon() {
+		return ribbon;
+	}
+	public void setRibbon(String ribbon) {
+		this.ribbon = ribbon;
+	}
 	public int getCategoryId() {
 		return categoryId;
 	}

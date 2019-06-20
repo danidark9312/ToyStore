@@ -91,6 +91,17 @@
           <div class="col-md-6" ng-init="qnty=1">
             <h2 class="text-black">${product.name}</h2>
             <p class="mb-4">${product.description}</p>
+            <c:if test="${product.value_prev!=0}">
+	            <p>
+	            	<strong class="h4 previous_value" style="font-size:large;"><fmt:formatNumber 
+												value = "${product.value_prev}" 
+												currencySymbol = "$"
+												maxFractionDigits="0" 
+												type = "currency"/>
+					</strong>
+				</p>
+            </c:if>
+            
             <p><strong class="text-primary h4"><fmt:formatNumber 
 											value = "${product.value}" 
 											currencySymbol = "$"
@@ -109,7 +120,14 @@
 
             </div>
 <%--             href="${url}" --%>
-            <p><a href="javascript:void(0)" class="buy-now btn btn-sm btn-primary" ng-click="addItemToCartFromDetail(${product.id},qnty)">Agregar al carrito</a></p>
+            <p><a href="javascript:void(0)" id="addProductBtn" class="buy-now btn btn-sm btn-primary" ng-click="addItemToCartFromDetail(${product.id},qnty);">Agregar al carrito</a></p>
+            <div class="alert alert-success" id="successAlertItemAdded"  role="alert" style="display: none">Producto agregado con éxito
+            <ul>
+            	<li><a href="${url}store">Volver a la tienda</a></li>
+            	<li><a href="${url}cart">Editar Compra</a></li>
+            	<li><a href="${url}checkout">Finalizar Compra</a></li>
+            </ul>
+            </div>
 
           </div>
         </div>
@@ -177,6 +195,7 @@
   
   $(document).ready(function(){
 	 	 setFloatingProperties(100);
+	 	$("#cartMenuItem").show();
 	 	changeFloatingVisibility(window.scrollY);
 	 });
   
@@ -196,6 +215,7 @@
 				  if(data.message == "failed")
 					  showErrorAlert("La pregunta no se pudo envíar, intente mas tarde");
 				  else{
+					  sendQuestionConversion();
 					  showSuccessAlert("Pregunta enviada con éxito, sera contestada en breve");
 					  $("#formQuestion")[0].reset();  
 				  }

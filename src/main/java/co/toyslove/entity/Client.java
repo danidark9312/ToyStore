@@ -129,6 +129,9 @@ public class Client {
 				+ ", addressAppend=" + addressAppend + ", city=" + city + ", state=" + state + ", email=" + email
 				+ ", phone=" + phone + ", addressComment=" + addressComment + "]";
 	}
+	public boolean isAnonymous() {
+		return this.document == null || this.document.trim().equals("");
+	}
 	
 	
 

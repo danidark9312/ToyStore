@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="${urlResources}/css/style.css">
     <link rel="stylesheet" href="${urlResources}/css/general.css">
     <script>
-    var url = '${urlForm}'
-    
+    var url = '${urlForm}';
+    var user = '${user}'
     </script>
     
   </head>
@@ -57,7 +57,7 @@
                     <input id="trackId" type="number" class="form-control" placeholder="Número Orden" value="${trackId}"/>
                   </div>
                   <div class="col-md-6">
-                    <input id="document" type="text" class="form-control" placeholder="Documento identidad" value="${document}"/>
+                    <input id="document" type="text" class="form-control" placeholder="E-mail"/>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -122,11 +122,18 @@
 												<c:forEach var="item" items="${order.items}" >
 													<c:set var="total" value="${total + (item.price*item.quantity)}" />
 												</c:forEach>
-												<fmt:formatNumber 
-											value = "${total+7000}" 
-											currencySymbol = "$"
-											maxFractionDigits="0" 
-											type = "currency"/>
+												<c:if test="${total<65000}">
+													<c:set var="total" value="${total + 7000}" />
+													<c:set var="includeShipping" value="true" />
+												</c:if>
+												
+													<fmt:formatNumber 
+												value = "${total}" 
+												currencySymbol = "$"
+												maxFractionDigits="0" 
+												type = "currency"/>
+												
+												
 											
 											</td>
 										</tr> 
@@ -167,7 +174,8 @@
 											type = "currency"/></td>
 										</tr>
 								</c:forEach>
-								<tr>
+								<c:if test="${includeShipping}">
+										<tr>
 											<td style="text-align: right" colspan="4">Envío</td>
 											<td><fmt:formatNumber 
 											value = "${7000}" 
@@ -175,6 +183,8 @@
 											maxFractionDigits="0" 
 											type = "currency"/></td>
 										</tr>
+								</c:if>
+								
 								</tbody>
 							</table>
 	
@@ -200,11 +210,18 @@
   <script src="${urlResources}/js/angular/angular.min.js"></script>
   
   <script>
+  
+  
+  $(document).ready(function(){
+	  $("#document").val(decodeURIComponent(user));
+  });
+  
+  
   function loadOrder(){
 	  var trackId = $("#trackId").val();
-	  var document = $("#document").val();
+	  var document = encodeURIComponent($("#document").val());
 	  if(trackId!="" && document!=""){
-		  window.location = url+trackId+"/"+document;
+		  window.location = url+"?trackId="+trackId+"&user="+document;
 	  }else{
 		$("#alertMessage").show();  
 	  }

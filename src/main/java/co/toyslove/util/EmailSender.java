@@ -75,6 +75,9 @@ public class EmailSender {
 
 	private String getHTMLBodyOrder(ShoppingCart shoppingCart, double shippingCost, String orderLink) {
 		int purchaseOrderId = shoppingCart.getPurchaseOrder().getId();
+		int totalOrder = getTotal(shoppingCart.getShoppingItems());
+		if(totalOrder>65000)
+			shippingCost = 0;
 		String base = templateReader.getTemplate("PurchaseOrder");
 		String table = "";
 		table+="<table border=0>";
@@ -86,7 +89,7 @@ public class EmailSender {
 		table+=	"</tr>";
 		table+=getItemsDetails(shoppingCart.getShoppingItems(), shippingCost);
 		
-		table+="<tr><td colspan=3>Total</td><td>"+currencyFormat.format(getTotal(shoppingCart.getShoppingItems())+shippingCost)+"</td></tr>";
+		table+="<tr><td colspan=3>Total</td><td>"+currencyFormat.format(totalOrder+shippingCost)+"</td></tr>";
 		table+="</table>";
 		table+=getClentInfo(shoppingCart.getClient());
 		String bodyEmail = String.format(base, purchaseOrderId ,orderLink,table);

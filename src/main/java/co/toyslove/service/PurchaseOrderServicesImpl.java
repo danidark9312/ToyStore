@@ -38,12 +38,14 @@ public class PurchaseOrderServicesImpl implements PurchaseOrderService{
 		return purchaseOrderRepository.findById(id).orElse(null);
 	}
 	
-	public PurchaseOrder findByIdAndClient(int id,String document) {
-		return purchaseOrderRepository.findByIdAndClientDocument(id,document).orElse(null);
+	public PurchaseOrder findByIdAndClient(int id,String user) {
+		return purchaseOrderRepository.findByIdAndClientDocument(id,user).orElse(null);
 	}
 	
 	
 	public PurchaseOrder savePurchaseOrder(PurchaseOrder order) {
+		if(order.getClient().isAnonymous())
+			order.setClient(null);
 		PurchaseOrder po = purchaseOrderRepository.save(order);
 		List<PurchaseItem> itemsDB = order.getItems().stream()
 				.peek(item->{

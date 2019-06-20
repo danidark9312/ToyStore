@@ -1,5 +1,7 @@
 package co.toyslove.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,17 +45,20 @@ public class CheckoutController {
 	
 	@RequestMapping()
 	public String showForm(Model model, RedirectAttributes attributes) {
+		System.out.println("Enter to checkout");
 		if(shoppingCart.getShoppingItems()==null || shoppingCart.getShoppingItems().size()==0) {
+			System.out.println("Not products in cart");
 			attributes.addFlashAttribute("error","No tiene productos en el carrito de compras");
-			return "redirect:home";
+			return "redirect:store";
 		}else {
 			model.addAttribute("shoppingList", shoppingCart.getShoppingItems());
+			System.out.println("doing checkout form");
 			return "checkout";	
 		}
 	}
 	
 	@RequestMapping("thankyou")
-	public String showFormThankYou(Model model,HttpServletRequest request) {
+	public String showFormThankYou(Model model,HttpServletRequest request) throws UnsupportedEncodingException {
 		if(shoppingCart.getItemsCount()==0)
 			return "thankyou";
 		
@@ -107,13 +112,13 @@ public class CheckoutController {
 		return purchaseItem;
 	}
 	
-	private String getOrderLink(PurchaseOrder po, HttpServletRequest request) {
-		return String.format("%s://%s:%d%s/order/list/%s/%s"
+	private String getOrderLink(PurchaseOrder po, HttpServletRequest request) throws UnsupportedEncodingException {
+		return String.format("%s://%s:%d%s/order/list/?trackId=%s&user=%s"
 				,request.getScheme()
 				,request.getServerName()
 				,request.getServerPort()
 				,request.getContextPath()
 				,po.getId()
-				,po.getClient().getDocument());
+				,URLEncoder.encode(po.getClient().getDocument(),"UTF-8"));
 	}
 }

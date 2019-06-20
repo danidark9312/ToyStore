@@ -87,15 +87,15 @@
 								<tr>
 									<th scope="col">Id</th>
 									<th scope="col">Nombre</th>
-									<th scope="col">Valor</th>
-									<th scope="col">Inventario</th>
+									<th scope="col">Val</th>
+									<th scope="col">Inv</th>
 									<th scope="col">Categoria</th>
-									<th scope="col">Rating</th>
+									<th scope="col">Rat</th>
 									<th scope="col">Imagen</th>
-									<th scope="col">Activar/Suspender</th>
-									<th scope="col">Editar</th>
-									<th scope="col">Eliminar</th>
-									<th scope="col">Duplicar</th>
+									<th scope="col">Acción</th>
+									<th scope="col">Ed</th>
+									<th scope="col">El</th>
+									<th scope="col">Du</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -175,7 +175,7 @@
 											<i class="fa fa-times" aria-hidden="true"></i>
 										</a></td>
 										<td><a href="${url}admin/products/{{product.id}}/duplicate">
-											<i class="fa fa-pencil" aria-hidden="true"></i>
+											<i class="fa fa-pause" aria-hidden="true"></i>
 										</a></td>
 									</tr> 
 								

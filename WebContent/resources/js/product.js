@@ -1,11 +1,22 @@
 var globalAspectRatio = 1;
-var imageResize = 600;
+var imageResize = 800;
+var imageModified = false;
+var initialCrop = false;
+
 $(document).ready(function(){
 	if(!imageUrl)
 		$("#imageCrop").hide();
 	else
 		initializeCropper();
   });
+
+	window.addEventListener('paste', e => {
+		files = e.clipboardData.files;
+		if(files.length > 0){
+			$("#archivoImagenPreload")[0].files = e.clipboardData.files;
+			$("#archivoImagenPreload").change();	
+		}
+	});
   
   function readURL(input) {
 	  if (input.files && input.files[0]) {
@@ -19,6 +30,7 @@ $(document).ready(function(){
 	}
 
 	$("#archivoImagenPreload").change(function(e) {
+	  imageModified = true;
 	  $('#imageCrop').cropper('destroy');
 	  compress(e);
 	});
@@ -34,7 +46,6 @@ $(document).ready(function(){
 	    reader.onload = event => {
 	        const img = new Image();
 	        img.src = event.target.result;
-	        
 	        
 	        img.onload = () => {
 	                const elem = document.createElement('canvas');
@@ -64,13 +75,20 @@ $(document).ready(function(){
 	    };
 	}
 	
-	
+
 function initializeCropper(){
-	
 	$('#imageCrop').cropper({
 		  aspectRatio: globalAspectRatio,
 		  autoCropArea : 1,
+		  crop: function(e){
+			  if(!initialCrop)
+				  initialCrop=true;
+			  else
+				  imageModified=true;
+		  }
+		  
 		});
+	
 }
 
 function saveFormProduct(){
@@ -80,17 +98,17 @@ function saveFormProduct(){
 	
 	var formData = new FormData(form);
 	var croppedCanvas = $('#imageCrop').cropper('getCroppedCanvas');
-	
 	if(croppedCanvas){
 		croppedCanvas.toBlob(function(blob){
-			
-			 
-			
-			
-			
-			
 			formData.delete("archivoImagenPreload");
-			formData.append('archivoImagen', blob, "product.jpg");
+			if(imageModified){
+				formData.append('archivoImagen', blob, "product.jpg");
+				formData.append('imageModified', imageModified);
+			}else{
+				formData.append('archivoImagen', null);
+				formData.append('imageModified', imageModified);
+				
+			}
 			$.ajax(formUrl, {
 			    method: "POST",
 			    data: formData,
@@ -98,7 +116,7 @@ function saveFormProduct(){
 			    contentType: false,
 			    success: function (d) {
 			      if(d.message=="Success")
-			    	  window.location=url+"admin/products/list";
+			    	  window.location=url+"store";
 			    },
 			    error: function () {
 			      console.log('Upload error');

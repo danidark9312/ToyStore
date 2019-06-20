@@ -31,12 +31,15 @@ public class CartController {
 	
 	@GetMapping()
 	public String showForm(Model model, RedirectAttributes attributes) {
+		System.out.println("Enter to Cart Controller");
 		if(shoppingCart.getShoppingItems()==null || shoppingCart.getShoppingItems().size()==0) {
+			System.out.println("Not products in cart");
 			attributes.addFlashAttribute("error","No tiene productos en el carrito de compras");
-			return "redirect:home";
+			return "redirect:store";
 		}
 		else {
 			model.addAttribute("shoppingList", shoppingCart.getShoppingItems());
+			System.out.println(shoppingCart.getShoppingItems());
 			return "cart";
 		}
 	}
@@ -45,11 +48,14 @@ public class CartController {
 	public @ResponseBody List<ShoppingItem> listShoppingItems() {
 		return shoppingCart.getShoppingItems();
 	}
+	
 	@PostMapping("add" )
 	public @ResponseBody Response<Integer> addItem(Model model,@RequestBody ShoppingItem shoppingItem) {
 		loadProductCompleteInfo(shoppingItem);
 		shoppingCart.addItem(shoppingItem);
 		Response<Integer> response = Response.of(shoppingCart.getItemsCount());
+		System.out.println("Item add to cart");
+		System.out.println(shoppingItem.getProduct().getName());
 		response.setMessage("Operación Exitosa");
 		return response;
 	}

@@ -92,15 +92,12 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="row mb-5">
-              <div class="col-md-10 mb-3 mb-md-0">
-                <button class="btn btn-primary btn-sm btn-block" ng-click="updateCart(true)">Actualizar y continuar comprando</button>
-              </div>
-<!--               <div class="col-md-6"> -->
-<!--                 <button class="btn btn-outline-primary btn-sm btn-block">Continuar Comprando</button> -->
+<!--             <div class="row mb-5"> -->
+<!--               <div class="col-md-10 mb-3 mb-md-0"> -->
+<!--                 <button class="btn btn-primary btn-sm btn-block" ng-click="updateCart(true)">Guardar</button> -->
 <!--               </div> -->
-            </div>
-            <div class="row">
+<!--             </div> -->
+            <div class="row" style="display: none">
               <div class="col-md-12">
                 <label class="text-black h4" for="coupon">Cupón</label>
                 <p>Enter your coupon code if you have one.</p>
@@ -145,9 +142,20 @@
                 </div>
 
                 <div class="row">
-                  <div class="col-md-12">
-                    <button class="btn btn-primary btn-lg py-3 btn-block" ng-click="updateCart(false)">Pagar</button>
-                  </div>
+                  <div class="col-3">
+			                  <div class="form-group">
+										<button class="btn btn-success btn-lg btn-block" style="font-size: 36px ;padding: 1px"
+										title="Regresar a la tienda"
+											ng-click="updateCart(true)"><i class="fa fa-cart-plus"
+												aria-hidden="true"></i>
+										</button>
+								</div>
+		                  </div>
+		                  <div class="col-9">
+			                  <div class="form-group">
+			                    <button class="btn btn-primary btn-lg py-3 btn-block" ng-click="updateCart(false)">Finalizar Compra</button>
+			                  </div>
+		                  </div>
                 </div>
               </div>
             </div>

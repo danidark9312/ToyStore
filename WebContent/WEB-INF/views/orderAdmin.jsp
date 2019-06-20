@@ -118,7 +118,9 @@
 												<a href="javascript:void(0)" ng-show="!showEditShippingC" ng-click="showEditShippingC=true"><i class="fa fa-edit"></i></a>
 												
 											</td>
-											<td>{{getTotal(order.items) | currency:"$":0}}</td>
+											
+											<td ng-if="order.includeShipping">{{getTotal(order.items)+7000 | currency:"$":0}}</td>
+											<td ng-if="!order.includeShipping">{{getTotal(order.items) | currency:"$":0}}</td>
 											<td>
 												<a href="javascript:void(0)" ng-click="setOrderSelected(order)" data-toggle="modal" data-target="#modalDetail"><i class="fa fa-eye"></i></a>
 											</td>
@@ -176,11 +178,14 @@
 										</tr>
 										<tr>
 											<td colspan="5" align="right">Envio</th>
-											<td>{{7000 | currency:"$":0}}</td>
+											<td ng-if="orderSelected.includeShipping">{{7000 | currency:"$":0}}</td>
+											<td ng-if="!orderSelected.includeShipping">{{0 | currency:"$":0}}</td>
 										</tr>
 										<tr>
 											<td colspan="5" align="right">Total</th>
-											<td>{{getTotal(orderSelected.items)+7000 | currency:"$":0}}</td>
+											<td ng-if="orderSelected.includeShipping">{{getTotal(orderSelected.items)+7000 | currency:"$":0}}</td>
+											<td ng-if="!orderSelected.includeShipping">{{getTotal(orderSelected.items) | currency:"$":0}}</td>
+											
 										</tr> 
 								</tbody>
 							</table>

@@ -17,4 +17,6 @@ public interface CategoryService {
 
 	List<Category> findFirstPage();
 
+	void mergeItemsQuantity(List<Category> categories);
+
 }

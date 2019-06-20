@@ -86,6 +86,10 @@ action="${urlForm}"
                     <form:input type="number" path="value" class="form-control" id="valor" name="valor"  />
                   </div>
                   <div class="col-md-6">
+                    <label for="valor">Valor Anterior<span class="text-danger">*</span></label>
+                    <form:input type="number" path="value_prev" class="form-control" id="valor_ant" name="valor_ant"  />
+                  </div>
+                  <div class="col-md-6">
                     <label for="valor">Inventario</label>
                     <form:input type="number" path="stock" class="form-control" id="stocl"  />
                   </div>
@@ -122,6 +126,13 @@ action="${urlForm}"
                 <div class="form-group row">
                   <label for="stars">Estrellas</label>
                     <form:input type="number" path="stars" class="form-control" id="estrellas" name="estrellas" />
+                </div>
+                <div class="form-group row">
+                  <label for="stars">Cinta</label>
+                  <form:select path="ribbon"  class="form-control">
+                  	<option value=""></option>
+                    	<form:options items="${ribbons}" />
+                    </form:select>
                 </div>
                 <div class="form-group row">
                   <div class="col-lg-12">
