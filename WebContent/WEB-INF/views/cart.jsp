@@ -66,7 +66,9 @@
 					</a>
                     </td>
                     <td class="product-name">
-                      <h2 class="h5 text-black">{{item.product.name}}</h2>
+                      <h2 class="h5 text-black">{{item.product.name}}
+                      <span ng-if="item.size">({{item.size}})</span>
+                      </h2>
                     </td>
                     <td>{{item.product.value | currency:"$":0}}</td>
                     <td>
@@ -88,6 +90,7 @@
               </table>
             </div>
           </form>
+          <p>Si la compra es superior a $65,000, el envío es gratis</p>
         </div>
 
         <div class="row">

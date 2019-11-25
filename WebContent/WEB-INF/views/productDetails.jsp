@@ -117,8 +117,18 @@
                 <button ng-click="qnty=qnty+1" class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
               </div>
             </div>
+							<div class="input-group input-group-sm">
+								<div class="input-group-prepend">
+									<span class="input-group-text">Tamaño</span>
+								</div>
+								<select id="size">
+								<c:forEach items="${product.sizeArray}" var="size">
+									<option value="${size}">${size}</option>
+								</c:forEach>
+								</select>
+							</div>
 
-            </div>
+						</div>
 <%--             href="${url}" --%>
             <p><a href="javascript:void(0)" id="addProductBtn" class="buy-now btn btn-sm btn-primary" ng-click="addItemToCartFromDetail(${product.id},qnty);">Agregar al carrito</a></p>
             <div class="alert alert-success" id="successAlertItemAdded"  role="alert" style="display: none">Producto agregado con éxito

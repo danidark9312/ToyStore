@@ -47,23 +47,39 @@
 <!--             </a> -->
 <!--           </div> -->
 
+<!-- 		<div class="col-md-6 col-lg-3 mb-4 mb-lg-0"> -->
+<!--             <h3 class="footer-heading mb-4">Nuevo !!</h3> -->
+<%--             <a href="${url}?category=3" class="block-6"> --%>
+<%--               <img data-lazy="${urlResources}/images/products/small_H3C48BFYproduct.jpg" alt="Image placeholder" class="img-fluid rounded mb-4"> --%>
+<!--               <h3 class="font-weight-light  mb-0">Colección de buzos</h3> -->
+<!--               <p><span class="badge badge-secondary">Envío gratis</span></p> -->
+<!--             </a> -->
+<!--           </div> -->
 		<div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
-            <h3 class="footer-heading mb-4">Promoción</h3>
-            <a href="${url}?category=3" class="block-6">
-              <img src="${urlResources}/img/promoBuz.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
-              <h3 class="font-weight-light  mb-0">10% de descuento en todos los buzos</h3>
-              <p><span class="badge badge-secondary">Hasta Junio 30</span></p>
+            <h3 class="footer-heading mb-4">Oferta !!</h3>
+            <a href="${url}?category=7" class="block-6">
+              <img data-lazy="${urlResources}/images/products/small_327S09LSproduct.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
+              <h3 class="font-weight-light  mb-0">Sudaderas desde $45,000</h3>
+              <p><span class="badge badge-secondary">Hasta agotar existencias</span></p>
+            </a>
+          </div>
+		<div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+            <h3 class="footer-heading mb-4">Super Oferta !!</h3>
+            <a href="${url}?category=4" class="block-6">
+              <img data-lazy="${urlResources}/images/products/small_XIAGYWVHproduct.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
+              <h3 class="font-weight-light  mb-0">Camisetas desde $32,000</h3>
+              <p><span class="badge badge-secondary">Últimas disponibles !</span></p>
             </a>
           </div>
           <div class="col-md-6 col-lg-3">
             <div class="block-5 mb-5">
               <h3 class="footer-heading mb-4">Contacto</h3>
               <ul class="list-unstyled">
-              	<li><a href="fb://outletEnLinea.co" target="blank"><i class="fa fa-facebook-square" style="color:var(--main-bg-color)"></i>/OutletEnLinea.co</a></li>
+              	<li><a href="https://www.facebook.com/OutletEnLinea.co" target="blank"><i class="fa fa-facebook-square" style="color:var(--main-bg-color)"></i>/OutletEnLinea.co</a></li>
                 <li><a href="http://www.instagram.com/outletEnLinea.info" target="blank"><i class="fa fa-camera-retro" style="color:var(--main-bg-color)"></i>@OutletEnLinea.info</a></li>
                 <li class="address">Medellín - Colombia</li>
                 <li class="phone"><a href="tel://301 663 7232">3016637232</a></li>
-                <li class="email">danielgm9312@hotmail.com</li>
+                <li class="email">outletenlinea.info@gmail.com</li>
                 
               </ul>
             </div>
@@ -88,6 +104,14 @@
           
         </div>
       </div>
+      
+      <div class="floating-wp">
+		<a href="https://api.whatsapp.com/send?phone=573016637232&text=Quiero%20conocer%20sobre%20tus%20productos">
+			<img src="${urlResources}/img/wp-logo.png" style="width: 80px; height: 80px"/>
+		</a>
+	
+	</div>
+      
     </footer>
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -159,9 +183,19 @@
 </script>
 <!--Begin Comm100 Live Chat Code-->
 <div id="comm100-button-301"></div>
-<script type="text/javascript">
-  var Comm100API=Comm100API||{};(function(t){function e(e){var a=document.createElement("script"),c=document.getElementsByTagName("script")[0];a.type="text/javascript",a.async=!0,a.src=e+t.site_id,c.parentNode.insertBefore(a,c)}t.chat_buttons=t.chat_buttons||[],t.chat_buttons.push({code_plan:301,div_id:"comm100-button-301"}),t.site_id=233313,t.main_code_plan=301,e("https://chatserver.comm100.com/livechat.ashx?siteId="),setTimeout(function(){t.loaded||e("https://hostedmax.comm100.com/chatserver/livechat.ashx?siteId=")},5e3)})(Comm100API||{})
-</script>
+<!-- <script type="text/javascript">var Comm100API=Comm100API||{};(function(t){function e(e){var a=document.createElement("script"),c=document.getElementsByTagName("script")[0];a.type="text/javascript",a.async=!0,a.src=e+t.site_id,c.parentNode.insertBefore(a,c)}t.chat_buttons=t.chat_buttons||[],t.chat_buttons.push({code_plan:301,div_id:"comm100-button-301"}),t.site_id=233313,t.main_code_plan=301,e("https://chatserver.comm100.com/livechat.ashx?siteId="),setTimeout(function(){t.loaded||e("https://hostedmax.comm100.com/chatserver/livechat.ashx?siteId=")},5e3)})(Comm100API||{})</script> -->
+
+<script type='text/javascript'>
+if(false){
+	window.__lo_site_id = 161434;
+	(function() {
+		var wa = document.createElement('script'); wa.type = 'text/javascript'; wa.async = true;
+		wa.src = 'https://d10lpsik1i8c69.cloudfront.net/w.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wa, s);
+	  })();	
+}
+	</script>
+
 <!--End Comm100 Live Chat Code-->
 
     

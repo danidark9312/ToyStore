@@ -19,8 +19,12 @@ public class PurchaseItem {
 	private String productName;
 	@Column(name="vlqnty")
 	private int quantity;
+	
 	@Column(name="vlprice")
 	private double price;
+	
+	@Column(name="dssize")
+	private String size;
 	
 	
 	
@@ -32,6 +36,14 @@ public class PurchaseItem {
 	
 	
 	
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
 
 	public Integer getIdProduct() {
 		return idProduct;

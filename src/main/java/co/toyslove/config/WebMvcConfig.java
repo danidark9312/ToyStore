@@ -78,8 +78,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	
 	@Bean
 	public JavaMailSender getJavaMailSender() {
-		String username = "maestramagaliceleste@gmail.com";
-		String password = "ayudaspoderosas";
+//		String username = "maestramagaliceleste@gmail.com";
+//		String password = "ayudaspoderosas";
+		String username = "outletenlinea.info@gmail.com";
+		String password = "dani.4eveR";
 		
 	    JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 	    mailSender.setHost("smtp.gmail.com");

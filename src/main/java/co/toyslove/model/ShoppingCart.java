@@ -46,7 +46,9 @@ public class ShoppingCart {
 	}
 
 	public int getItemsCount() {
-		return shoppingItems==null?0:shoppingItems.size();
+		return shoppingItems==null?0
+				:shoppingItems.stream().mapToInt(ShoppingItem::getCount).sum()
+				;
 	}
 
 	public void addItem(ShoppingItem shoppingItem) {
@@ -55,13 +57,37 @@ public class ShoppingCart {
 		
 		Optional<ShoppingItem> findAny = this.shoppingItems
 		.stream()
-		.filter(item->item.getProduct().equals(shoppingItem.getProduct()))
+		.filter(item->item.getProduct().equals(shoppingItem.getProduct()) )
 		.findAny();
 		
-		if(findAny.isPresent()) 
-			findAny.get().addCant(shoppingItem.getCount());
-		else 
+		if(!isInCartProduct(shoppingItem)) {
 			this.shoppingItems.add(shoppingItem);	
+		}
+		
+		
+		
+				
+	}
+	
+	private boolean isInCartProduct(ShoppingItem shoppingItem) {
+		Optional<ShoppingItem> findAny = this.shoppingItems
+				.stream()
+				.filter(item->{
+					if(item.getProduct().equals(shoppingItem.getProduct())) {
+						if(item.getSize()==shoppingItem.getSize())
+							return true;
+						else
+							return false;
+					}else
+						return false;	
+				}) 
+				.findAny();
+		
+		if(findAny.isPresent()) {
+			findAny.get().addCant(shoppingItem.getCount());
+			return true;
+		}else 
+			return false;	
 	}
 
 	
@@ -70,6 +96,11 @@ public class ShoppingCart {
 	public String toString() {
 		return "ShoppingCart [shoppingItems=" + shoppingItems + ", client=" + client + ", purchaseOrder="
 				+ purchaseOrder + "]";
+	}
+	
+	
+	public String toObjectString() {
+		return super.toString();
 	}
 
 	public void removeProduct(Product product) {

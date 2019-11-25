@@ -3,9 +3,7 @@ function startLazyLoad(){
 
 	const lazyLoad = target => {
 	  const io = new IntersectionObserver((entries, observer) => {
-	    console.log(entries)
 	    entries.forEach(entry => {
-	      console.log("--");
 
 	      if (entry.isIntersecting) {
 	        const img = entry.target;

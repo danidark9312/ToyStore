@@ -166,7 +166,9 @@
 											<th scope="row">
 											{{item.purchaseItemPK.productConsecutive}}
 											</th>
-											<th>{{item.productName}}</th>
+											<th>{{item.productName}}
+											<span ng-if="item.size">({{item.size}})</span>
+											</th>
 												<th>
 												<a ng-href="${url}item/{{item.idProduct}}">
 													<img class="imgList" ng-src="${urlResources}/images/products/{{item.image}}">

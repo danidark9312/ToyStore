@@ -52,7 +52,6 @@ public class CategoryController {
 	
 	@GetMapping("/categories/list")
 	public @ResponseBody List<Category> getProducts() {
-		categoryService.findAll();
 		return categoryService.findAll();
 	}
 	

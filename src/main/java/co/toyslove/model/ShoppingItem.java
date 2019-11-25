@@ -5,6 +5,17 @@ import co.toyslove.entity.Product;
 public class ShoppingItem {
 	private Product product;
 	private int count;
+	private String size;
+	
+	
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
 
 	public Product getProduct() {
 		return product;

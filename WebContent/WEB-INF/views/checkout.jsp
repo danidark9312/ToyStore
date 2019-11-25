@@ -70,6 +70,7 @@
 	              <div class="col-md-12">
 	                <h2 class="h3 mb-3 text-black">Tu orden</h2>
 	                <div class="p-3 p-lg-5 border">
+	                <p>Si la compra es superior a $65,000, el envío es gratis</p>
 	                  <table class="table site-block-order-table mb-5">
 	                    <thead>
 	                      <th>Producto</th>
@@ -77,7 +78,9 @@
 	                    </thead>
 	                    <tbody>
 	                      <tr ng-repeat="item in shoppingList">
-	                        <td>{{item.product.name}}<strong class="mx-2">x</strong>{{item.count}}</td>
+	                        <td>{{item.product.name}}
+	                        <span ng-if="item.size">({{item.size}})</span>
+	                        <strong class="mx-2">x</strong>{{item.count}}</td>
 	                        <td>{{item.product.value * item.count | currency:"$":0}}</td>
 	                      </tr>
 	                      <tr>
@@ -94,7 +97,9 @@
 	                      </tr>
 	                      <tr>
 	                      	<td colspan="2">
-	                      	
+	                      	<div class="col-9">
+			                    <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='${url}cart'">Editar compra</button>
+		                  </div>
 	                      	</td>
 	                      </tr>
 	                    </tbody>
@@ -318,7 +323,7 @@
 		
 		              <div class="form-group">
 		                <label for="c_order_notes" class="text-black">Observaciones de entrega</label>
-		                <textarea ng-model="user.addressComment" cols="30" rows="5" class="form-control" placeholder="Especifique talla o tamaño del producto, Mencione puntos de referencia del domicilio, indicaciones y sugerencias para una entrega efectiva"></textarea>
+		                <textarea ng-model="user.addressComment" cols="30" rows="5" class="form-control" placeholder="Mencione puntos de referencia del domicilio, indicaciones y sugerencias para una entrega efectiva"></textarea>
 		              </div>
 		
 					  <div class="row">

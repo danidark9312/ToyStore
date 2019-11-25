@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import co.toyslove.entity.Product;
+import co.toyslove.entity.ProductProductType;
+import co.toyslove.entity.ProductType;
 import co.toyslove.entity.PurchaseOrder;
 import co.toyslove.model.ProductQuestion;
 import co.toyslove.model.ProductStatus;
@@ -37,7 +39,9 @@ import co.toyslove.model.size.ShoesSize;
 import co.toyslove.model.size.Size;
 import co.toyslove.service.CategoryService;
 import co.toyslove.service.ProductServicesImpl;
+import co.toyslove.service.ProductTypeService;
 import co.toyslove.util.EmailSender;
+import co.toyslove.util.Out;
 import co.toyslove.util.Util;
 import co.toyslove.viewmodel.Response;
 
@@ -51,7 +55,13 @@ public class ProductController {
 	CategoryService categoryService;
 	
 	@Autowired
+	ProductTypeService productTypeService;
+	
+	@Autowired
 	ShoppingCart shoppingCart;
+	
+	@Autowired
+	Out out;
 	
 	@Autowired
 	EmailSender emailSender;
@@ -67,10 +77,23 @@ public class ProductController {
 			return "redirect:/store";
 		}else {
 			model.addAttribute(product);
-			System.out.println("Consulting product details: ");
-			System.out.println(product.getName());
+			out.print("Consulting product details: ");
+			out.print(product.getName());
 			return "productDetails";	
 		}
+	}
+	@GetMapping("generateproducttype")
+	public void generateDefaultProductType(Model model) {
+		List<Product> products = productService.findAll();
+		List<ProductType> productTypes = productTypeService.findAll();
+		List<ProductProductType> productProductTypes = new ArrayList<>();
+		products.forEach(product->{
+			productTypes.forEach(productType->{
+				productProductTypes.add(new ProductProductType(product.getId(), productType.getId(), 1));
+			});
+		});
+		productTypeService.saveProductProductTypes(productProductTypes);
+		
 	}
 	
 	@GetMapping("/admin/products")
@@ -92,11 +115,27 @@ public class ProductController {
 
 	@GetMapping("/admin/products/{id}")
 	public String showForm(Model model,@PathVariable int id) {
-		model.addAttribute("product", productService.findById(id));
+		Product product = productService.findById(id);
+		model.addAttribute("product", product);
 		loadScreenAttributes(model);
+		loadProductTypesValues(product, model);
 		return "productForm";
 	}
 	
+	private void loadProductTypesValues(Product product, Model model) {
+		List<ProductType> productTypes = productTypeService.findAll();
+		product.getProductProductTypes().forEach(productProductTye->{
+			productTypes.stream().forEach(productType->{
+					if(productType.getId()==productProductTye.getProductProductTypePK().getProductType()) {
+						productType.setValueSelected(productProductTye.getProductValue());	
+					}
+				});
+		});
+			
+		model.addAttribute("productTypes", productTypes);
+		
+	}
+
 	@GetMapping("/admin/products/list")
 	public String showListForm(Model model) {
 		model.addAttribute("products",productService.findAll());
@@ -110,7 +149,7 @@ public class ProductController {
 			products = productService.findAll();
 		else
 			products = productService.findByFilter(shopFilter);
-		markItemsInCart(products);
+		Util.markItemsInCart(shoppingCart,products);
 		return products;
 	}
 	@PostMapping("/products/sendQuestion")
@@ -132,28 +171,46 @@ public class ProductController {
 	
 	@PostMapping(value="/admin/products/save", consumes = "multipart/form-data;charset=UTF-8")
 	public @ResponseBody Response saveProduct(@ModelAttribute Product product, BindingResult result, Model model,
-			@RequestParam(value="archivoImagen",required=false) MultipartFile multiPart, HttpServletRequest request, RedirectAttributes attributes) {
+			@RequestParam(value = "archivoImagen", required = false) MultipartFile multiPart,
+			HttpServletRequest request, RedirectAttributes attributes) {
 		String imageName = null;
-		System.out.println(product);
-		if (result.hasErrors()){
+		
+		
+		if (result.hasErrors()) {
 			System.out.println("Existieron errores");
 			Response.ofMessage("Error");
-		}	
-		
-		if (multiPart!=null && !multiPart.isEmpty()) {
-			imageName = util.saveImage(multiPart,request,"products");
 		}
-			if (imageName!=null){ 
-				product.setImage(imageName);
-				
-			}
-			product.setEnable(ProductStatus.ENABLE.getStatus());
-			System.out.println(product);
-			productService.save(product);
-					
-		//return "redirect:/peliculas/index";
-		return Response.ofMessage("Success");
+
+		if (multiPart != null && !multiPart.isEmpty()) {
+			imageName = util.saveImage(multiPart, request, "products");
+		}
+		if (imageName != null) {
+			product.setImage(imageName);
+
+		}
+		product.setEnable(ProductStatus.ENABLE.getStatus());
+		//Save all product specifications, Tipo prenda, estado producto, etc
 		
+		productService.save(product);
+		
+		product.convertProductTypesFromString();
+		if(product.getId()!=0)
+			product.getProductProductTypes().forEach(ppt->ppt.setProductId(product.getId()));
+		
+		productTypeService.removeByProduct(product);
+		if(product.getProductProductTypes()!=null) {
+			product.getProductProductTypes()
+			.stream()
+			.forEach(productProductType->{
+				productProductType.setProductId(product.getId());
+				productTypeService.saveProductProductType(productProductType);
+			});
+		}
+		
+
+		// return "redirect:/peliculas/index";
+		return Response.ofMessage("Success");
+
 	}
 	
 	@GetMapping("admin/products/{idProduct}/remove")
@@ -168,6 +225,19 @@ public class ProductController {
 		Product productDB = productService.findById(idProduct);
 		productDB.setId(0);
 		productService.save(productDB);
+		
+		
+		productDB.getProductProductTypes().forEach(ppt->ppt.setProductId(productDB.getId()));
+		
+		if(productDB.getProductProductTypes()!=null) {
+			productDB.getProductProductTypes()
+			.stream()
+			.forEach(productProductType->{
+				productProductType.setProductId(productDB.getId());
+				productTypeService.saveProductProductType(productProductType);
+			});
+		}
+		
 		return "redirect:/admin/products/"+productDB.getId();
 	}
 	
@@ -181,25 +251,6 @@ public class ProductController {
 		
 		productService.save(productDB);
 		return "redirect:/admin/products/list";
-	}
-	
-	private void markItemsInCart(List<Product> products) {
-		if(shoppingCart.getShoppingItems() == null)
-			return;
-		
-		products.forEach(product->{
-			Optional<ShoppingItem> cartItem = shoppingCart.getShoppingItems()
-				.stream()
-				//.map(ShoppingItem::getProduct)
-				.filter(p->p.getProduct().equals(product))
-				.findAny()
-				;
-			product.setInCart(cartItem.isPresent());
-			if(cartItem.isPresent()) {
-				product.setQntyInCart(cartItem.get().getCount());
-			}
-		});
-		
 	}
 	
 	private List<String> getSizesAsList() {

@@ -4,6 +4,7 @@ app.factory('shopService',function($http,$q){
 			addItemToCart : addItemToCart,
 			removeItemFromCart : removeItemFromCart,
 			getProductsInCart : getProductsInCart,
+			getCountTotalProductsInCart:getCountTotalProductsInCart
 	};
 	return factory;
 	
@@ -35,6 +36,21 @@ app.factory('shopService',function($http,$q){
            }
        );
        return deferred.promise;
+	}
+	
+	function getCountTotalProductsInCart(){
+		 var deferred = $q.defer();
+	     $http.get(context+"cart/count")
+          .then(
+          function (response) {
+          	deferred.resolve(response);        
+          },
+          function(errResponse){
+              console.error('Error while fetching products');
+              deferred.reject(errResponse);
+          }
+      );
+      return deferred.promise;
 	}
 	
 	function addItemToCart(shoppingItem){

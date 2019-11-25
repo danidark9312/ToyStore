@@ -23,27 +23,27 @@
         <p>
         Veras como el producto es llevado a la canasta
         </p>
-        <img class="tutoImage" src="${urlResources}/img/tuto/shoppingCart.png">
+        <img class="tutoImage" data-lazy="${urlResources}/img/tuto/shoppingCart.png">
         
         <p>Luego cuando estes a gusto con tus productos, es hora de darle click al carrito de compras y finalizar la orden</p>
         
-        <img class="tutoImage" src="${urlResources}/img/tuto/confirmCart2.png">
+        <img class="tutoImage" data-lazy="${urlResources}/img/tuto/confirmCart2.png">
         
         <p>Una vez en la pantalla de checkout es muy sencillo concretar tu orden,
         solo tienes que llenar el formulario con la información de envío, y darle al botón
         "Finalizar", esto generará una orden la cual podrás seguir a cada momento hasta recibir el producto
         </p>
         
-        <img class="tutoImage" src="${urlResources}/img/tuto/checkoutForm.png">
+        <img class="tutoImage" data-lazy="${urlResources}/img/tuto/checkoutForm.png">
         
         <p>Como opción adicional podras crear una contraseña, para poder cargar tu información 
         automáticamente la proxima vez que quieras realizar una compra
         </p>
-        <img class="tutoImage" src="${urlResources}/img/tuto/savePass.png">
+        <img class="tutoImage" data-lazy="${urlResources}/img/tuto/savePass.png">
         
         <p>Ahora tu orden esta en el sistema siendo verificada</p>
         
-        <img class="tutoImage" src="${urlResources}/img/tuto/orderEnded.png">
+        <img class="tutoImage" data-lazy="${urlResources}/img/tuto/orderEnded.png">
         
         <p>Nota: <strong>La órden no sera cobrada al momento de finalizar el proceso, los descuentos y pagos seran 
         aplicados luego y por correo electrónico sera coordinado y ajustado los descuentos y pagos, por ende usted

@@ -8,6 +8,7 @@ app.controller('shopController', function($scope,shopService) {
   $scope.shoppingCart = new Array();
   $scope.shopFilter = {
 		  price : "priceMin="+defaultMinPriceFilter+"&priceMax"+defaultMaxPriceFilter,
+		  productTypes : new Array()
   };
 
   angular.element(document).ready(function () {
@@ -17,6 +18,9 @@ app.controller('shopController', function($scope,shopService) {
 	  if(category!=''){
 		  $scope.addCategoryFilter("categoryId="+category);
 	  }
+	  if(tipoPrenda!=''){
+		  $scope.shopFilter.productTypes[0] = 1+";"+tipoPrenda;
+	  }
 	  $scope.loadProductos();
 	  //setTimeout("startLazyLoad()",1000);
   });
@@ -25,7 +29,7 @@ app.controller('shopController', function($scope,shopService) {
   
   $scope.initComponents = function(){
 	  $("#cartMenuItem").show();
-	  $scope.getItemsInCart();
+	  $scope.countItemsInCart();
 	  $( "#slider-range" ).slider({
 	      range: true,
 	      min: 10000,
@@ -99,10 +103,11 @@ app.controller('shopController', function($scope,shopService) {
 	  );
   }
   
-  $scope.getItemsInCart = function(products){
-	  shopService.getProductsInCart().then(
+  $scope.countItemsInCart = function(products){
+	  shopService.getCountTotalProductsInCart().then(
 				 function(d) {
-					  $("[id=itemsCant]").text(d.data.length);
+					 if(d.data)
+						 $("[id=itemsCant]").text(d.data.data);
 	         		},
 	         function(errResponse){
 	             console.error('Error while fetching Users');
@@ -119,8 +124,10 @@ app.controller('shopController', function($scope,shopService) {
   
   
   $scope.addItemToCartFromDetail = function(productId, cant){
-	  $scope.addItemToCart(
-			  {id : productId } 
+	  var size = $("#size").val()?$("#size").val():"";
+	  $scope.addItemToCart({
+		  		id : productId,
+			   size : size} 
 			  ,cant);
 	  
 
@@ -132,22 +139,26 @@ app.controller('shopController', function($scope,shopService) {
   }
   
   $scope.addItemToCart = function(product, cant){
-	  addProductAddedToCart();
+	  addProductAddedToCart();//Google Conversion
 	  var shoppingItem = {
 			  product : product,
-			  count : cant
+			  count : cant,
+			  size : product.size
 	  }
 	  
 	  shopService.addItemToCart(shoppingItem).then(
 			  function(d) {
 				  $scope.shoppingCart.push(shoppingItem);
-				  $("[id=itemsCant]").text(d.data.data);
+				  $("[id=itemsCant]").text(d.data.data.totalProductsInCart);
 				  $("#animatedCart").addClass("animated-cart");
+				  shoppingItem.product.qntyInCart = d.data.data.totalProductsThisType;
+				  shoppingItem.product
 				  setTimeout(function(){
 					  $("#animatedCart").removeClass("animated-cart")
 				  },1000);
-				  
+				  //$scope.initializeCant(product);
 				  product.inCart = true;
+				  cant = 1;
 			  },
 			  function(errResponse){
 				  console.error('Error while fetching Users');
@@ -175,6 +186,7 @@ app.controller('shopController', function($scope,shopService) {
 		$("#collapsefilter").collapse("hide");
 	}  
   };
+
   $scope.searchProducts = function(text){
 	  if(text == ""){
 		  angular.forEach($scope.products, function(product, key){
@@ -196,12 +208,25 @@ app.controller('shopController', function($scope,shopService) {
 		  
   };
   
+  $scope.addTypeFilter = function(typePosition,productType, productValue){
+	  $scope.shopFilter.productTypes[typePosition] = productType+";"+productValue;
+	  $scope.loadProductos();
+  };
+  
   var buildFilters = function(){
 	var str = "";
 	if($scope.shopFilter.category)
 		str+=$scope.shopFilter.category+"&";
 	if($scope.shopFilter.ribbon)
 		str+=$scope.shopFilter.ribbon+"&";
+	
+	if($scope.shopFilter.productTypes.length>0){
+		angular.forEach($scope.shopFilter.productTypes, function(productType, key){
+			str+="strProductType["+key+"]="+productType+"&";	
+		});
+	}
+		
+		
 	
 	str+=$scope.shopFilter.price;
 	return str;
@@ -291,4 +316,20 @@ attachImageObserver = function(){
 		  startLazyLoad();
 		  observerAttach = true;
 	  }
-};   	
+};
+
+
+function addOrUpdateUrlParam(name, value){
+  var href = window.location.href;
+  var regex = new RegExp("[&\\?]" + name + "=");
+  if(regex.test(href)){
+    regex = new RegExp("([&\\?])" + name + "=\\d+");
+    window.location.href = href.replace(regex, "$1" + name + "=" + value);
+  }
+  else {
+    if(href.indexOf("?") > -1)
+      window.location.href = href + "&" + name + "=" + value;
+    else
+      window.location.href = href + "?" + name + "=" + value;
+  }
+}

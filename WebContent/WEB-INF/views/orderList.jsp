@@ -160,7 +160,11 @@
 													<img class="imgList" src="${urlResources}/images/products/${item.image}">
 												</a>
 											</td>
-											<td>${item.productName}</td>
+											<td>${item.productName}
+												<c:if test="${item.size!=null}">
+												(${item.size})
+												</c:if>
+											</td>
 											<td><fmt:formatNumber 
 											value = "${item.price}" 
 											currencySymbol = "$"

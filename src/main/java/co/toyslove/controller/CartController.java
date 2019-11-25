@@ -1,6 +1,8 @@
 package co.toyslove.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,8 @@ import co.toyslove.entity.Product;
 import co.toyslove.model.ShoppingCart;
 import co.toyslove.model.ShoppingItem;
 import co.toyslove.service.ProductServices;
+import co.toyslove.util.Out;
+import co.toyslove.util.Util;
 import co.toyslove.viewmodel.Response;
 
 @Controller
@@ -28,18 +32,20 @@ public class CartController {
 	@Autowired
 	ShoppingCart shoppingCart;
 	
+	@Autowired
+	Out out;
 	
 	@GetMapping()
 	public String showForm(Model model, RedirectAttributes attributes) {
-		System.out.println("Enter to Cart Controller");
+		out.print("Enter to Cart");
 		if(shoppingCart.getShoppingItems()==null || shoppingCart.getShoppingItems().size()==0) {
-			System.out.println("Not products in cart");
+			out.print("Not products in cart");
 			attributes.addFlashAttribute("error","No tiene productos en el carrito de compras");
 			return "redirect:store";
 		}
 		else {
 			model.addAttribute("shoppingList", shoppingCart.getShoppingItems());
-			System.out.println(shoppingCart.getShoppingItems());
+			out.print(shoppingCart.getShoppingItems());
 			return "cart";
 		}
 	}
@@ -49,13 +55,22 @@ public class CartController {
 		return shoppingCart.getShoppingItems();
 	}
 	
+	@GetMapping("count" )
+	public @ResponseBody Response<Integer> countShoppingItems() {
+		return Response.of(shoppingCart.getItemsCount());
+	}
+	
 	@PostMapping("add" )
-	public @ResponseBody Response<Integer> addItem(Model model,@RequestBody ShoppingItem shoppingItem) {
+	public @ResponseBody Response<Map<String,Integer>> addItem(Model model,@RequestBody ShoppingItem shoppingItem) {
 		loadProductCompleteInfo(shoppingItem);
 		shoppingCart.addItem(shoppingItem);
-		Response<Integer> response = Response.of(shoppingCart.getItemsCount());
-		System.out.println("Item add to cart");
-		System.out.println(shoppingItem.getProduct().getName());
+		Util.markItemsInCart(shoppingCart,shoppingItem.getProduct());
+		Map<String,Integer> addItemResponse = new HashMap<>();
+		addItemResponse.put("totalProductsInCart", shoppingCart.getItemsCount());
+		addItemResponse.put("totalProductsThisType", shoppingItem.getProduct().getQntyInCart());
+		Response<Map<String,Integer>> response = Response.of(addItemResponse);
+		out.print("Item add to cart");
+		out.print(shoppingItem.getProduct().getName());
 		response.setMessage("Operación Exitosa");
 		return response;
 	}

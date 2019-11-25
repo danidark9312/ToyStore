@@ -93,10 +93,11 @@ function initializeCropper(){
 
 function saveFormProduct(){
 	var form = document.forms[0];
+	var formData = new FormData(form);
+	appendProductTypes(form,formData);
 	if(!isValidForm(form))
 		return;
 	
-	var formData = new FormData(form);
 	var croppedCanvas = $('#imageCrop').cropper('getCroppedCanvas');
 	if(croppedCanvas){
 		croppedCanvas.toBlob(function(blob){
@@ -147,4 +148,14 @@ function isValidForm(form){
 function showFormError(text){
 	$("#errorMessage").show().text(text);
 	window.location="#errorMessage";
+}
+
+function appendProductTypes(form,formData){
+	var productTypes = $(form).find("[name=productTypesSelect]");
+	productTypes.each(function(index,select){
+		var productTypeId = select.getAttribute("product_type_id");
+		var productTypeValue = select.value;
+		var str = productTypeId+";"+productTypeValue;
+		formData.append("productTypes["+index+"]",str);
+	});
 }

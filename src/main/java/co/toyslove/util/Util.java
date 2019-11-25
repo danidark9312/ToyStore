@@ -13,14 +13,22 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.JPanel;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import co.toyslove.entity.Product;
+import co.toyslove.model.ShoppingCart;
+import co.toyslove.model.ShoppingItem;
 
 @Component
 public class Util {
@@ -48,6 +56,7 @@ public class Util {
 			
 			System.out.println(imageFile.getAbsolutePath());
 			multiPart.transferTo(imageFile);
+			reduceImageSize(imageFile.toPath());
 			//resizeV2(multiPart.getInputStream(), imageFile.getAbsolutePath(), 800, 800);
 			
 			return nombreFinal;
@@ -93,7 +102,7 @@ public class Util {
 	            return (BufferedImage) img;
 	        }
 
-	        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+	        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
 
 	        bimage.getGraphics().drawImage(img, 0, 0 , null);
 	        bimage.getGraphics().dispose();
@@ -185,6 +194,131 @@ public class Util {
 			builder.append(CARACTERES.charAt(character));
 		}
 		return builder.toString();
+	}
+	
+	public static void markItemsInCart(ShoppingCart shoppingCart, List<Product> products) {
+		if(shoppingCart.getShoppingItems() == null)
+			return;
+		
+		products.forEach(product->{
+			List<ShoppingItem> typedProducts = shoppingCart.getShoppingItems()
+				.stream()
+				//.map(ShoppingItem::getProduct)
+				.filter(p->p.getProduct().equals(product))
+				.collect(Collectors.toList());
+			if(typedProducts!=null && !typedProducts.isEmpty()) {
+				product.setInCart(Boolean.TRUE);
+				product.setQntyInCart(typedProducts.stream().mapToInt(ShoppingItem::getCount).sum());
+			}
+		});
+		
+	}
+	public static void markItemsInCart(ShoppingCart shoppingCart, Product product) {
+		Util.markItemsInCart(shoppingCart,Arrays.asList(product));
+	}
+
+	public void generateSmallImages() throws IOException {
+		Path images = Paths.get(filePath+"/products");
+		List<Path> collect = Files.list(images)
+		.filter(path->{
+			File file = new File(getFileSmallName(path.toFile()));
+			return !file.exists() && !path.toString().contains("small");	
+		})
+		//.limit(2)
+		.collect(Collectors.toList());
+		
+		collect.forEach(image->{
+			try {
+				reduceImageSize(image);
+				System.out.println("REDUCED -- "+image);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		
+	}
+	
+	private void reduceImageSize(Path path) throws IOException {
+		File file = path.toFile();
+		Image img = Toolkit.getDefaultToolkit().getImage( file.getAbsolutePath() );
+		loadCompletely(img);
+		BufferedImage inputImage = toBufferedImage(img);
+		//BufferedImage inputImage = ImageIO.read(file);
+		//File resizeImage = resize(file, 240, 240);
+		BufferedImage scaledImage = scale(inputImage,350,350);
+		ImageIO.write(scaledImage, "jpg", new File(getFileSmallName(file)));
+	}
+	
+	private String getFileSmallName(File file) {
+		return file.getParentFile().getAbsolutePath()+"/"+"small_"+file.getName();
+	}
+
+	public static void main(String[] args) {
+		try {
+			Util util = new Util();
+			util.filePath = "C://Users//daniel//personal//toysloveimages//";
+			util.generateSmallImages();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public BufferedImage scale(BufferedImage img, int targetWidth, int targetHeight) {
+		
+	    int type = (img.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+	    BufferedImage ret = img;
+	    BufferedImage scratchImage = null;
+	    Graphics2D g2 = null;
+
+	    int w = img.getWidth();
+	    int h = img.getHeight();
+	    if(w<targetWidth || h < targetHeight)
+	    	return img;
+
+	    int prevW = w;
+	    int prevH = h;
+
+	    do {
+	        if (w > targetWidth) {
+	            w /= 2;
+	            w = (w < targetWidth) ? targetWidth : w;
+	        }
+
+	        if (h > targetHeight) {
+	            h /= 2;
+	            h = (h < targetHeight) ? targetHeight : h;
+	        }
+
+	        if (scratchImage == null) {
+	            scratchImage = new BufferedImage(w, h, type);
+	            g2 = scratchImage.createGraphics();
+	        }
+
+	        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+	                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	        g2.drawImage(ret, 0, 0, w, h, 0, 0, prevW, prevH, null);
+
+	        prevW = w;
+	        prevH = h;
+	        ret = scratchImage;
+	    } while (w != targetWidth || h != targetHeight);
+
+	    if (g2 != null) {
+	        g2.dispose();
+	    }
+
+	    if (targetWidth != ret.getWidth() || targetHeight != ret.getHeight()) {
+	        scratchImage = new BufferedImage(targetWidth, targetHeight, type);
+	        g2 = scratchImage.createGraphics();
+	        g2.drawImage(ret, 0, 0, null);
+	        g2.dispose();
+	        ret = scratchImage;
+	    }
+
+	    return ret;
+
 	}
 
 }

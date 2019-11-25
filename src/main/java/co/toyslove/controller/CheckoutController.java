@@ -23,6 +23,7 @@ import co.toyslove.model.ShoppingItem;
 import co.toyslove.service.ClientService;
 import co.toyslove.service.PurchaseOrderService;
 import co.toyslove.util.EmailSender;
+import co.toyslove.util.Out;
 import co.toyslove.viewmodel.Response;
 
 @Controller
@@ -43,16 +44,19 @@ public class CheckoutController {
 	@Autowired
 	PurchaseOrderService purchaseOrderService;
 	
+	@Autowired
+	Out out;
+	
 	@RequestMapping()
 	public String showForm(Model model, RedirectAttributes attributes) {
-		System.out.println("Enter to checkout");
+		out.print("||Enter to checkout||");
 		if(shoppingCart.getShoppingItems()==null || shoppingCart.getShoppingItems().size()==0) {
-			System.out.println("Not products in cart");
+			out.print("Not products in cart");
 			attributes.addFlashAttribute("error","No tiene productos en el carrito de compras");
 			return "redirect:store";
 		}else {
 			model.addAttribute("shoppingList", shoppingCart.getShoppingItems());
-			System.out.println("doing checkout form");
+			out.print("Doing checkout form");
 			return "checkout";	
 		}
 	}
@@ -109,6 +113,8 @@ public class CheckoutController {
 		purchaseItem.setQuantity(item.getCount());
 		purchaseItem.setImage(item.getProduct().getImage());
 		purchaseItem.setIdProduct(item.getProduct().getId());
+		if(item.getSize()!=null && !item.getSize().trim().equals(""))
+			purchaseItem.setSize(item.getSize());
 		return purchaseItem;
 	}
 	

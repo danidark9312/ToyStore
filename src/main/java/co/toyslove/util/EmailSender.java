@@ -116,7 +116,7 @@ public class EmailSender {
 		body+="<label>"+client.getEmail()+"</label><br/>";
 		body+="<label>"+client.getPhone()+"</label><br/>";
 		body+="<label>"+client.getAddress()+" - "+client.getAddressAppend()+"</label><br/>";
-		body+="<label>"+client.getAddressComment()+"</label><br/>";
+		body+="<label>"+(client.getAddressComment()==null?"":client.getAddressComment())+"</label><br/>";
 		body+="<label>"+client.getCity()+"</label><br/>";
 		body+="<label>Antioquia</label><br/>"; //TODO Cargar estado de BD
 		return body;
@@ -129,7 +129,7 @@ public class EmailSender {
 	private String getItemsDetails(List<ShoppingItem> shoppingItems, double shippingCost) {
 		String body = shoppingItems.stream().map(item->{
 			String details = "<tr>";
-			details+=	"<td>"+item.getProduct().getName()+"</td>";
+			details+=	"<td>"+item.getProduct().getName()+(item.getSize()!=null&& !item.getSize().equals("")?("("+item.getSize()+")"):"")+"</td>";
 			details+=	"<td>"+currencyFormat.format(item.getProduct().getValue())+"</td>";
 			details+=	"<td>"+item.getCount()+"</td>";
 			details+=	"<td>"+currencyFormat.format((long)item.getCount()*item.getProduct().getValue())+"</td>";

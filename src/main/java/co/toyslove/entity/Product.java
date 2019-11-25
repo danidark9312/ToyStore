@@ -1,14 +1,20 @@
 package co.toyslove.entity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -56,11 +62,31 @@ public class Product {
 
 	@ManyToOne()
 	@JoinColumn(name = "category", referencedColumnName = "id")
-	
-	
-	
 	private Category category;
 	
+	@Transient
+	private String[] productTypes;
+	
+	@OneToMany(mappedBy="productProductTypePK.idProduct",fetch=FetchType.EAGER,cascade = CascadeType.DETACH)
+	private List<ProductProductType> productProductTypes;
+	
+
+	public List<ProductProductType> getProductProductTypes() {
+		return productProductTypes;
+	}
+
+	public void setProductProductTypes(List<ProductProductType> productProductTypes) {
+		this.productProductTypes = productProductTypes;
+	}
+
+	public String[] getProductTypes() {
+		return productTypes;
+	}
+
+	public void setProductTypes(String[] productTypes) {
+		this.productTypes = productTypes;
+	}
+
 	public boolean isImageModified() {
 		return imageModified;
 	}
@@ -226,6 +252,8 @@ public class Product {
 
 	
 
+	
+
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", description=" + description + ", value=" + value
@@ -233,7 +261,8 @@ public class Product {
 				+ ", joinedSizes=" + joinedSizes + ", sizeArray=" + Arrays.toString(sizeArray) + ", enable=" + enable
 				+ ", ribbon=" + ribbon + ", sizes=" + Arrays.toString(sizes) + ", inCart=" + inCart + ", qntyInCart="
 				+ qntyInCart + ", imageModified=" + imageModified + ", invisible=" + invisible + ", category="
-				+ category + "]";
+				+ category + ", productTypes=" + Arrays.toString(productTypes) + ", productProductTypes="
+				+ productProductTypes + "]";
 	}
 
 	@Override
@@ -256,6 +285,36 @@ public class Product {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+	
+	public void convertProductTypesFromString() {
+		String[] strProductTypes = this.getProductTypes();
+		if(strProductTypes == null || strProductTypes.length == 0)
+			return;
+		if(this.productProductTypes == null)
+			this.productProductTypes = new ArrayList<>();
+		
+		Arrays
+		.asList(strProductTypes)
+		.stream()
+		.map(str -> str.split(";"))
+		.forEach(productTypeArray->{
+			if(productTypeArray.length>1) {
+				Integer productTypeId = Integer.parseInt(productTypeArray[0]);
+				Integer productTypeValue = Integer.parseInt(productTypeArray[1]);
+				this.productProductTypes.add(new ProductProductType(productTypeId,productTypeValue));	
+			}
+			
+		});
+		
+	}
+	
+	public static void main(String[] args) {
+		Product product = new Product();
+		product.setProductTypes(new String[] {"1;2","7;8"});
+		product.convertProductTypesFromString();
+		System.out.println(product.getProductProductTypes());
+		
 	}
 
 }

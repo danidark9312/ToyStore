@@ -133,7 +133,28 @@ action="${urlForm}"
                   	<option value=""></option>
                     	<form:options items="${ribbons}" />
                     </form:select>
+                    
                 </div>
+                
+                <c:forEach items="${productTypes}" var="productType" varStatus="status">
+	                <div class="form-group row">
+	                  <label>${productType.typeDescription}</label>
+	                  <select name="productTypesSelect"  class="form-control" product_type_id="${productType.id}">
+	                  		<option value=""></option>
+	                  		<c:forEach items="${productType.values}" var="value">
+		                  		<c:choose>
+		                  			<c:when test="${value.productValuePK.productValue == productType.valueSelected}">
+		                  				<option selected value="${value.productValuePK.productValue}">${value.typeDescription}</option>
+		                  			</c:when>
+		                  			<c:otherwise>
+		                  				<option value="${value.productValuePK.productValue}">${value.typeDescription}</option>
+		                  			</c:otherwise>
+		                  		</c:choose>
+	                  		</c:forEach>
+	                    </select>
+	                </div>
+                </c:forEach>
+                
                 <div class="form-group row">
                   <div class="col-lg-12">
                     <button type="button" onclick="saveFormProduct()" class="btn btn-primary btn-lg btn-block" value="Guardar">Guardar</button>

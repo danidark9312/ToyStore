@@ -35,6 +35,8 @@
     <script>
     var context = '${url}';
     var category = '${param.category}';
+    var tipoPrenda = '${param.tipoPrenda}';
+    
     
     window.mobilecheck = function() {
     	  var check = false;
@@ -155,7 +157,7 @@
 	            <div ng-repeat="product in products | orderBy : '-stars'"
 	             ng-show="!product.invisible && product.enable=='Y'" 
 	             class="col-sm-6 col-lg-4 mb-4 box" 
-	             ng-init="cant=initializeCant(product);showCant=false"
+	             ng-init="cant=1;showCant=false;productSize=''"
 	             callback-on-end="attachImageObserver()"
 	             >
 	            
@@ -170,7 +172,7 @@
 	                <div class="block-4 text-center border" ng-class="{productInCart : product.inCart}">
 	                  <figure class="block-4-image">
 	                    <a ng-href="${url}item/{{product.id}}" style="width: 100%;display: block">
-	                    	<img data-lazy="${urlResources}/images/products/{{product.image}}" alt="Image placeholder" class="img-fluid" style="width: 100%">
+	                    	<img data-lazy="${urlResources}/images/products/small_{{product.image}}" alt="Image placeholder" class="img-fluid" style="width: 100%">
 	                    </a>
 	                  </figure>
 	                  <div class="block-4-text p-4 limitedSize200">
@@ -181,20 +183,36 @@
 		  							<input value="{{cant}}" type="text" readonly="readonly" class="form-control" placeholder="Cantidad" aria-label="Cantidad" aria-describedby="basic-addon2">
 		  							<div class="input-group-append">
 									    <button ng-click="cant=cant+1" class="btn btn-outline-secondary" type="button">+</button>
-									    <button ng-click="cant=cant-1" class="btn btn-outline-secondary" type="button">-</button>
+									    <button ng-click="cant=cant==1?1:cant-1" class="btn btn-outline-secondary" type="button">-</button>
 		  							</div>
 								</div>
 							</div>
 	           				<div class="col-4 mb-1">
 								<div class="input-group input-group-sm">
-	  							    <span class="fa fa-check confirmCartIcon text-success" ng-click="addItemToCart(product,cant);showCant=false"></span>
+	  							    <span class="fa fa-check confirmCartIcon text-success" ng-click="addItemToCart(product,cant);showCant=false;cant=1"></span>
 	  							    <span class="fa fa-times confirmCartIcon" ng-click="showCant=false"></span>
 								</div>
 							</div>
+							<div class="col-8 mb-1" ng-if="product.sizeArray.length > 0" >
+								<div class="input-group input-group-sm">
+									<div class="input-group-prepend">
+										<span class="input-group-text">Tamaño</span>
+									</div>
+<!-- 									    <select ng-model="productSize" > -->
+<!-- 									    	<option ng-repeat="size in product.sizeArray" vlue="size">{{size}}</option> -->
+<!-- 									    </select> -->
+
+									    <select ng-init="product.size=product.sizeArray[0]" ng-model="product.size" ng-options="size for size in product.sizeArray"></select>
+								</div>
+							</div>
+							
 							<p ng-show="cant<1" class="text-primary font-weight-bold text-danger">Cantidad debe ser superior a 0</p>
 						</div>
+						<span ng-show="product.inCart" class="shoppingCant">{{product.qntyInCart}}</span>
 		                <div ng-show="!showCant">  
-			                <a href="javascript:void(0)" ng-click="showCant=true" ng-show="!product.inCart">
+			                <a href="javascript:void(0)" ng-click="showCant=true">
+<!-- 			                	ng-show="!product.inCart" -->
+			                
 			                	<span class="fa fa-cart-plus shoppingIcon" ></span>
 			                </a>
 			                <sec:authorize access="isAuthenticated()">
@@ -207,8 +225,8 @@
 							</sec:authorize>
 			                
 			                
-			                <span ng-show="product.inCart" class="shoppingCant">{{cant}}</span>
-			                <span ng-click="removeItemFromCart(product)" class="fa fa-trash-o shoppingIcon" ng-show="product.inCart"></span>
+			                
+<!-- 			            <span ng-click="removeItemFromCart(product)" class="fa fa-trash-o shoppingIcon" ng-show="product.inCart"></span> -->
 			                
 			                <h3><a ng-href="${url}item/{{product.id}}">{{product.name}}</a></h3>
 			                
@@ -275,7 +293,7 @@
 			
 				
 	            <div class="mb-4 collapse show" id="collapsefilter">
-		            <div class="border p-4 rounded mb-4">
+		          <div class="border p-4 rounded mb-4">
 	              <h3 class="mb-3 h6 text-uppercase text-black d-block">Categorías</h3>
 	              <ul class="list-unstyled mb-0">
 	              <li class="mb-1">
@@ -293,6 +311,27 @@
 	              	</c:forEach>
 	              </ul>
 	            </div>
+	            <c:forEach var="productType" items="${productTypes}" varStatus="status">
+	            	<div class="border p-4 rounded mb-4">
+	              <h3 class="mb-3 h6 text-uppercase text-black d-block">${productType.typeDescription}</h3>
+	              <ul class="list-unstyled mb-0">
+	              <li class="mb-1">
+	              			<a href="#productSection" ng-click="addTypeFilter(${status.index},'${productType.id}',0)" class="d-flex">
+	              				<span>TODOS</span>
+	              			</a> 
+	              		</li>
+	              	<c:forEach var ="value" items="${productType.values}">
+	              		<li class="mb-1">
+	              			<a 	href="#productSection" 
+	              				ng-click="addTypeFilter(${status.index},'${productType.id}','${value.productValuePK.productValue}');" 
+	              				class="d-flex">
+	              				<span>${value.typeDescription}</span>
+	              			</a> 
+	              		</li>
+	              	</c:forEach>
+	              </ul>
+	            </div>
+	            </c:forEach>
 		            <div class="border p-4 rounded mb-4">
 	              <h3 class="mb-3 h6 text-uppercase text-black d-block">OTROS</h3>
 	              <ul class="list-unstyled mb-0">
