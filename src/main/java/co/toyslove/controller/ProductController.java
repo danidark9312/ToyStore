@@ -194,7 +194,7 @@ public class ProductController {
 		productService.save(product);
 		
 		product.convertProductTypesFromString();
-		if(product.getId()!=0)
+		if(product.getId()!=0 && product.getProductProductTypes()!=null)
 			product.getProductProductTypes().forEach(ppt->ppt.setProductId(product.getId()));
 		
 		productTypeService.removeByProduct(product);
